@@ -1,3 +1,4 @@
 **/backup
 .gitattributes
 /assets
+.gitignore
