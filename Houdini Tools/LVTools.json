@@ -1,0 +1,9 @@
+{
+	"env": [
+		{
+			"LV": "D:\Assets\Houdini Packages\LV Tools\Houdini Tools"
+		}
+	],
+	"path": "$LV"
+	
+}
