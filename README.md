@@ -5,6 +5,8 @@ LV Tools
 
 A collection of HDAs that I use everyday to make my life easier/better/faster.
 
+Free to use! If you would like to support me, you can do so at [Gumroad](https://wobblypictures.gumroad.com/) or [buy me a coffee](https://www.buymeacoffee.com/lukevan).
+
 ### Installation:
 
 For those of you running Houdini 17.5 or later, you have an option for a much easier install. 
