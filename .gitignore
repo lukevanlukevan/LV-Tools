@@ -2,3 +2,4 @@
 .gitattributes
 /assets
 .gitignore
+**/Setups
