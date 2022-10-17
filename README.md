@@ -22,6 +22,9 @@ Then edit LVTools.json and change the "LV" variable to match the LV Tools instal
  
  - **LV Clip by Attribute**
  >Use an input attribute to clip geometry. Really clean, fast, and works on most types of geo. A big plus is that it doesn't need high resolution geo and is about 50 million times faster than a boolean. Works on curves too!
+
+ - **LV Cycle Attribute**
+>Cycle input attribute over time. Controls for the shape of remap, loop duration, direction, amount of loops and more.
  
  - **LV Mat**
  >Another one that is not fancy at all, but I use this almost every time. Rather than hopping to `/mat` and back, this is an on stream material assignment (like the material sop) that automatically assigns dives into a matnet.
@@ -47,6 +50,12 @@ Mirror mode is an even simpler mode that ensures edges lining up by splitting th
 
 - **LV Move Along Path**
 >Barely stable. Outputs point moving along path, controlled by slider. Multiple path mode works *sometimes*. This node is going to be fixed.
+
+- **LV UV 2 World**
+>Translate object UVs to worldspace for scattering or deforming. Used in conjunction with LV World 2 UV.
+
+- **LV World 2 UV**
+>Transform UV space alignment back to world space for deformation or editing. Used in conjunction with LV UV 2 World.
 
 - **LV Variant**
 >Simple wrapper for manually assigning variant. This node will become much more robust in the future.
