@@ -8,6 +8,16 @@
   <toolshelf name="LV" label="LV Shelf">
     <memberTool name="ConnectToOutput"/>
     <memberTool name="auto variant pieces"/>
-    <memberTool name="keyAllRigPose"/>
+    <memberTool name="LV Key Transforms"/>
+    <memberTool name="LV Export"/>
+    <memberTool name="LVArrange"/>
   </toolshelf>
+
+  <toolshelf name="LVShelf" label="LV Shelf">
+    <memberTool name="LVArrange0"/>
+  </toolshelf>
+
+  <tool name="LVArrange0" label="LV Arrange" icon="D:/Assets/Houdini Packages/LV Tools/assets/Icon.svg">
+    <script scriptType="python"><![CDATA[]]></script>
+  </tool>
 </shelfDocument>
