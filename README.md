@@ -36,6 +36,9 @@ Then edit LVTools.json and change the "LV" variable to match the LV Tools instal
 >This node is essentially a kaleidoscope for your input geometry. Utilizes clips and mirrors so its relatively fast. On the debug tab there is a "view guides" option that can help the user line up the geometry.
 Mirror mode is an even simpler mode that ensures edges lining up by splitting the geo down the middle. Updates the guides to match.
 
+- **LV Simple ROP**
+>Simple wrapper for the Redshift ROP with parameters that I often use exposed and in easy access.
+
 - **LV Slicer**
 >Does what it says on the tin. Slices up geometry over a period of time, settable by the parameter menu. Controls for slice duration, angle of rotation, amount of slices, and more!
 
