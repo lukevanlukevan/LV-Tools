@@ -20,4 +20,56 @@
   <tool name="LVArrange0" label="LV Arrange" icon="D:/Assets/Houdini Packages/LV Tools/assets/Icon.svg">
     <script scriptType="python"><![CDATA[]]></script>
   </tool>
+
+  <tool name="LVArrange" label="LV Arrange" icon="D:/Assets/Houdini Packages/LV Tools/assets/Icon.svg">
+    <script scriptType="python"><![CDATA[obj = hou.node('/obj')
+
+centerPos = hou.Vector2(0,0)
+
+nodes = hou.selectedNodes()
+
+for index, n in enumerate(nodes):
+    if index == 0:
+        nodePos = n.position()
+        centerPos -= nodePos
+    else:
+        ss = ""
+        fb = ""
+        ud = ""
+    
+        node = n
+        
+        posx = node.parm('tx').eval()
+        posz = node.parm('tz').eval() * -1
+        posy = node.parm('ty').eval()
+        
+        pos = hou.Vector2(posx,posz)
+        newPos = pos.normalized()
+        newPos *= 3 + (pos.length()/12)
+        
+        if posx < 0:
+            ss = "Left"
+        elif posx == 0:
+            ss = ""
+        else:
+            ss = "Right"
+            
+        if posz > 0:
+            fb = "Back"
+        elif posz == 0:
+            fb = ""
+        else:
+            fb = "Front"
+            
+        if posy > 0:
+            ud = "Top"
+        elif posy == 0:
+            ud = ""
+        else:
+            ud = "Bottom"
+        
+        node.setPosition(hou.Vector2(newPos[0]-centerPos[0],newPos[1]-centerPos[1]))
+        
+        node.setName(ud + fb + ss + "_" + node.type().name(), True)]]></script>
+  </tool>
 </shelfDocument>
