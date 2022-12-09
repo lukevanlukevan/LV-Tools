@@ -16,9 +16,14 @@ Then edit LVTools.json and change the "LV" variable to match the LV Tools instal
 
 ### Basic Documentation
 
+ - **LV 3D Print Output**
+>Send models to a slicer of your choice! Only tested with Cura, known to not work with PrusaSlicer just yet. Requests can be made at: https://discord.gg/6NuB4zwWKg
+
  - **LV Alembic**
 >This is the Alembic ROP wrapped up with some parameters that I regularly use. Not the most exciting HDA but I use this over the Alembic ROP 95% of the time.
 
+ - **LV Balancer**
+>This is the Alembic ROP wrapped up with some parameters that I regularly use. Not the most exciting HDA but I use this over the Alembic ROP 95% of the time.
  
  - **LV Clip by Attribute**
  >Use an input attribute to clip geometry. Really clean, fast, and works on most types of geo. A big plus is that it doesn't need high resolution geo and is about 50 million times faster than a boolean. Works on curves too!
