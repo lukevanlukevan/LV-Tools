@@ -15,6 +15,11 @@
 
   <toolshelf name="LVShelf" label="LV Shelf">
     <memberTool name="LVArrange0"/>
+    <memberTool name="LV_Color"/>
+    <memberTool name="LV Breakdown"/>
+    <memberTool name="Shape"/>
+    <memberTool name="LV Controller"/>
+    <memberTool name="test"/>
   </toolshelf>
 
   <tool name="LVArrange0" label="LV Arrange" icon="D:/Assets/Houdini Packages/LV Tools/assets/Icon.svg">
@@ -22,7 +27,9 @@
   </tool>
 
   <tool name="LVArrange" label="LV Arrange" icon="D:/Assets/Houdini Packages/LV Tools/assets/Icon.svg">
-    <script scriptType="python"><![CDATA[obj = hou.node('/obj')
+    <script scriptType="python"><![CDATA[import os
+
+obj = hou.node('/obj')
 
 centerPos = hou.Vector2(0,0)
 
@@ -39,9 +46,16 @@ for index, n in enumerate(nodes):
     
         node = n
         
+        node.setGenericFlag(hou.nodeFlag.DisplayComment,True)
+        
         posx = node.parm('tx').eval()
         posz = node.parm('tz').eval() * -1
         posy = node.parm('ty').eval()
+        
+        if node.type().name() == 'rslight':
+            intensity = str(node.parm('RSL_intensityMultiplier').eval())
+            exposure = str(node.parm('Light1_exposure').eval())
+            spread = str(node.parm('RSL_spread').eval())
         
         pos = hou.Vector2(posx,posz)
         newPos = pos.normalized()
@@ -70,6 +84,39 @@ for index, n in enumerate(nodes):
         
         node.setPosition(hou.Vector2(newPos[0]-centerPos[0],newPos[1]-centerPos[1]))
         
-        node.setName(ud + fb + ss + "_" + node.type().name(), True)]]></script>
+        node.setName(ud + fb + ss + "_" + node.type().name(), True)
+        if node.type().name() == 'rslight':
+            node.setComment('Intensity: ' + intensity + os.linesep +
+            'Exposure: ' + exposure + os.linesep +
+            'Spread: ' + spread)]]></script>
+  </tool>
+
+  <tool name="LV_Color" label="LV Color" icon="SOP_color">
+    <script scriptType="python"><![CDATA[nodes = hou.selectedNodes()
+
+sCol = hou.selectedNodes()[0].color()
+
+color = sCol
+
+def handleColorChange(color, alpha):
+    color = color
+    
+    nodes = hou.selectedNodes()
+    
+    for index, n in enumerate(nodes):
+        node = n
+        if(color):   
+            n.setColor(color)
+        else:
+            pass
+
+hou.ui.openColorEditor(
+    handleColorChange,
+    include_alpha=False,
+    initial_color=sCol)
+
+
+
+    ]]></script>
   </tool>
 </shelfDocument>
