@@ -30,6 +30,15 @@ Then edit LVTools.json and change the "LV" variable to match the LV Tools instal
 
  - **LV Cycle Attribute**
 >Cycle input attribute over time. Controls for the shape of remap, loop duration, direction, amount of loops and more.
+
+ - **LV Delete Pieces**
+>Deleted connected pieces of geometry based on a bounding object.
+
+ - **LV Gnomon**
+>Simple gnomon for checking orientation of points.
+
+ - **LV Make Blend**
+>The blend tool from Adobe Illustrator.
  
  - **LV Mat**
  >Another one that is not fancy at all, but I use this almost every time. Rather than hopping to `/mat` and back, this is an on stream material assignment (like the material sop) that automatically assigns dives into a matnet.
@@ -44,8 +53,14 @@ Mirror mode is an even simpler mode that ensures edges lining up by splitting th
 - **LV Simple ROP**
 >Simple wrapper for the Redshift ROP with parameters that I often use exposed and in easy access.
 
+ - **LV Simple Retime**
+>Wrapper for Labs Simple Retime with some controls for ease of use exposed.
+
 - **LV Slicer**
 >Does what it says on the tin. Slices up geometry over a period of time, settable by the parameter menu. Controls for slice duration, angle of rotation, amount of slices, and more!
+
+ - **LV Split and Path**
+>Split geometry and assign `s@path` attribute. Stack them up to organize geometry for export with LV Alembic.
 
 - **LV Blend by Attribute**
 >Quick wrap of a wrangle that lerps based on an attribute. I use this more than the blend option on the Blendshape SOP purely out of speed and pride.
@@ -53,11 +68,11 @@ Mirror mode is an even simpler mode that ensures edges lining up by splitting th
 - **LV Fit Float**
 >Inspired by the XK Studio internal tool, this takes some messy attributes you may have on your geo and automatically fits them between 0 and 1, with a ramp for remapping if needed.
 
-- **LV Largest Prim**
->Groups or blasts all but the largest primitive. Control for group name.
+- **LV Largest Piece**
+>Groups or blasts all but the largest piece or primitive. Control for group name.
 
 - **LV Move Along Path**
->Barely stable. Outputs point moving along path, controlled by slider. Multiple path mode works *sometimes*. This node is going to be fixed.
+>Outputs point moving along path, controlled by slider. Multiple path mode works *sometimes*. This node is going to be fixed.
 
 - **LV UV 2 World**
 >Translate object UVs to worldspace for scattering or deforming. Used in conjunction with LV World 2 UV.
