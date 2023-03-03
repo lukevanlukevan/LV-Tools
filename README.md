@@ -16,6 +16,7 @@ Then edit LVTools.json and change the "LV" variable to match the LV Tools instal
 
 ### Basic Documentation
 <details>
+ 
  - **LV 3D Print Output**
 >Send models to a slicer of your choice! Only tested with Cura, known to not work with PrusaSlicer just yet. Requests can be made at: https://discord.gg/6NuB4zwWKg
 
