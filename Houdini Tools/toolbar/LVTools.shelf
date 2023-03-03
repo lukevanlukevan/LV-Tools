@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<shelfDocument>
+  <!-- This file contains definitions of shelves, toolbars, and tools.
+ It should not be hand-edited when it is being used by the application.
+ Note, that two definitions of the same element are not allowed in
+ a single file. -->
+
+  <toolshelf name="LV Tools" label="LV Tools">
+    <memberTool name="LV Color"/>
+    <memberTool name="LV Arrange"/>
+    <memberTool name="LV Controller"/>
+    <memberTool name="LV Texture Abs"/>
+    <memberTool name="LV Add/Remove Sticky Note Parent"/>
+  </toolshelf>
+
+  <tool name="LV Color" label="LV Color" icon="SOP_color">
+    <script scriptType="python"><![CDATA[nodes = hou.selectedItems()
+
+sCol = hou.selectedItems()[0].color()
+
+color = sCol
+
+def handleColorChange(color, alpha):
+    color = color
+    
+    nodes = hou.selectedItems()
+    
+    for index, n in enumerate(nodes):
+        node = n
+        if(color):   
+            n.setColor(color)
+        else:
+            pass
+
+hou.ui.openColorEditor(
+    handleColorChange,
+    include_alpha=False,
+    initial_color=sCol)
+
+
+
+    ]]></script>
+  </tool>
+
+  <tool name="LV Arrange" label="LV Arrange" icon="D:/Assets/Houdini Packages/LV Tools/assets/LV.svg">
+    <script scriptType="python"><![CDATA[import os
+
+obj = hou.node('/obj')
+
+centerPos = hou.Vector2(0,0)
+
+nodes = hou.selectedNodes()
+
+for index, n in enumerate(nodes):
+    if index == 0:
+        nodePos = n.position()
+        centerPos -= nodePos
+    else:
+        ss = ""
+        fb = ""
+        ud = ""
+    
+        node = n
+        
+        node.setGenericFlag(hou.nodeFlag.DisplayComment,True)
+        
+        posx = node.parm('tx').eval()
+        posz = node.parm('tz').eval() * -1
+        posy = node.parm('ty').eval()
+        
+        if node.type().name() == 'rslight':
+            intensity = str(node.parm('RSL_intensityMultiplier').eval())
+            exposure = str(node.parm('Light1_exposure').eval())
+            spread = str(node.parm('RSL_spread').eval())
+        
+        pos = hou.Vector2(posx,posz)
+        newPos = pos.normalized()
+        newPos *= 3 + (pos.length()/12)
+        
+        if posx < 0:
+            ss = "Left"
+        elif posx == 0:
+            ss = ""
+        else:
+            ss = "Right"
+            
+        if posz > 0:
+            fb = "Back"
+        elif posz == 0:
+            fb = ""
+        else:
+            fb = "Front"
+            
+        if posy > 0:
+            ud = "Top"
+        elif posy == 0:
+            ud = ""
+        else:
+            ud = "Bottom"
+        
+        node.setPosition(hou.Vector2(newPos[0]-centerPos[0],newPos[1]-centerPos[1]))
+        
+        node.setName(ud + fb + ss + "_" + node.type().name(), True)
+        if node.type().name() == 'rslight':
+            node.setComment('Intensity: ' + intensity + os.linesep +
+            'Exposure: ' + exposure + os.linesep +
+            'Spread: ' + spread)]]></script>
+  </tool>
+
+  <tool name="LV Controller" label="LV Controller" icon="D:/Assets/Houdini Packages/LV Tools/assets/Icon.svg">
+    <script scriptType="python"><![CDATA[node = hou.selectedNodes()[0]
+
+ui = hou.ui
+
+hou.ui.openParameterInterfaceDialog(node)
+
+]]></script>
+  </tool>
+
+  <tool name="LV Texture Abs" label="LV Texture Abs" icon="D:/Assets/Houdini Packages/LV Tools/assets/Icon.svg">
+    <script scriptType="python"><![CDATA[nodes = hou.selectedNodes()
+
+desktop = hou.ui.curDesktop()
+pane =  desktop.paneTabUnderCursor()
+ctx = pane.pwd()
+
+mat = (ctx)
+
+abs = mat.createNode("RSMathAbs")
+baseP = nodes[0].position()
+abs.setPosition(hou.Vector2(baseP[0]-5, baseP[1]))
+
+for node in nodes:
+    if node.type().name() == "redshift::TextureSampler":
+        node.setInput(0, abs)]]></script>
+  </tool>
+
+  <tool name="LV Copy Ease" label="LV Copy Ease" icon="VOP_clamp">
+    <script scriptType="python"><![CDATA[import json
+import math
+
+pane_tab = hou.ui.paneTabUnderCursor()
+anim_editor = pane_tab.graph()
+keyframes = anim_editor.selectedKeyframes()
+
+kfs = []
+
+for parm in keyframes.keys():
+    for key in keyframes[parm]:
+        kfs.append(key)
+
+#normalize values
+
+foff = kfs[0].frame() -1 #shift set back to 0
+fdiff = kfs[1].frame() -  kfs[0].frame() #length of set
+
+
+for key in kfs:
+    #if (key.frame()-1) > 0:
+    key.setFrame(math.floor(key.frame() * (hou.fps()/(key.frame()-1) ) ) )
+            
+#start saving out
+c1 = kfs[0].asJSON(save_keys_in_frames=True)
+c2 = kfs[1].asJSON(save_keys_in_frames=True)
+
+#create file
+path1 = 'C:/Users/PIC-TWO/Documents/ease/copied1.json'
+
+f = open(path1, 'w')
+json.dump(c1, f)
+f.close()
+
+path2 = 'C:/Users/PIC-TWO/Documents/ease/copied2.json'
+
+f = open(path2, 'w')
+json.dump(c2, f)
+f.close()
+
+]]></script>
+    <keywordList>
+      <keyword>ease</keyword>
+      <keyword>copy ease</keyword>
+      <keyword>transfer ease</keyword>
+    </keywordList>
+  </tool>
+
+  <tool name="LV Paste Ease" label="LV Paste Ease" icon="PLASMA_App">
+    <script scriptType="python"><![CDATA[import json
+
+pane_tab = hou.ui.paneTabUnderCursor()
+anim_editor = pane_tab.graph()
+keyframes = anim_editor.selectedKeyframes()
+
+#load keyframe
+path1 = 'C:/Users/PIC-TWO/Documents/ease/copied1.json'
+f1 = open(path1, 'r')
+c1 = json.load(f1)
+
+path2 = 'C:/Users/PIC-TWO/Documents/ease/copied2.json'
+f2 = open(path2, 'r')
+c2 = json.load(f2)
+
+kfs = []
+
+i = -1
+for parm in keyframes.keys():
+    for key in keyframes[parm]:
+        i = i + 1
+        kfs.append(key)
+        if i < 1:
+        
+            parm.deleteKeyframeAtFrame(key.frame())
+            newKey = hou.Keyframe()
+            newKey.fromJSON(c1)
+            parm.setKeyframe(newKey)
+        else:
+            parm.deleteKeyframeAtFrame(key.frame())
+            newKey = hou.Keyframe()
+            newKey.fromJSON(c2)
+            parm.setKeyframe(newKey)
+            
+#normalize values
+
+toff = kfs[0].time()
+tscale = kfs[1].time() -  kfs[0].time()]]></script>
+  </tool>
+
+  <tool name="LV Add/Remove Sticky Note Parent" label="LV Add/Remove Sticky Note Parent" icon="PLASMA_App">
+    <script scriptType="python"><![CDATA[def onNodeMoved(**kwargs):
+    sNote.setPosition(node.position() - diff)
+
+def clearCall(**kwargs):
+    node.removeAllEventCallbacks()
+
+if len(hou.selectedItems())<2:
+    print("Select parent node and sticky note.")
+else:
+    node = hou.selectedItems()[0]
+
+    sNote = hou.selectedItems()[1]
+    
+
+    
+    diff = node.position()-sNote.position()
+    
+    #register callback
+    if len(node.eventCallbacks()) == 0 :
+        node.removeAllEventCallbacks()
+        node.setComment("This node hasa a linked sticky note. To unlink, select this node and run the 'Remove Link' shelf tool.")
+        node.addEventCallback((hou.nodeEventType.PositionChanged, ), onNodeMoved)
+        node.addEventCallback((hou.nodeEventType.BeingDeleted, ), clearCall)
+    else:
+        node.removeAllEventCallbacks()
+        node.setComment("")]]></script>
+  </tool>
+
+  <tool name="LV Flip Ease Y" label="LV Flip Ease Y" icon="PLASMA_App">
+    <script scriptType="python"><![CDATA[import hou
+
+pane_tab = hou.ui.paneTabUnderCursor()
+anim_editor = pane_tab.graph()
+keyframes = anim_editor.selectedKeyframes()
+
+# Collect all of the selected keyframes into a dictionary with parms as keys
+selected_keyframes = []
+for parm in keyframes.keys():
+    for key in keyframes[parm]:
+        if parm not in selected_keyframes:
+            selected_keyframes[parm] = []
+        selected_keyframes[parm].append(key)
+
+# Flip the values for each parameter's selected keyframes so that the minimum and maximum values swap
+for parm in selected_keyframes.keys():
+    keyframes = selected_keyframes[parm]
+    min_value = min([key.value() for key in keyframes])
+    max_value = max([key.value() for key in keyframes])
+    for keyframe in keyframes:
+        value = keyframe.value()
+        new_value = min_value + max_value - value
+        parm.setKeyframe(new_value, keyframe.frame())
+
+# Refresh the animation editor to show the updated keyframe values
+anim_editor.layout().setCurrentFrame(hou.frame())
+]]></script>
+  </tool>
+</shelfDocument>
