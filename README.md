@@ -14,7 +14,7 @@ Simply create a folder inside your Houdini preferences directory (where the houd
 
 Then edit LVTools.json and change the "LV" variable to match the LV Tools install path you chose in step 1 (the directory that contains "otls", "scripts", and so on).
 
-### Basic Documentation
+### Basic Documentation (WIP)
 <details>
  
  - **LV 3D Print Output**
