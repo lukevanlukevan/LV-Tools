@@ -225,33 +225,10 @@ toff = kfs[0].time()
 tscale = kfs[1].time() -  kfs[0].time()]]></script>
   </tool>
 
-  <tool name="LV Add/Remove Sticky Note Parent" label="LV Add/Remove Sticky Note Parent" icon="PLASMA_App">
-    <script scriptType="python"><![CDATA[def onNodeMoved(**kwargs):
-    sNote.setPosition(node.position() - diff)
+  <tool name="LV Add/Remove Sticky Note Parent" label="LV Add/Remove Sticky Note Parent" icon="SHELF_parent">
+    <script scriptType="python"><![CDATA[import stickyparent
 
-def clearCall(**kwargs):
-    node.removeAllEventCallbacks()
-
-if len(hou.selectedItems())<2:
-    print("Select parent node and sticky note.")
-else:
-    node = hou.selectedItems()[0]
-
-    sNote = hou.selectedItems()[1]
-    
-
-    
-    diff = node.position()-sNote.position()
-    
-    #register callback
-    if len(node.eventCallbacks()) == 0 :
-        node.removeAllEventCallbacks()
-        node.setComment("This node hasa a linked sticky note. To unlink, select this node and run the 'Remove Link' shelf tool.")
-        node.addEventCallback((hou.nodeEventType.PositionChanged, ), onNodeMoved)
-        node.addEventCallback((hou.nodeEventType.BeingDeleted, ), clearCall)
-    else:
-        node.removeAllEventCallbacks()
-        node.setComment("")]]></script>
+stickyparent.linkNodes()]]></script>
   </tool>
 
   <tool name="LV Flip Ease Y" label="LV Flip Ease Y" icon="PLASMA_App">

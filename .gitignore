@@ -1,5 +1,11 @@
 **/backup
 .gitattributes
 /assets
+**/__pycache__
+**/.idea
+**/easeManager
+**/easecontrol
 .gitignore
 **/Setups
+**/LV_Dev.shelf
+TODO.txt

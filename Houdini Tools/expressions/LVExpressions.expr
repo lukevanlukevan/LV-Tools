@@ -1,0 +1,4 @@
+# New function detit
+detit(i){
+    return detail(i,"iteration",0);
+}
