@@ -118,21 +118,10 @@ hou.ui.openParameterInterfaceDialog(node)
   </tool>
 
   <tool name="LV Texture Abs" label="LV Texture Abs" icon="D:/Assets/Houdini Packages/LV Tools/assets/Icon.svg">
-    <script scriptType="python"><![CDATA[nodes = hou.selectedNodes()
-
-desktop = hou.ui.curDesktop()
-pane =  desktop.paneTabUnderCursor()
-ctx = pane.pwd()
-
-mat = (ctx)
-
-abs = mat.createNode("RSMathAbs")
-baseP = nodes[0].position()
-abs.setPosition(hou.Vector2(baseP[0]-5, baseP[1]))
-
-for node in nodes:
-    if node.type().name() == "redshift::TextureSampler":
-        node.setInput(0, abs)]]></script>
+    <script scriptType="python"><![CDATA[import tex
+from imp import reload
+reload(tex)
+tex.createAbs()]]></script>
   </tool>
 
   <tool name="LV Copy Ease" label="LV Copy Ease" icon="VOP_clamp">
