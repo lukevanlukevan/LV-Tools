@@ -16,6 +16,8 @@ Then edit LVTools.json and change the "LV" variable to match the LV Tools instal
 
 I have added some basic scripts, please feel free to give feedback on Discord.
 
+[![Discord](https://discord.com/widget?id=629964034203975680&theme=dark)](https://discord.com/widget?id=629964034203975680&theme=dark)
+
 ### Basic Documentation (WIP)
 <details>
  
