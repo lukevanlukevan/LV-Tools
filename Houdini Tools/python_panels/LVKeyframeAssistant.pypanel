@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pythonPanelDocument>
+  <!-- This file contains definitions of Python interfaces and the
+ interfaces menu.  It should not be hand-edited when it is being
+ used by the application.  Note, that two definitions of the
+ same interface or of the interfaces menu are not allowed
+ in a single file. -->
+  <interface name="LV Keyframe Assistant" label="LV Keyframe Assistant" icon="PLAYBAR_set_key" showNetworkNavigationBar="false" help_url="">
+    <script><![CDATA[from imp import reload
+from keyframeAssistant import keyframeAssistant
+reload(keyframeAssistant)
+
+def onCreateInterface():
+    return keyframeAssistant.keyframeAssistant()]]></script>
+    <includeInPaneTabMenu menu_position="400" create_separator="true"/>
+    <includeInToolbarMenu menu_position="421" create_separator="false"/>
+    <help><![CDATA[]]></help>
+  </interface>
+</pythonPanelDocument>

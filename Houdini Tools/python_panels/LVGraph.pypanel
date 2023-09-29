@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pythonPanelDocument>
+  <!-- This file contains definitions of Python interfaces and the
+ interfaces menu.  It should not be hand-edited when it is being
+ used by the application.  Note, that two definitions of the
+ same interface or of the interfaces menu are not allowed
+ in a single file. -->
+  <interface name="LV Graph" label="LV Graph" icon="CHANNELS_multi_graph_0" showNetworkNavigationBar="false" help_url="">
+    <script><![CDATA[from imp import reload
+from graph import graph
+reload(graph)
+
+def onCreateInterface():
+    return graph.graph()]]></script>
+    <includeInToolbarMenu menu_position="422" create_separator="false"/>
+    <help><![CDATA[]]></help>
+  </interface>
+</pythonPanelDocument>

@@ -16,7 +16,7 @@ from easeManager import BaseEaseManager
 
 def onCreateInterface():
 
-    ui_file_path = "D:\Assets\Houdini Packages\LV Tools\Houdini Tools\python_panels\LV_Ease.ui"
+    ui_file_path = hou.getenv("LV") + "\scripts\python\LV_Ease.ui"
 
     loader = QtUiTools.QUiLoader()
     ui_file = QtCore.QFile(ui_file_path)

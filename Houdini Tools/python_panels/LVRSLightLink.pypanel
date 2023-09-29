@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pythonPanelDocument>
+  <!-- This file contains definitions of Python interfaces and the
+ interfaces menu.  It should not be hand-edited when it is being
+ used by the application.  Note, that two definitions of the
+ same interface or of the interfaces menu are not allowed
+ in a single file. -->
+  <interface name="LV RS Light Link" label="LV RS Light Link" icon="BUTTONS_light_include" showNetworkNavigationBar="false" help_url="">
+    <script><![CDATA[from imp import reload
+from RSLightLink import RSLightLink
+reload(RSLightLink)
+
+panel = RSLightLink.RSLightLink()
+
+def onCreateInterface():
+    global panel
+    return panel
+    
+def onNodePathChanged(node):
+    global panel
+    panel.setLink()]]></script>
+    <includeInPaneTabMenu menu_position="0" create_separator="false"/>
+    <includeInToolbarMenu menu_position="0" create_separator="false"/>
+    <help><![CDATA[]]></help>
+  </interface>
+</pythonPanelDocument>

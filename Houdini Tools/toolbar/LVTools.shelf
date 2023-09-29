@@ -11,32 +11,18 @@
     <memberTool name="LV Controller"/>
     <memberTool name="LV Texture Abs"/>
     <memberTool name="LV Add/Remove Sticky Note Parent"/>
+    <memberTool name="Open Project Folder"/>
+    <memberTool name="LV Wedge Parm"/>
+    <memberTool name="Create wedge"/>
+    <memberTool name="LV Create Named Geo"/>
+    <memberTool name="LV Make Space"/>
+    <memberTool name="Light Visibility Listener"/>
   </toolshelf>
 
   <tool name="LV Color" label="LV Color" icon="SOP_color">
-    <script scriptType="python"><![CDATA[nodes = hou.selectedItems()
+    <script scriptType="python"><![CDATA[from LVUtils import colorControl
 
-sCol = hou.selectedItems()[0].color()
-
-color = sCol
-
-def handleColorChange(color, alpha):
-    color = color
-    
-    nodes = hou.selectedItems()
-    
-    for index, n in enumerate(nodes):
-        node = n
-        if(color):   
-            n.setColor(color)
-        else:
-            pass
-
-hou.ui.openColorEditor(
-    handleColorChange,
-    include_alpha=False,
-    initial_color=sCol)
-
+colorControl()
 
 
     ]]></script>
@@ -107,14 +93,11 @@ for index, n in enumerate(nodes):
             'Spread: ' + spread)]]></script>
   </tool>
 
-  <tool name="LV Controller" label="LV Controller" icon="D:/Assets/Houdini Packages/LV Tools/assets/Icon.svg">
-    <script scriptType="python"><![CDATA[node = hou.selectedNodes()[0]
+  <tool name="LV Controller" label="LV Controller" icon="$LV/lv.svg">
+    <script scriptType="python"><![CDATA[from LVUtils import openControls
+from imp import reload
 
-ui = hou.ui
-
-hou.ui.openParameterInterfaceDialog(node)
-
-]]></script>
+openControls()]]></script>
   </tool>
 
   <tool name="LV Texture Abs" label="LV Texture Abs" icon="D:/Assets/Houdini Packages/LV Tools/assets/Icon.svg">
@@ -248,5 +231,59 @@ for parm in selected_keyframes.keys():
 # Refresh the animation editor to show the updated keyframe values
 anim_editor.layout().setCurrentFrame(hou.frame())
 ]]></script>
+  </tool>
+
+  <tool name="Open Project Folder" label="Open Project Folder" icon="BUTTONS_folder">
+    <script scriptType="python"><![CDATA[import projectFolder as pf
+
+pf.openDir()]]></script>
+  </tool>
+
+  <tool name="LV Wedge Parm" label="LV Wedge Parm" icon="ROP_wedge">
+    <script scriptType="python"><![CDATA[d = hou.ui.curDesktop()
+ctx = d.paneTabUnderCursor()
+
+p = hou.parmClipboardContents()[0]['path']
+    
+con = ctx.pwd()
+t = con.type().name()
+
+if t == 'topnet' or t == 'topnetmgr':
+    
+    try:
+        sel = hou.selectedNodes()[-1]
+        if sel.type().name() == 'wedge':
+            w = sel
+            count = w.parm('wedgeattributes').eval()
+            w.parm('wedgeattributes').set(count+1)
+            w.parm(f'exportchannel{count+1}').set(1)
+            w.parm(f'channel{count+1}').set(p)
+            w.parm(f'name{count+1}').set(p.split("/")[-1])
+            w.parm('previewselection').set(1)
+        
+    except:
+        w = con.createNode('wedge')
+        w.setPosition(ctx.cursorPosition())
+        w.parm('wedgeattributes').set(1)
+        w.parm('exportchannel1').set(1)
+        w.parm('channel1').set(p)
+        w.parm('name1').set(p.split("/")[-1])
+        w.parm('previewselection').set(1)
+        
+            ]]></script>
+  </tool>
+
+  <tool name="LV Create Named Geo" label="LV Create Named Geo" icon="C:/Users/PIC-TWO/Partners in Crime Dropbox/Luke Van/STUDIO-PIC/05-RESOURCES/05_Houdini Packages/LV Tools/assets/Icon.svg">
+    <script scriptType="python"><![CDATA[import LVUtils
+from imp import reload
+reload(LVUtils)
+LVUtils.createNamedGeo(kwargs)]]></script>
+  </tool>
+
+  <tool name="LV Make Space" label="LV Make Space" icon="$HIP/Partners in Crime Dropbox/Luke Van/STUDIO-PIC/05-RESOURCES/05_Houdini Packages/LV Tools/assets/Icon.svg">
+    <script scriptType="python"><![CDATA[import LVUtils
+from imp import reload
+reload(LVUtils)
+LVUtils.makeSpace(kwargs)]]></script>
   </tool>
 </shelfDocument>

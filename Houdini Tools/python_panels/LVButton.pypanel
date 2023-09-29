@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pythonPanelDocument>
+  <!-- This file contains definitions of Python interfaces and the
+ interfaces menu.  It should not be hand-edited when it is being
+ used by the application.  Note, that two definitions of the
+ same interface or of the interfaces menu are not allowed
+ in a single file. -->
+  <interface name="LV Button" label="LV Button" icon="MISC_python" showNetworkNavigationBar="false" help_url="">
+    <script><![CDATA[from imp import reload
+from LVButton import LVButton
+reload(LVButton)
+
+def onCreateInterface():
+    return LVButton.LVButton()]]></script>
+    <includeInPaneTabMenu menu_position="0" create_separator="false"/>
+    <includeInToolbarMenu menu_position="426" create_separator="false"/>
+    <help><![CDATA[]]></help>
+  </interface>
+</pythonPanelDocument>

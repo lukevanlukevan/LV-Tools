@@ -1,22 +1,47 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <menuDocument>
-    <menuBar>
-        <separatorItem></separatorItem>
+	<menuBar>
+		<subMenu id="LVM1">
 
-        <!-- <subMenu id="LV_submenu"> -->
-            <label>LV Tools</label>
+			<label>LV Tools</label>
 
-            <scriptItem id="LV_distribute_knots">
-            <label>LV Distribute Constant</label>
-            <expression>
-            parm = kwargs["parms"]
-            if parm is None:
-                return False
+			<scriptItem>
+				<label>Add float parm + slider</label>
+				<expression>
+					parm = kwargs["parms"]
+					if parm is None:
+						return False
 
-            return parm[0].parmTemplate().type().name() == 'Ramp'
-            </expression>
-    
-            <scriptCode>
+					return parm[0].name() == 'snippet'
+				</expression>
+				<scriptCode>
+<![CDATA[
+from imp import reload
+import LVParmUtils
+reload(LVParmUtils)
+
+LVParmUtils.addFloatParm(kwargs)
+]]>
+			</scriptCode>
+			</scriptItem>
+
+		</subMenu>
+
+		<subMenu id="LVM2">
+			<insertAfter>reference_menu</insertAfter>
+
+			<label>LV Ramp Tools</label>
+			<expression>
+				parm = kwargs["parms"]
+				if parm is None:
+					return False
+
+				return parm[0].parmTemplate().type().name() == 'Ramp'
+			</expression>
+
+			<scriptItem id="LV_distribute_knots">
+				<label>LV Distribute Constant</label>
+				<scriptCode>
 <![CDATA[
 from imp import reload
 import knotcontrol
@@ -25,9 +50,34 @@ reload(knotcontrol)
 knotcontrol.doDist(kwargs, hou.rampBasis.Constant)
 ]]>
             </scriptCode>
-            </scriptItem>
-        <!-- </subMenu> -->
-        <!-- seperator -->
-        <separatorItem></separatorItem>
-    </menuBar>
+			</scriptItem>
+
+			<scriptItem id="LV Copy Ramp">
+				<label>LV Copy Ramp</label>
+				<scriptCode>
+<![CDATA[
+from imp import reload
+import rampSave
+reload(rampSave)
+
+rampSave.save(kwargs)
+]]>
+            </scriptCode>
+			</scriptItem>
+			<scriptItem id="LV Paste Ramp">
+				<label>LV Paste Ramp</label>
+				<scriptCode>
+<![CDATA[
+from imp import reload
+import rampSave
+reload(rampSave)
+
+rampSave.load(kwargs, hou.rampBasis.Linear)
+]]>
+			</scriptCode>
+			</scriptItem>
+		</subMenu>
+
+		<separatorItem></separatorItem>
+	</menuBar>
 </menuDocument>

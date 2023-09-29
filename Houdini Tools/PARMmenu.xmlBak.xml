@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<menuDocument>
+    <menuBar>
+        <separatorItem></separatorItem>
+
+        <!-- <subMenu id="LV_submenu"> -->
+            <label>LV Tools</label>
+
+            <scriptItem id="LV_distribute_knots">
+            <label>LV Distribute Constant</label>
+            <expression>
+            parm = kwargs["parms"]
+            if parm is None:
+                return False
+
+            return parm[0].parmTemplate().type().name() == 'Ramp'
+            </expression>
+    
+            <scriptCode>
+<![CDATA[
+from imp import reload
+import knotcontrol
+reload(knotcontrol)
+
+knotcontrol.doDist(kwargs, hou.rampBasis.Constant)
+]]>
+            </scriptCode>
+            </scriptItem>
+
+            <scriptItem id="LV Copy Ramp">
+            <label>LV Copy Ramp</label>
+            <expression>
+            parm = kwargs["parms"]
+            if parm is None:
+                return False
+
+            return parm[0].parmTemplate().type().name() == 'Ramp'
+            </expression>
+    
+            <scriptCode>
+<![CDATA[
+from imp import reload
+import rampSave
+reload(rampSave)
+
+rampSave.save(kwargs)
+]]>
+            </scriptCode>
+            </scriptItem>
+            <scriptItem id="LV Paste Ramp">
+            <label>LV Paste Ramp</label>
+            <expression>
+            parm = kwargs["parms"]
+            if parm is None:
+                return False
+
+            return parm[0].parmTemplate().type().name() == 'Ramp'
+            </expression>
+    
+            <scriptCode>
+<![CDATA[
+from imp import reload
+import rampSave
+reload(rampSave)
+
+rampSave.load(kwargs, hou.rampBasis.Linear)
+]]>
+            </scriptCode>
+            </scriptItem>
+			<scriptItem id="LV Test">
+            <label>LV Test</label>
+    
+            <scriptCode>
+<![CDATA[
+from imp import reload
+import lvtest
+reload(lvtest)
+
+lvtest.getParmName(kwargs)
+]]>
+            </scriptCode>
+            </scriptItem>
+        <!-- </subMenu> -->
+        <!-- seperator -->
+        <separatorItem></separatorItem>
+    </menuBar>
+</menuDocument>
