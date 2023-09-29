@@ -4,7 +4,7 @@ import hou
 def listenForLight():
     sel = hou.selectedNodes()
 
-    types = ['rslightdome::2.0', 'rslight']
+    types = ['rslightdome::2.0', 'rslight', 'rslightsun']
 
     def flagChanged(node, event_type, **kwargs):
         if any(node.type().name() == x for x in types):
@@ -31,4 +31,3 @@ def listenForLight():
     for node in sel:
         node.removeAllEventCallbacks()
         node.addEventCallback((hou.nodeEventType.FlagChanged, ), flagChanged)
-
