@@ -1,5 +1,6 @@
 import hou
 import vexpressionmenu
+import subprocess
 
 
 def addFloatParm(kwargs):
@@ -19,3 +20,13 @@ def addFloatParm(kwargs):
         node.parm("snippet").set(channel + "\n\n" + snippet)
 
         vexpressionmenu.createSpareParmsFromChCalls(node, 'snippet')
+
+
+def regenParms(kwargs):
+    node = kwargs["parms"][0].node()
+
+    node.removeSpareParms()
+
+    snippet = node.parm("snippet").eval()
+
+    vexpressionmenu.createSpareParmsFromChCalls(node, 'snippet')

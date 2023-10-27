@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<menuDocument>
+	<menu>
+
+	<separatorItem />
+
+	<scriptItem id="LV_timelineSettings">
+	<label>LV Set Timeline</label>
+	<scriptCode>
+<![CDATA[
+from imp import reload
+import LVPlaybarUtils
+reload(LVPlaybarUtils)
+
+LVPlaybarUtils.setTimeline(kwargs)
+]]></scriptCode>
+	</scriptItem>
+
+	</menu>
+</menuDocument>

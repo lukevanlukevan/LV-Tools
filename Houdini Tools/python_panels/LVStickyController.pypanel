@@ -5,7 +5,7 @@
  used by the application.  Note, that two definitions of the
  same interface or of the interfaces menu are not allowed
  in a single file. -->
-  <interface name="LV Sticky Controller" label="LV Sticky Controller" icon="BUTTONS_network_sticky" showNetworkNavigationBar="false" help_url="">
+  <interface name="LV_Sticky_Controller" label="LV Sticky Controller" icon="BUTTONS_network_sticky" showNetworkNavigationBar="false" help_url="">
     <script><![CDATA[from imp import reload
 from stickyController import stickyController
 reload(stickyController)

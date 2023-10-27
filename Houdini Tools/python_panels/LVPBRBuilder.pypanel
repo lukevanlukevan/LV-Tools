@@ -5,7 +5,7 @@
  used by the application.  Note, that two definitions of the
  same interface or of the interfaces menu are not allowed
  in a single file. -->
-  <interface name="LV PBR Builder" label="LV PBR Builder" icon="SOP_material" showNetworkNavigationBar="false" help_url="">
+  <interface name="LV_PBR_Builder" label="LV PBR Builder" icon="SOP_material" showNetworkNavigationBar="false" help_url="">
     <script><![CDATA[from imp import reload
 from PBRBuilder import PBRBuilder
 reload(PBRBuilder)

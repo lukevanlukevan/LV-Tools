@@ -5,7 +5,7 @@
  used by the application.  Note, that two definitions of the
  same interface or of the interfaces menu are not allowed
  in a single file. -->
-  <interface name="LV Texture Manager" label="LV Texture Manager" icon="VOP_texture" showNetworkNavigationBar="false" help_url="">
+  <interface name="LV_Texture_Manager" label="LV Texture Manager" icon="VOP_texture" showNetworkNavigationBar="false" help_url="">
     <script><![CDATA[from imp import reload
 from texManager import texManager
 reload(texManager)

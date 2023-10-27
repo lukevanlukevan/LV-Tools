@@ -5,7 +5,7 @@
  used by the application.  Note, that two definitions of the
  same interface or of the interfaces menu are not allowed
  in a single file. -->
-  <interface name="LV Ease Transfer" label="LV Ease Tranfer" icon="hicon:/SVGIcons.index?BUTTONS_scope.svg" showNetworkNavigationBar="false" help_url="">
+  <interface name="LV_Ease_Transfer" label="LV Ease Tranfer" icon="hicon:/SVGIcons.index?BUTTONS_scope.svg" showNetworkNavigationBar="false" help_url="">
     <script><![CDATA[import os
 import sys
 

@@ -25,6 +25,26 @@ LVParmUtils.addFloatParm(kwargs)
 			</scriptCode>
 			</scriptItem>
 
+			<scriptItem>
+				<label>Regenerate Parm UI</label>
+				<expression>
+					parm = kwargs["parms"]
+					if parm is None:
+						return False
+
+					return parm[0].name() == 'snippet'
+				</expression>
+				<scriptCode>
+<![CDATA[
+from imp import reload
+import LVParmUtils
+reload(LVParmUtils)
+
+LVParmUtils.regenParms(kwargs)
+]]>
+			</scriptCode>
+			</scriptItem>
+
 		</subMenu>
 
 		<subMenu id="LVM2">

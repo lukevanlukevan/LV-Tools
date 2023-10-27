@@ -3,7 +3,7 @@ import hou
 
 def createNamedGeo(kwargs):
 
-    input = hou.ui.readInput("Container name:")[1]
+    input = hou.ui.readInput("Container name:")[1].replace(" ", "_")
 
     if input == "":
         geo_name = "geo1"

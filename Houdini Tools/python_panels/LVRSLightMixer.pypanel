@@ -5,7 +5,7 @@
  used by the application.  Note, that two definitions of the
  same interface or of the interfaces menu are not allowed
  in a single file. -->
-  <interface name="LV RS Light Mixer" label="LV RS Light Mixer" icon="LOP_lightmixer" showNetworkNavigationBar="false" help_url="">
+  <interface name="LV_RS_Light_Mixer" label="LV RS Light Mixer" icon="LOP_lightmixer" showNetworkNavigationBar="false" help_url="">
     <script><![CDATA[from imp import reload
 from RSLightMixer import RSLightMixer
 reload(RSLightMixer)
