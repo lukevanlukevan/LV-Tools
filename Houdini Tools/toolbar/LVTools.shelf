@@ -13,7 +13,6 @@
     <memberTool name="LV Add/Remove Sticky Note Parent"/>
     <memberTool name="Open Project Folder"/>
     <memberTool name="LV Wedge Parm"/>
-    <memberTool name="Create wedge"/>
     <memberTool name="LV Create Named Geo"/>
     <memberTool name="LV Make Space"/>
     <memberTool name="Light Visibility Listener"/>
@@ -28,7 +27,7 @@ colorControl()
     ]]></script>
   </tool>
 
-  <tool name="LV Arrange" label="LV Arrange" icon="D:/Assets/Houdini Packages/LV Tools/assets/LV.svg">
+  <tool name="LV Arrange" label="LV Arrange" icon="$LV/lv.svg">
     <script scriptType="python"><![CDATA[import os
 
 obj = hou.node('/obj')
@@ -100,7 +99,7 @@ from imp import reload
 openControls()]]></script>
   </tool>
 
-  <tool name="LV Texture Abs" label="LV Texture Abs" icon="D:/Assets/Houdini Packages/LV Tools/assets/Icon.svg">
+  <tool name="LV Texture Abs" label="LV Texture Abs" icon="$LV/lv.svg">
     <script scriptType="python"><![CDATA[import tex
 from imp import reload
 reload(tex)
@@ -273,17 +272,24 @@ if t == 'topnet' or t == 'topnetmgr':
             ]]></script>
   </tool>
 
-  <tool name="LV Create Named Geo" label="LV Create Named Geo" icon="C:/Users/PIC-TWO/Partners in Crime Dropbox/Luke Van/STUDIO-PIC/05-RESOURCES/05_Houdini Packages/LV Tools/assets/Icon.svg">
+  <tool name="LV Create Named Geo" label="LV Create Named Geo" icon="$LV/lv.svg">
     <script scriptType="python"><![CDATA[import LVUtils
 from imp import reload
 reload(LVUtils)
 LVUtils.createNamedGeo(kwargs)]]></script>
   </tool>
 
-  <tool name="LV Make Space" label="LV Make Space" icon="$HIP/Partners in Crime Dropbox/Luke Van/STUDIO-PIC/05-RESOURCES/05_Houdini Packages/LV Tools/assets/Icon.svg">
+  <tool name="LV Make Space" label="LV Make Space" icon="$LV/lv.svg">
     <script scriptType="python"><![CDATA[import LVUtils
 from imp import reload
 reload(LVUtils)
 LVUtils.makeSpace(kwargs)]]></script>
+  </tool>
+
+  <tool name="Light Visibility Listener" label="Light Visibility Listener" icon="OBJ_light_area">
+    <script scriptType="python"><![CDATA[import LVLightUtils
+from imp import reload
+reload(LVLightUtils)
+LVLightUtils.listenForLight()]]></script>
   </tool>
 </shelfDocument>
