@@ -1,0 +1,45 @@
+= LV Draw Ramp =
+
+== Overview ==
+
+Explanation of the node's purpose and operation.
+
+@inputs
+
+Label:
+
+What the input is for.
+
+@parameters
+
+Pull Shape:
+	#pull:
+	button: Pull Shape
+
+Ramp:
+	#ramp:
+	ramp: Ramp
+
+Position:
+	#ramp1pos:
+	float: Position
+
+Value:
+	#ramp1value:
+	float: Value
+
+Interpolation:
+	#ramp1interp:
+	menu: Interpolation
+
+Position:
+	#ramp2pos:
+	float: Position
+
+Value:
+	#ramp2value:
+	float: Value
+
+Interpolation:
+	#ramp2interp:
+	menu: Interpolation

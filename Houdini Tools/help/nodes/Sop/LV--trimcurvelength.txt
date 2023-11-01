@@ -1,0 +1,25 @@
+= PIC Trim Curve With Length =
+
+== Overview ==
+
+Explanation of the node's purpose and operation.
+
+@inputs
+
+Label:
+
+What the input is for.
+
+@parameters
+
+Start Position:
+	#dist:
+	float: Start Position
+
+Length:
+	#length:
+	float: Length
+
+Flip:
+	#flip:
+	toggle: Flip

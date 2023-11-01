@@ -1,0 +1,21 @@
+= LV Gnomon =
+
+== Overview ==
+
+Explanation of the node's purpose and operation.
+
+@inputs
+
+Label:
+
+What the input is for.
+
+@parameters
+
+Type:
+	#type:
+	menu: Type
+
+Scale:
+	#scale:
+	float: Scale

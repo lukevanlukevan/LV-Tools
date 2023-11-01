@@ -1,0 +1,53 @@
+= LV Double Resample =
+
+== Overview ==
+
+Explanation of the node's purpose and operation.
+
+@inputs
+
+Label:
+
+What the input is for.
+
+@parameters
+
+pre:
+	#pre:
+	: pre
+
+Maximum Segment Length:
+	#dolength:
+	toggle: Maximum Segment Length
+
+Length:
+	#length:
+	float: Length
+
+Maximum Segments:
+	#dosegs:
+	toggle: Maximum Segments
+
+Segments:
+	#segs:
+	int: Segments
+
+post:
+	#post:
+	: post
+
+Maximum Segment Length:
+	#dolength2:
+	toggle: Maximum Segment Length
+
+Length:
+	#length2:
+	float: Length
+
+Maximum Segments:
+	#dosegs2:
+	toggle: Maximum Segments
+
+Segments:
+	#segs2:
+	int: Segments

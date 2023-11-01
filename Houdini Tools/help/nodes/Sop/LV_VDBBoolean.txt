@@ -1,0 +1,41 @@
+= LV VDB Boolean =
+
+== Overview ==
+
+Explanation of the node's purpose and operation.
+
+@inputs
+
+Label:
+
+What the input is for.
+
+@parameters
+
+Voxel Size:
+	#voxelsize:
+	float: Voxel Size
+
+Operation:
+	#op:
+	menu: Operation
+
+Label:
+	#de:
+	menu: Label
+
+ :
+	#de_amt:
+	float:  
+
+Operation:
+	#operation:
+	string: Operation
+
+Filter Voxel Radius:
+	#radius:
+	int: Filter Voxel Radius
+
+Iterations:
+	#iterations:
+	int: Iterations

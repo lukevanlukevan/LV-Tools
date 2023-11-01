@@ -1,0 +1,81 @@
+= LV Backdrop =
+
+== Overview ==
+
+Explanation of the node's purpose and operation.
+
+@inputs
+
+Label:
+
+What the input is for.
+
+@parameters
+
+Roof:
+	#roof:
+	toggle: Roof
+
+Left Wall:
+	#left:
+	toggle: Left Wall
+
+Right Wall:
+	#right:
+	toggle: Right Wall
+
+Back Wall:
+	#back:
+	toggle: Back Wall
+
+Front Wall:
+	#front:
+	toggle: Front Wall
+
+Curve Distance:
+	#offset:
+	float: Curve Distance
+
+Center:
+	#tx:
+	float: Center
+
+Center:
+	#ty:
+	float: Center
+
+Center:
+	#tz:
+	float: Center
+
+Size:
+	#sizex:
+	float: Size
+
+Size:
+	#sizey:
+	float: Size
+
+Size:
+	#sizez:
+	float: Size
+
+Uniform Scale:
+	#scale:
+	float: Uniform Scale
+
+Rotate:
+	#rx:
+	float: Rotate
+
+Rotate:
+	#ry:
+	float: Rotate
+
+Rotate:
+	#rz:
+	float: Rotate
+
+Divisions:
+	#divisions:
+	int: Divisions

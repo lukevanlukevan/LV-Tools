@@ -1,0 +1,41 @@
+= LV Radial Symmetry =
+
+== Overview ==
+
+Explanation of the node's purpose and operation.
+
+@inputs
+
+Label:
+
+What the input is for.
+
+@parameters
+
+Auto Align Slice:
+	#aslice:
+	toggle: Auto Align Slice
+
+Loops:
+	#loops:
+	int: Loops
+
+Mirror Mode:
+	#mirmode:
+	toggle: Mirror Mode
+
+Fuse Edges:
+	#fuse:
+	toggle: Fuse Edges
+
+Snap Distance:
+	#tol3d:
+	float: Snap Distance
+
+Preview Slice:
+	#slice:
+	toggle: Preview Slice
+
+Show Guides:
+	#guides:
+	toggle: Show Guides

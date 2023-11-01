@@ -1,0 +1,57 @@
+= LV Move Along Path =
+
+== Overview ==
+
+Explanation of the node's purpose and operation.
+
+@inputs
+
+Label:
+
+What the input is for.
+
+@parameters
+
+Resample Resolution:
+	#resrez:
+	float: Resample Resolution
+
+Progress:
+	#progress:
+	float: Progress
+
+Multiple Paths:
+	#multi:
+	toggle: Multiple Paths
+
+multimode:
+	#multimode:
+	: multimode
+
+Pack and Instance:
+	#pack:
+	toggle: Pack and Instance
+
+Piece Attribute:
+	#useidattrib:
+	toggle: Piece Attribute
+
+Piece Attribute:
+	#idattrib:
+	string: Piece Attribute
+
+Automatically apply variant attribute:
+	#autov:
+	toggle: Automatically apply variant attribute
+
+Seed:
+	#randomseed:
+	float: Seed
+
+Offset Attribute:
+	#inname:
+	string: Offset Attribute
+
+Offset Scale:
+	#off_s:
+	float: Offset Scale

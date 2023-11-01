@@ -84,3 +84,7 @@ def openControls():
     node = hou.selectedNodes()[0]
 
     hou.ui.openParameterInterfaceDialog(node)
+
+
+def save_incremental():
+    hou.hipFile.saveAndIncrementFileName()

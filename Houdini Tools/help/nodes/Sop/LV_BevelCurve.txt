@@ -1,0 +1,25 @@
+= LV Bevel Curve =
+
+== Overview ==
+
+Explanation of the node's purpose and operation.
+
+@inputs
+
+Label:
+
+What the input is for.
+
+@parameters
+
+Maximum Normal Angle:
+	#flatangle:
+	float: Maximum Normal Angle
+
+Distance:
+	#offset:
+	float: Distance
+
+Divisions:
+	#divisions:
+	int: Divisions

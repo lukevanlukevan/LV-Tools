@@ -1,0 +1,27 @@
+= LV Clip by Attribute =
+
+== Overview ==
+
+Clip geometry by input attribute.
+
+@parameters
+
+Clip Attribute:
+	#clipatt:
+	Attribute to use for clipping of geometry.
+
+Add Noise:
+	#addnoise:
+	Add noise to attribute.
+
+noise:
+	#noise:
+	Noise controls (exposed from Attribute Noise).
+
+Clip Threshold:
+	#clipamount:
+	Value to clip by.
+
+Keep:
+	#clipop:
+	Control for removing values above or below threshold.

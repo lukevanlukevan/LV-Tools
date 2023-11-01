@@ -1,0 +1,21 @@
+= LV UV 2 World =
+
+== Overview ==
+
+Explanation of the node's purpose and operation.
+
+@inputs
+
+Label:
+
+What the input is for.
+
+@parameters
+
+Freeze Input Geometry:
+	#freeze:
+	toggle: Freeze Input Geometry
+
+Freeze Frame:
+	#freezeframe:
+	int: Freeze Frame

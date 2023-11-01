@@ -1,0 +1,33 @@
+= LV Path =
+
+== Overview ==
+
+Explanation of the node's purpose and operation.
+
+@inputs
+
+Label:
+
+What the input is for.
+
+@parameters
+
+Split Group:
+	#group:
+	string: Split Group
+
+Prepend name with prim attribute:
+	#useprimatt:
+	toggle: Prepend name with prim attribute
+
+Attribute:
+	#att:
+	string: Attribute
+
+Name:
+	#name:
+	string: Name
+
+Group Type:
+	#grouptype:
+	menu: Group Type

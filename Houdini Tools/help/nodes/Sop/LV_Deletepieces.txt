@@ -1,0 +1,17 @@
+= LV Delete Pieces =
+
+== Overview ==
+
+Explanation of the node's purpose and operation.
+
+@inputs
+
+Label:
+
+What the input is for.
+
+@parameters
+
+Delete Non Selected:
+	#negate:
+	toggle: Delete Non Selected

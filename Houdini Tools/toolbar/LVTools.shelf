@@ -16,6 +16,8 @@
     <memberTool name="LV Create Named Geo"/>
     <memberTool name="LV Make Space"/>
     <memberTool name="Light Visibility Listener"/>
+    <memberTool name="Updater"/>
+    <memberTool name="render_to_mp4"/>
   </toolshelf>
 
   <tool name="LV Color" label="LV Color" icon="SOP_color">
@@ -291,5 +293,12 @@ LVUtils.makeSpace(kwargs)]]></script>
 from imp import reload
 reload(LVLightUtils)
 LVLightUtils.listenForLight()]]></script>
+  </tool>
+
+  <tool name="Updater" label="Updater" icon="PLASMA_App">
+    <script scriptType="python"><![CDATA[import LVUpdater
+from imp import reload
+reload(LVUpdater)
+LVUpdater.update()]]></script>
   </tool>
 </shelfDocument>

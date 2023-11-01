@@ -1,0 +1,77 @@
+= LV Sticky Note Controller =
+
+== Overview ==
+
+Explanation of the node's purpose and operation.
+
+@inputs
+
+Label:
+
+What the input is for.
+
+@parameters
+
+Drag Sticky Note Here:
+	#note:
+	string: Drag Sticky Note Here
+
+Text Size:
+	#size:
+	float: Text Size
+
+Text Color:
+	#tcolorr:
+	float: Text Color
+
+Text Color:
+	#tcolorg:
+	float: Text Color
+
+Text Color:
+	#tcolorb:
+	float: Text Color
+
+f_bg:
+	#f_bg:
+	: f_bg
+
+Enable Background:
+	#bg:
+	toggle: Enable Background
+
+Background Color:
+	#bgcr:
+	float: Background Color
+
+Background Color:
+	#bgcg:
+	float: Background Color
+
+Background Color:
+	#bgcb:
+	float: Background Color
+
+parent:
+	#parent:
+	: parent
+
+Parent:
+	#link:
+	string: Parent
+
+X Offset:
+	#x:
+	float: X Offset
+
+Y Offset:
+	#y:
+	float: Y Offset
+
+Add Link:
+	#blink:
+	button: Add Link
+
+Remove Link:
+	#bunlink:
+	button: Remove Link

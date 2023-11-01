@@ -1,0 +1,41 @@
+= LV Safe Bevel =
+
+== Overview ==
+
+Explanation of the node's purpose and operation.
+
+@inputs
+
+Label:
+
+What the input is for.
+
+@parameters
+
+Group:
+	#group:
+	string: Group
+
+Ignore Flat Edges (Coplanar Incident Polygons):
+	#ignoreflatedges:
+	toggle: Ignore Flat Edges (Coplanar Incident Polygons)
+
+Maximum Normal Angle:
+	#flatangle:
+	float: Maximum Normal Angle
+
+fillet:
+	#fillet:
+	: fillet
+
+Distance:
+	#offset:
+	float: Distance
+
+Divisions:
+	#divisions:
+	int: Divisions
+
+Stop Loops:
+	#limit:
+	menu: Stop Loops

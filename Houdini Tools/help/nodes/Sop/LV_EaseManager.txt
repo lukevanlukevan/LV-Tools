@@ -1,0 +1,29 @@
+= LV Ease Manager =
+
+== Overview ==
+
+Explanation of the node's purpose and operation.
+
+@inputs
+
+Label:
+
+What the input is for.
+
+@parameters
+
+Label:
+	#newparameter:
+	menu: Label
+
+Label:
+	#newparameter2:
+	menu: Label
+
+Label:
+	#newparameter3min:
+	float: Label
+
+Label:
+	#newparameter3max:
+	float: Label

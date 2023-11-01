@@ -1,0 +1,25 @@
+= LV Round Corner Curve =
+
+== Overview ==
+
+Explanation of the node's purpose and operation.
+
+@inputs
+
+Label:
+
+What the input is for.
+
+@parameters
+
+Group:
+	#group:
+	string: Group
+
+Distance:
+	#offset:
+	float: Distance
+
+Length:
+	#length:
+	float: Length

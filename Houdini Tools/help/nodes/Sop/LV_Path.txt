@@ -1,0 +1,93 @@
+= LV Path =
+
+== Overview ==
+
+Explanation of the node's purpose and operation.
+
+@inputs
+
+Label:
+
+What the input is for.
+
+@parameters
+
+Group:
+	#group:
+	string: Group
+
+Group Type:
+	#grouptype:
+	menu: Group Type
+
+Run Over:
+	#class:
+	menu: Run Over
+
+Number Count:
+	#vex_numcount:
+	int: Number Count
+
+Thread Job Size:
+	#vex_threadjobsize:
+	int: Thread Job Size
+
+VEXpression:
+	#snippet:
+	string: VEXpression
+
+Attributes to Create:
+	#exportlist:
+	string: Attributes to Create
+
+Enforce Prototypes:
+	#vex_strict:
+	toggle: Enforce Prototypes
+
+Autobind by Name:
+	#autobind:
+	toggle: Autobind by Name
+
+Number of Bindings:
+	#bindings:
+	folder: Number of Bindings
+
+Autobind Groups by Name:
+	#groupautobind:
+	toggle: Autobind Groups by Name
+
+Group Bindings:
+	#groupbindings:
+	folder: Group Bindings
+
+Evaluation Node Path:
+	#vex_cwdpath:
+	string: Evaluation Node Path
+
+Export Parameters:
+	#vex_outputmask:
+	string: Export Parameters
+
+Update Normals If Displaced:
+	#vex_updatenmls:
+	toggle: Update Normals If Displaced
+
+Attribute to Match:
+	#vex_matchattrib:
+	string: Attribute to Match
+
+Compute Results In Place:
+	#vex_inplace:
+	toggle: Compute Results In Place
+
+Output Selection Group:
+	#vex_selectiongroup:
+	string: Output Selection Group
+
+VEX Precision:
+	#vex_precision:
+	string: VEX Precision
+
+Name:
+	#name:
+	string: Name

@@ -9,7 +9,7 @@ from importlib import reload
 
 def createEventHandler(uievent, pending_actions):
     reload(extra)
-    if extra.do_more(uievent):
+    if extra.do_stuff(uievent):
         return None, True
     else:
         return None, False

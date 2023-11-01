@@ -1,0 +1,25 @@
+= LV Make Blend =
+
+== Overview ==
+
+Explanation of the node's purpose and operation.
+
+@inputs
+
+Label:
+
+What the input is for.
+
+@parameters
+
+Steps:
+	#segs:
+	int: Steps
+
+Closed:
+	#closedall:
+	toggle: Closed
+
+Connectivity:
+	#surftype:
+	menu: Connectivity
