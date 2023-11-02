@@ -9,3 +9,4 @@ scripts\python\LVProjectManager\prefs.json
 */*/*/__pycache__/*
 */*/__pycache__/*
 python3.9libs/__pycache__/*
+otls/backup/*
