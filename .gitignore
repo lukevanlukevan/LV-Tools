@@ -1,14 +1,11 @@
-**/backup
-.gitattributes
-/assets
-**/__pycache__
-**/.idea
-**/easeManager
-**/easecontrol
+LV Tools.approj
+.ap/*
+Houdini Tools.zip
 .gitignore
-**/Setups
-**/LV_Dev.shelf
-TODO.txt
-Houdini Tools/.ap/project.json
-Houdini Tools/LV Tools.approj
-Houdini Tools/scripts/python/LVProjectManager/prefs.json
+hda/backup/*
+hda/back
+otls_bak/*
+scripts\python\LVProjectManager\prefs.json
+*/*/*/__pycache__/*
+*/*/__pycache__/*
+python3.9libs/__pycache__/*

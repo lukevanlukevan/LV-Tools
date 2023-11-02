@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<shelfDocument>
+  <!-- This file contains definitions of shelves, toolbars, and tools.
+ It should not be hand-edited when it is being used by the application.
+ Note, that two definitions of the same element are not allowed in
+ a single file. -->
+
+  <toolshelf name="LV Dev" label="LV Dev">
+    <memberTool name="Copy Paste Ease"/>
+    <memberTool name="Paste Ease"/>
+    <memberTool name="flipx"/>
+    <memberTool name="flipy"/>
+    <memberTool name="RefreshMenu"/>
+    <memberTool name="&quot;Can you share working files&quot;"/>
+    <memberTool name="Key"/>
+    <memberTool name="Change all tex"/>
+    <memberTool name="connect tex"/>
+    <memberTool name="tool_2"/>
+    <memberTool name="tool_4"/>
+    <memberTool name="Create LV Mat"/>
+    <memberTool name="OD Render Batch File"/>
+    <memberTool name="Toggle RS Lights"/>
+    <memberTool name="tool_3"/>
+    <memberTool name="setParent"/>
+    <memberTool name="dummy"/>
+    <memberTool name="LV Make Space"/>
+    <memberTool name="tool_5"/>
+    <memberTool name="Create Named Geo"/>
+    <memberTool name="add float parm"/>
+    <memberTool name="sticky test"/>
+    <memberTool name="tool_8"/>
+    <memberTool name="tool_9"/>
+    <memberTool name="LVUpdate"/>
+    <memberTool name="build_hda_help"/>
+    <memberTool name="Dbug"/>
+    <memberTool name="ordered_menu"/>
+  </toolshelf>
+
+  <tool name="Paste Ease" label="Paste Ease" icon="PLASMA_App">
+    <script scriptType="python"><![CDATA[pane_tab = hou.ui.paneTabUnderCursor()
+anim_editor = pane_tab.graph()
+keyframes = anim_editor.selectedKeyframes()
+
+#load keyframe
+path1 = 'C:/Users/PIC-TWO/Documents/ease/copied1.json'
+f1 = open(path1, 'r')
+c1 = json.load(f1)
+
+path2 = 'C:/Users/PIC-TWO/Documents/ease/copied2.json'
+f2 = open(path2, 'r')
+c2 = json.load(f2)
+
+kfs = []
+
+i = -1
+for parm in keyframes.keys():
+    for key in keyframes[parm]:
+        i = i + 1
+        kfs.append(key)
+        if i < 1:
+        
+            parm.deleteKeyframeAtFrame(key.frame())
+            newKey = hou.Keyframe()
+            newKey.fromJSON(c1)
+            parm.setKeyframe(newKey)
+        else:
+            parm.deleteKeyframeAtFrame(key.frame())
+            newKey = hou.Keyframe()
+            newKey.fromJSON(c2)
+            parm.setKeyframe(newKey)
+            
+#normalize values
+
+toff = kfs[0].time()
+tscale = kfs[1].time() -  kfs[0].time()]]></script>
+  </tool>
+
+  <tool name="Copy Paste Ease" label="Copy Paste Ease" icon="PLASMA_App">
+    <script scriptType="python"><![CDATA[import math
+
+pane_tab = hou.ui.paneTabUnderCursor()
+anim_editor = pane_tab.graph()
+keyframes = anim_editor.selectedKeyframes()
+
+kfs = []
+
+for parm in keyframes.keys():
+    for key in keyframes[parm]:
+        kfs.append(key)
+
+#normalize values
+
+foff = kfs[0].frame() -1 #shift set back to 0
+fdiff = kfs[1].frame() -  kfs[0].frame() #length of set
+
+
+for key in kfs:
+    #if (key.frame()-1) > 0:
+    key.setFrame(math.floor(key.frame() * (hou.fps()/(key.frame()-1) ) ) )
+            
+#start saving out
+c1 = kfs[0].asJSON(save_keys_in_frames=True)
+c2 = kfs[1].asJSON(save_keys_in_frames=True)
+
+#create file
+path1 = 'C:/Users/PIC-TWO/Documents/ease/copied1.json'
+
+f = open(path1, 'w')
+json.dump(c1, f)
+f.close()
+
+path2 = 'C:/Users/PIC-TWO/Documents/ease/copied2.json'
+
+f = open(path2, 'w')
+json.dump(c2, f)
+f.close()]]></script>
+  </tool>
+
+  <tool name="build_hda_help" label="Build HDA Help" icon="BUTTONS_help">
+    <script scriptType="python"><![CDATA[import HDAUtils
+from imp import reload
+reload(HDAUtils)
+HDAUtils.build_help()]]></script>
+  </tool>
+
+  <tool name="ordered_menu" label="Ordered Menu Edit" icon="PLASMA_App">
+    <script scriptType="python"><![CDATA[node = hou.selectedItems()[0]
+
+menu = node.parm("menu")
+print(menu)
+
+items = ("1","2","3")
+labels = ("Hello", "World", ":)")
+
+menu.setMenuItems(items)
+menu.setMenuLabels(labels)
+]]></script>
+  </tool>
+</shelfDocument>
