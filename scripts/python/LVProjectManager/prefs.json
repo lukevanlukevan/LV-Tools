@@ -1,10 +1,5 @@
 {
-    "paths": [
-        "$DB/02-JOBS/PIC - 2023/39_BelkinTechnicalVideo/",
-        "$DB/02-JOBS/PIC - 2023/48_ActiveState/",
-        "$DB/02-JOBS/PIC - 2023/49_MicrosoftSummit/",
-        "$DB/02-JOBS/PIC - 2023/53_Revvity/"
-    ],
-    "recent": 4,
-    "rootPath": "02_Workflow/01-3D/Houdini/"
+	"paths": [],
+	"recent": 1,
+	"rootPath": "02_Workflow/01-3D/Houdini/"
 }

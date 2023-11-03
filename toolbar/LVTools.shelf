@@ -295,11 +295,13 @@ reload(LVLightUtils)
 LVLightUtils.listenForLight(hou.selectedItems())]]></script>
   </tool>
 
-  <tool name="Updater" label="Updater" icon="PLASMA_App">
+  <tool name="Updater" label="Updater" icon="BUTTONS_download">
     <script scriptType="python"><![CDATA[import LVUpdater
 from imp import reload
 reload(LVUpdater)
-# LVUpdater.update()
-hou.ui.displayMessage("Not working yet, if you adjust this one you could break your LVTools install!", severity=hou.severityType.Warning)]]></script>
+try:
+    LVUpdater.update()
+except:
+    print("Something went wrong, this updates with git, so install git and clone the repo to ensure this works.")]]></script>
   </tool>
 </shelfDocument>
