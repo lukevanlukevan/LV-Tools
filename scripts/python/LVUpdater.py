@@ -10,8 +10,7 @@ def update():
     os.chdir(path)
     result = subprocess.run('git fetch --dry-run', shell=True, capture_output=True, text=True)
 
-    if result.stdout == "":
-        # print("Up to date")
+    if not result.stdout == "":
         if hou.ui.displayMessage("Update available. Download update?", buttons=("Yes", "No")) == 0:
             subprocess.run('git fetch')
             hou.ui.displayMessage("Updated. Please restart Houdini.", buttons=("Okay", "Close"))
