@@ -8,30 +8,41 @@ def listenForLight(nodes):
     types = ['rslightdome::2.0', 'rslight', 'rslightsun']
 
     def flagChanged(node, event_type, **kwargs):
-        if any(node.type().name() == x for x in types):
-            enabled = node.parm("light_enabled")
+        flag = node.isDisplayFlagSet()
 
-            e = enabled.eval()
-            node.setGenericFlag(hou.nodeFlag.DisplayComment, True)
+        # node.setGenericFlag(hou.nodeFlag.DisplayComment, True)
+
+        c = hou.Color()
+
+        if not flag:
+            # node.setComment('Light Off')
+            hsv = (0, 1, 1)
+            c.setHSV(hsv)
+            node.setColor(c)
+        else:
+            # node.setComment('Light On')
+            hsv = (0, 0, 1)
+            c.setHSV(hsv)
+            node.setColor(c)
+
+    for node in sel:
+        flag = node.isDisplayFlagSet()
+
+        if any(node.type().name() == x for x in types):
+            node.removeAllEventCallbacks()
+            node.addEventCallback((hou.nodeEventType.FlagChanged, ), flagChanged)
+            node.parm('light_enabled').setExpression('hou.pwd().isDisplayFlagSet()', hou.exprLanguage.Python)
 
             c = hou.Color()
 
-            if e == 1:
-                enabled.set(0)
-                node.setComment('Light Off')
+            if not flag:
                 hsv = (0, 1, 1)
                 c.setHSV(hsv)
                 node.setColor(c)
             else:
-                enabled.set(1)
-                node.setComment('Light On')
                 hsv = (0, 0, 1)
                 c.setHSV(hsv)
                 node.setColor(c)
-
-    for node in sel:
-        node.removeAllEventCallbacks()
-        node.addEventCallback((hou.nodeEventType.FlagChanged, ), flagChanged)
 
 
 def light_listen():
@@ -40,4 +51,11 @@ def light_listen():
         single = kwargs['child_node']
 
         listenForLight(tuple([single]))
+    hou.node("/obj").removeAllEventCallbacks()
     hou.node("/obj").addEventCallback((hou.nodeEventType.ChildCreated,), prep)  # type: ignore
+
+    objs = hou.node("/obj").children()  # type: ignore
+    for o in objs:
+        print(o.name())
+        cb = o.eventCallbacks()
+        print(cb)
