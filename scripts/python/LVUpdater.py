@@ -12,7 +12,7 @@ def update():
 
     if not result.stdout == "":
         if hou.ui.displayMessage("Update available. Download update?", buttons=("Yes", "No")) == 0:
-            subprocess.run('git fetch')
+            subprocess.run('git pull')
             hou.ui.displayMessage("Updated. Please restart Houdini.", buttons=("Okay", "Close"))
 
     else:

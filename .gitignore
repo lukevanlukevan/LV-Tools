@@ -10,3 +10,4 @@ otls_bak/*
 python3.9libs/__pycache__/*
 otls/backup/*
 scripts/python/LVProjectManager/prefs.json
+python3.9libs/nodegraphtitle.py

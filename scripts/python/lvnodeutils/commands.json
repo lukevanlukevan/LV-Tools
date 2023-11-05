@@ -1,0 +1,9 @@
+[
+	{
+		"label": "Add Random Parm",
+		"icon": "DATATYPES_parameter",
+		"command": "lambda: LVParmUtils.addFloatParm(kwargs={'parms': (currentNode.parm('snippet'),)})",
+		"node": "attribwrangle"
+	}
+]
+
