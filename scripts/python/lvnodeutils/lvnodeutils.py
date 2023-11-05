@@ -67,7 +67,7 @@ class lvnodeutils(QtWidgets.QWidget):
 
         btns = []
 
-        # adding one million buttons
+        # adding one million buttons here
 
         # attribwrangle
         addFloatParm = (QPushButton(hou.qt.Icon('DATATYPES_parameter'), "Add Float Parm"), "attribwrangle",  "Add Float Parm")
