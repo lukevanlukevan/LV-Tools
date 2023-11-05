@@ -2,6 +2,7 @@ import hou
 import vexpressionmenu
 import subprocess
 import re
+from LVUtils import lv_error
 
 
 def addFloatParm(kwargs):
@@ -75,6 +76,91 @@ def cleanParms(kwargs):
 
     for r in toremove:
         node.removeSpareParmTuple(r)
+
+
+def pivotFromSpare(kwargs):
+    node = kwargs.get("node")
+    try:
+        if node.parm("spare_input0"):
+            pass
+        else:
+            spare_input = hou.StringParmTemplate("spare_input0", "Spare Input 0", 1, default_value=([""]), naming_scheme=hou.parmNamingScheme.Base1, string_type=hou.stringParmType.NodeReference, menu_items=(
+                []), menu_labels=([]), icon_names=([]), item_generator_script="", item_generator_script_language=hou.scriptLanguage.Python, menu_type=hou.menuType.Normal)
+            spare_input.setHelp("Refer to this in expressions as -1, such as: npoints(-1)")
+            spare_input.setTags({"cook_dependent": "1", "opfilter": "!!SOP!!", "oprelative": "."})
+            node.addSpareParmTuple(spare_input)
+        pt_sel = hou.IntParmTemplate("pt_sel", "Point Selection", 1, default_value=(0,))
+        node.addSpareParmTuple(pt_sel)
+    except:
+        pass
+
+    node.parm("px").setExpression('point(-1, ch("pt_sel"), "P", 0)', language=hou.exprLanguage.Hscript)
+    node.parm("py").setExpression('point(-1, ch("pt_sel"), "P", 1)', language=hou.exprLanguage.Hscript)
+    node.parm("pz").setExpression('point(-1, ch("pt_sel"), "P", 2)', language=hou.exprLanguage.Hscript)
+
+
+def offsetByAttribute(kwargs):
+    node = kwargs.get("node")
+    parm = node.parm("frame")
+
+    clicked, vals = hou.ui.readInput(
+        "Offset attribute:",
+        title="Offset By Attribute",
+        default_choice=0, close_choice=1,
+    )
+
+    if clicked == 0:
+        # try:
+        spare_input = hou.StringParmTemplate("spare_input0", "Spare Input 0", 1, default_value=([""]), naming_scheme=hou.parmNamingScheme.Base1, string_type=hou.stringParmType.NodeReference, menu_items=(
+            []), menu_labels=([]), icon_names=([]), item_generator_script="", item_generator_script_language=hou.scriptLanguage.Python, menu_type=hou.menuType.Normal)
+        spare_input.setHelp("Refer to this in expressions as -1, such as: npoints(-1)")
+        spare_input.setTags({"cook_dependent": "1", "opfilter": "!!SOP!!", "oprelative": "."})
+        node.addSpareParmTuple(spare_input)
+
+        offset = hou.IntParmTemplate("per_piece", "Offset Frames", 1, default_value=(0,))
+        node.addSpareParmTuple(offset)
+
+        parm.setExpression('$FF + (detail(-1, "iteration", 0) * ch("per_piece"))')
+
+        recon = node.inputs()[0]
+
+        split = node.createInputNode(0, 'split', f'split_by_{vals}')
+        split.addSpareParmTuple(spare_input)
+        loopStart = split.createInputNode(0, 'block_begin')
+        loopStart.parm("method").set('input')
+
+        loopStart.setInput(0, recon)
+
+        meta = loopStart.parent().createNode('block_begin')
+        meta.parm("method").set('metadata')
+        meta.setPosition(loopStart.position() + hou.Vector2(4, 0))
+
+        det = meta.path()
+
+        split.parm('group').set(f'@{vals}==`detail(-1, "iteration", 0)`')
+        split.parm('spare_input0').set(det)
+        split.parm("grouptype").set("prims")
+        # split.parm('negate').set(1)
+        node.parm('spare_input0').set(det)
+
+        loopEnd = node.createOutputNode('block_end')
+        loopEnd.parm("useattrib").set(0)
+        loopEnd.parm("itermethod").set('auto')
+        loopEnd.parm("attrib").set(vals)
+        loopEnd.parm("method").set('merge')
+        # loopEnd.parm("blockpath").set(loopEnd.relativePathTo(loopStart))
+        loopEnd.parm("blockpath").set(loopStart.path())
+        loopEnd.parm("templatepath").set(loopStart.path())
+        loopEnd.parm("class").set("primitive")
+        loopEnd.parm("resetcookpass").pressButton()
+
+        # loopStart.parm("blockpath").set(loopStart.relativePathTo(loopEnd))
+        loopStart.parm("blockpath").set(loopEnd.path())
+        meta.parm("blockpath").set(loopEnd.path())
+
+        # except Exception as e:
+
+        # lv_error("offsetByAttribute", e)
 
 
 def regenParms(kwargs):

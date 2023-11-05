@@ -1,6 +1,15 @@
 import hou
 
 
+def lv_error(f, message):
+
+    print("------------------------")
+    print(f"Error running: {f}")
+    # print("Logging error")
+    print(message)
+    print("------------------------")
+
+
 def createNamedGeo(kwargs):
 
     input = hou.ui.readInput("Container name:")[1].replace(" ", "_")

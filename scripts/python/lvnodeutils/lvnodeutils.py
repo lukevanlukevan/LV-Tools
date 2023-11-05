@@ -29,15 +29,17 @@ class lvnodeutils(QtWidgets.QWidget):
         global btnLayout
         global btnLayout2
         global hori
+        global nodeLabel
 
         hori = self.ui.findChild(QtWidgets.QPushButton, "hori")
-        hori.setIcon(hou.qt.Icon('BUTTONS_flip_vertical'))
+        hori.setIcon(hou.qt.Icon('BUTTONS_collapse_left'))
         hori.setText('Collapse')
         hori.clicked.connect(self.setDir)
+        hori.setMinimumWidth(3)
 
-        # btnLayout = QtWidgets.QVBoxLayout()
         btnLayout = self.ui.findChild(QtWidgets.QWidget, "vlayout").layout()
-        # self.ui.findChild(QtWidgets.QGridLayout, "mainGrid").addLayout(btnLayout, 2, 0)
+        nodeLabel = self.ui.findChild(QtWidgets.QLabel, "nodeLabel")
+        # nodeLabel.hide()
 
         layout = QtWidgets.QVBoxLayout()
         layout.setContentsMargins(0, 0, 0, 0)
@@ -66,6 +68,8 @@ class lvnodeutils(QtWidgets.QWidget):
         btns = []
 
         # adding one million buttons
+
+        # attribwrangle
         addFloatParm = (QPushButton(hou.qt.Icon('DATATYPES_parameter'), "Add Float Parm"), "attribwrangle",  "Add Float Parm")
         addFloatParm[0].clicked.connect(lambda: LVParmUtils.addFloatParm(kwargs={"parms": (currentNode.parm("snippet"),)}))
         btns.append(addFloatParm)
@@ -74,46 +78,55 @@ class lvnodeutils(QtWidgets.QWidget):
         addChramp[0].clicked.connect(lambda: LVParmUtils.addChramp(kwargs={"parms": (currentNode.parm("snippet"),)}))
         btns.append(addChramp)
 
-        cleanParms = (QPushButton(hou.qt.Icon('ENGINE_clean_temp'), "Remove unused parms"), "attribwrangle", "Remove unused parms")
+        cleanParms = (QPushButton(hou.qt.Icon('ENGINE_clean_temp'), "Remove Unused Parms"), "attribwrangle", "Remove Unused Parms")
         cleanParms[0].clicked.connect(lambda: LVParmUtils.cleanParms(kwargs={"parms": (currentNode.parm("snippet"),)}))
         btns.append(cleanParms)
 
-        # for d in loads:
-        #     label = d['label']
-        #     icon = d['icon']
-        #     command = d['command']
-        #     new = d['node']
+        # xform
+        pivotFromSpare = (QPushButton(hou.qt.Icon('BUTTONS_chooser_node'), "Pivot From Spare Input"), "xform", "Pivot From Spare Input")
+        pivotFromSpare[0].clicked.connect(lambda: LVParmUtils.pivotFromSpare(kwargs={"node": currentNode}))
+        btns.append(pivotFromSpare)
 
-        #     btn = (QPushButton(hou.qt.Icon(icon), label), "attribwrangle", label)
-        #     btn[0].clicked.connect(lambda: exec("lambda: LVParmUtils.addFloatParm(kwargs={'parms': (currentNode.parm('snippet'),)})"))
-        #     btns.append(btn)
+        # timeshift
+        # offsetByAttribute = (QPushButton(hou.qt.Icon('BUTTONS_chooser_node'), "Offset by Spare Input"), "timeshift", "Offset by Spare Input")
+        # offsetByAttribute[0].clicked.connect(lambda: LVParmUtils.offsetByAttribute(kwargs={"node": currentNode}))
+        # btns.append(offsetByAttribute)
 
         for btn in btns:
             btnLayout.addWidget(btn[0])
             btn[0].hide()
             btn[0].setToolTip(btn[2])
+            btn[0].setStyleSheet("text-align: left;")
 
         spacer = QtWidgets.QSpacerItem(0, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         btnLayout.addItem(spacer)
+
+    def getFirst(self, s):
+        return ''.join([word[0].upper() for word in s.split()])
 
     def setDir(self):
         global direction
         d = direction
         direction = 0 if direction else 1
         if direction == 0:
-            hori.setText('Expand')
-            hori.setIcon(hou.qt.Icon('BUTTONS_flip_horizontal'))
+            hori.setText('')
+            hori.setIcon(hou.qt.Icon('BUTTONS_expand_right'))
         else:
             hori.setText('Collapse')
-            hori.setIcon(hou.qt.Icon('BUTTONS_flip_horizontal'))
+            hori.setIcon(hou.qt.Icon('BUTTONS_collapse_left'))
         for btn in btns:
             if direction == 1:
+                hide = btn[0].isHidden()
                 btn[0].setText(btn[2])
                 btn[0].setToolTip(btn[2])
             else:
-                btn[0].setText('')
+                btn[0].setText(self.getFirst(btn[2]))
                 btn[0].setToolTip(btn[2])
-                btn[0].show()
+                # btn[0].setStyleSheet("text-align: left; padding-left: 6px; padding-right: 6px")
+                # h = hori.height()
+                # btn[0].setFixedSize(h, h)
+                # hori.setFixedSize(h, h)
+                # hori.setStyleSheet("text-align: left; padding-left: 6px; padding-right: 6px")
 
             btn[0].setToolTip(btn[0].text())
 
@@ -132,3 +145,5 @@ class lvnodeutils(QtWidgets.QWidget):
                 widget.hide()
             else:
                 widget.show()
+
+        nodeLabel.setText(selector)

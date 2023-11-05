@@ -21,6 +21,16 @@
     </sizepolicy>
    </property>
    <layout class="QVBoxLayout" name="verticalLayout">
+    <property name="sizeConstraint">
+     <enum>QLayout::SetMinimumSize</enum>
+    </property>
+    <item>
+     <widget class="QLabel" name="nodeLabel">
+      <property name="text">
+       <string>No node selected</string>
+      </property>
+     </widget>
+    </item>
     <item>
      <layout class="QGridLayout" name="mainGrid">
       <property name="sizeConstraint">
@@ -31,8 +41,14 @@
       </property>
       <item row="0" column="0">
        <layout class="QHBoxLayout" name="horizontalLayout">
+        <property name="sizeConstraint">
+         <enum>QLayout::SetMinimumSize</enum>
+        </property>
         <item>
          <widget class="QPushButton" name="hori">
+          <property name="styleSheet">
+           <string notr="true">ho</string>
+          </property>
           <property name="text">
            <string/>
           </property>
@@ -51,7 +67,7 @@
            <x>0</x>
            <y>0</y>
            <width>1071</width>
-           <height>373</height>
+           <height>349</height>
           </rect>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_2">

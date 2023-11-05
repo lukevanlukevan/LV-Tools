@@ -126,14 +126,8 @@ HDAUtils.build_help()]]></script>
   <tool name="ordered_menu" label="Ordered Menu Edit" icon="PLASMA_App">
     <script scriptType="python"><![CDATA[node = hou.selectedItems()[0]
 
-menu = node.parm("menu")
-print(menu)
-
-items = ("1","2","3")
-labels = ("Hello", "World", ":)")
-
-menu.setMenuItems(items)
-menu.setMenuLabels(labels)
+spare = node.parm("spare_input0")
+print(node.type().name())
 ]]></script>
   </tool>
 </shelfDocument>
