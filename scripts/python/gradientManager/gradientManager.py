@@ -233,11 +233,14 @@ class gradientManager(QtWidgets.QWidget):
         self.tab = self.ui.findChild(QtWidgets.QWidget, "tab")
 
         tempi = 0
+        placement = -1
         files = os.listdir(self.gradFolder)
         files.sort()
         for filename in files:
             f = os.path.join(self.gradFolder, filename)
             # checking if it is a file
+            i += 1
+
             if os.path.isfile(f):
 
                 with open(f"{f}", "r") as openfile:
@@ -249,8 +252,7 @@ class gradientManager(QtWidgets.QWidget):
                 color = str(json_object["isColor"])
 
                 if self.toggleState == color or self.toggleState == 'All':
-                    i += 1
-
+                    placement += 1
                     new_keys = []
                     for k in keys:
                         new_keys.append(float(k))
@@ -331,7 +333,7 @@ class gradientManager(QtWidgets.QWidget):
 
                     self.gradHolder.setLayout(self.libItem)
 
-                    self.graphGrid.addWidget(self.gradHolder, i/4, i % 4)
+                    self.graphGrid.addWidget(self.gradHolder, placement/4, placement % 4)
 
                     tempi = i+1
 
