@@ -40,6 +40,32 @@ class gradientManager(QtWidgets.QWidget):
         self.saveRampBtn = self.ui.findChild(QtWidgets.QPushButton, "saveRamp")
         self.saveRampBtn.clicked.connect(self.saveRamp)
 
+        self.parmRow = self.ui.findChild(QtWidgets.QHBoxLayout, "parmRow")
+
+        self.controlGroup = QtWidgets.QButtonGroup()
+        self.toggleState = 'All'
+        self.controlGroup.buttonClicked.connect(self.setToggle)
+
+        self.all = QtWidgets.QPushButton("All")
+        self.all.setCheckable(True)
+        self.all.setWhatsThis("All")
+        self.all.setChecked(True)
+        self.float = QtWidgets.QPushButton("Float")
+        self.float.setCheckable(True)
+        self.float.setWhatsThis("False")
+        self.color = QtWidgets.QPushButton("Color")
+        self.color.setCheckable(True)
+        self.color.setWhatsThis("True")
+
+        self.controlGroup.addButton(self.color, 0)
+        self.controlGroup.addButton(self.float, 1)
+        self.controlGroup.addButton(self.all, 2)
+
+        self.radio = self.ui.findChild(QtWidgets.QHBoxLayout, "toggleRow")
+        self.radio.addWidget(self.all)
+        self.radio.addWidget(self.float)
+        self.radio.addWidget(self.color)
+
         # self.undoBtn = self.ui.findChild(QtWidgets.QPushButton, "undo")
 
         self.graphGrid = self.ui.findChild(QtWidgets.QGridLayout, "graphGrid")
@@ -57,6 +83,11 @@ class gradientManager(QtWidgets.QWidget):
         mainLayout.addWidget(self.ui)
         self.setLayout(mainLayout)
         self.stringChanged()
+
+    def setToggle(self, button):
+        i = button.whatsThis()
+        self.toggleState = i
+        self.loadRamps()
 
     def savePrefs(self):
         prefs = {
@@ -206,7 +237,6 @@ class gradientManager(QtWidgets.QWidget):
         files.sort()
         for filename in files:
             f = os.path.join(self.gradFolder, filename)
-            i += 1
             # checking if it is a file
             if os.path.isfile(f):
 
@@ -216,90 +246,94 @@ class gradientManager(QtWidgets.QWidget):
                 name = json_object["name"]
 
                 keys = json_object["ramp_keys"]
+                color = str(json_object["isColor"])
 
-                new_keys = []
-                for k in keys:
-                    new_keys.append(float(k))
+                if self.toggleState == color or self.toggleState == 'All':
+                    i += 1
 
-                values = json_object["ramp_values"]  # .strip("()")
+                    new_keys = []
+                    for k in keys:
+                        new_keys.append(float(k))
 
-                new_values = []
-                for val in values:
-                    new_values.append(val)
+                    values = json_object["ramp_values"]  # .strip("()")
 
-                self.gradHolder = QtWidgets.QWidget()
-                gradPolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Maximum)
-                self.gradHolder.setSizePolicy(gradPolicy)
-
-                self.libItem = QtWidgets.QGridLayout()
-                self.libItem.setContentsMargins(5, 5, 5, 5)
-                self.itemThumb = QtWidgets.QPushButton()
-                self.itemThumb.setMinimumSize(100, 100)
-
-                gradStyle = ('''QWidget:hover:!pressed {
-                                background-color: rgba(255, 255, 255, 100);
-                            }
-
-                            ''')
-                self.gradHolder.setStyleSheet(gradStyle)
-                inColor = values[0]
-                outColor = values[-1]
-
-                kString = []
-                ki = -1
-                for k in keys:
-                    ki += 1
-                    kString.append(f'x{ki+1}: {float(ki)/(len(keys)-1)}, y{ki+1}: 0')
-
-                kString = ', '.join(kString)
-
-                vString = []
-                if json_object['isColor'] == False:
-                    self.buttonLayout = QtWidgets.QGridLayout()
-                    self.buttonLayout.setContentsMargins(0, 0, 0, 0)
-                    self.graph = GraphView(self.itemThumb, json_object['plot_values'])
-                    self.graph.setRenderHint(QtGui.QPainter.Antialiasing)
-                    self.graph.setMinimumSize(100, 100)
-                    self.graph.setWhatsThis(str(i))
-                    self.buttonLayout.addWidget(self.graph)
-                    self.itemThumb.setLayout(self.buttonLayout)
-                else:
-                    vi = -1
+                    new_values = []
                     for val in values:
-                        vi += 1
-                        vString.append(f'stop: {float(vi)/(len(values)-1)} rgba({val[0]*255}, {val[1]*255}, {val[2]*255})')
+                        new_values.append(val)
 
-                vString = ', '.join(vString)
+                    self.gradHolder = QtWidgets.QWidget()
+                    gradPolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Maximum)
+                    self.gradHolder.setSizePolicy(gradPolicy)
 
-                gradStyle = (f'QPushButton {{border: none; background-color: qlineargradient(spread: pad, x1: {keys[0]}, y1: 0, x2: {keys[-1]}, y2: 0, {str(vString)})}}')
-                self.itemThumb.setStyleSheet(gradStyle)
-                self.itemThumb.setWhatsThis(str(i))
+                    self.libItem = QtWidgets.QGridLayout()
+                    self.libItem.setContentsMargins(5, 5, 5, 5)
+                    self.itemThumb = QtWidgets.QPushButton()
+                    self.itemThumb.setMinimumSize(100, 100)
 
-                self.libItem.addWidget(self.itemThumb, 0, 0, 1, 1)
-                self.gradHolder.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
-                self.gradHolder.customContextMenuRequested.connect(lambda: self.showContextMenu(self.gradHolder, QtGui.QCursor.pos(), i))
-                self.gradHolder.setWhatsThis(str(i))
+                    gradStyle = ('''QWidget:hover:!pressed {
+                                    background-color: rgba(255, 255, 255, 100);
+                                }
 
-                self.itemLabel = QtWidgets.QLabel()
-                if name == "":
-                    self.itemLabel.setText(f"Ramp {i+1}")
-                else:
-                    self.itemLabel.setText(name)
+                                ''')
+                    self.gradHolder.setStyleSheet(gradStyle)
+                    inColor = values[0]
+                    outColor = values[-1]
 
-                self.itemLabel.setEnabled(False)
-                self.itemLabel.setStyleSheet('color: rgb(200, 200, 200);')
+                    kString = []
+                    ki = -1
+                    for k in keys:
+                        ki += 1
+                        kString.append(f'x{ki+1}: {float(ki)/(len(keys)-1)}, y{ki+1}: 0')
 
-                self.itemLabel.setAlignment(QtCore.Qt.AlignHCenter)
+                    kString = ', '.join(kString)
 
-                self.libItem.addWidget(self.itemLabel, 1, 0, 1, 1)
+                    vString = []
+                    if json_object['isColor'] == False:
+                        self.buttonLayout = QtWidgets.QGridLayout()
+                        self.buttonLayout.setContentsMargins(0, 0, 0, 0)
+                        self.graph = GraphView(self.itemThumb, json_object['plot_values'])
+                        self.graph.setRenderHint(QtGui.QPainter.Antialiasing)
+                        self.graph.setMinimumSize(100, 100)
+                        self.graph.setWhatsThis(str(i))
+                        self.buttonLayout.addWidget(self.graph)
+                        self.itemThumb.setLayout(self.buttonLayout)
+                    else:
+                        vi = -1
+                        for val in values:
+                            vi += 1
+                            vString.append(f'stop: {float(vi)/(len(values)-1)} rgba({val[0]*255}, {val[1]*255}, {val[2]*255})')
 
-                self.gradGroup.addButton(self.itemThumb, i)
+                    vString = ', '.join(vString)
 
-                self.gradHolder.setLayout(self.libItem)
+                    gradStyle = (f'QPushButton {{border: none; background-color: qlineargradient(spread: pad, x1: {keys[0]}, y1: 0, x2: {keys[-1]}, y2: 0, {str(vString)})}}')
+                    self.itemThumb.setStyleSheet(gradStyle)
+                    self.itemThumb.setWhatsThis(str(i))
 
-                self.graphGrid.addWidget(self.gradHolder, i/4, i % 4)
+                    self.libItem.addWidget(self.itemThumb, 0, 0, 1, 1)
+                    self.gradHolder.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
+                    self.gradHolder.customContextMenuRequested.connect(lambda: self.showContextMenu(self.gradHolder, QtGui.QCursor.pos(), i))
+                    self.gradHolder.setWhatsThis(str(i))
 
-                tempi = i+1
+                    self.itemLabel = QtWidgets.QLabel()
+                    if name == "":
+                        self.itemLabel.setText(f"Ramp {i+1}")
+                    else:
+                        self.itemLabel.setText(name)
+
+                    self.itemLabel.setEnabled(False)
+                    self.itemLabel.setStyleSheet('color: rgb(200, 200, 200);')
+
+                    self.itemLabel.setAlignment(QtCore.Qt.AlignHCenter)
+
+                    self.libItem.addWidget(self.itemLabel, 1, 0, 1, 1)
+
+                    self.gradGroup.addButton(self.itemThumb, i)
+
+                    self.gradHolder.setLayout(self.libItem)
+
+                    self.graphGrid.addWidget(self.gradHolder, i/4, i % 4)
+
+                    tempi = i+1
 
         self.rampCount = tempi
         self.stringChanged()
