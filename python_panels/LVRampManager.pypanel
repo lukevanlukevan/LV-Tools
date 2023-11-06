@@ -5,7 +5,7 @@
  used by the application.  Note, that two definitions of the
  same interface or of the interfaces menu are not allowed
  in a single file. -->
-  <interface name="LV_Gradient_Manager2" label="LV Gradient Manager" icon="COP2_ramp" showNetworkNavigationBar="false" help_url="">
+  <interface name="LV_Ramp_Manager" label="LV Ramp Manager" icon="COP2_ramp" showNetworkNavigationBar="false" help_url="">
     <script><![CDATA[from imp import reload
 from gradientManager import gradientManager
 reload(gradientManager)

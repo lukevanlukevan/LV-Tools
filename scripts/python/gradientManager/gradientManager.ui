@@ -146,28 +146,6 @@
                 </property>
                </widget>
               </item>
-              <item>
-               <widget class="QPushButton" name="undo">
-                <property name="minimumSize">
-                 <size>
-                  <width>100</width>
-                  <height>0</height>
-                 </size>
-                </property>
-                <property name="maximumSize">
-                 <size>
-                  <width>300</width>
-                  <height>16777215</height>
-                 </size>
-                </property>
-                <property name="styleSheet">
-                 <string notr="true"/>
-                </property>
-                <property name="text">
-                 <string>Delete Last Ramp</string>
-                </property>
-               </widget>
-              </item>
              </layout>
             </item>
             <item row="1" column="0">
