@@ -3,16 +3,17 @@ import openai
 import os
 from dotenv import load_dotenv, find_dotenv
 
-load_dotenv(find_dotenv())
-# os.environ['OPENAI_KEY'] = 'KEY_HERE'
-
-pbase = os.getcwd()
-pdir = os.path.dirname(os.path.abspath(__file__))
-
 
 def setKey():
+    pbase = os.getcwd()
+    pdir = os.path.dirname(os.path.abspath(__file__))
     os.chdir(pdir)
+    load_dotenv(find_dotenv())
+
+    pbase = os.getcwd()
+    pdir = os.path.dirname(os.path.abspath(__file__))
     key = os.getenv("OPENAI_KEY")
+    # print(key)
     os.chdir(pbase)
     if key == "" or key == None:
         c, val = hou.ui.readInput("Please acquire OpenAI key and paste here", buttons=("Ok", "Cancel",), title="Open AI Key", close_choice=1)
@@ -27,9 +28,11 @@ def setKey():
 def call():
     setKey()
     key = os.getenv("OPENAI_KEY")
-    if (key != ""):
+    if (key == ""):
+        # print("OpenAI key is not set")
         pass
     else:
+        openai.api_key = key
         node = hou.selectedNodes()[0]
         snippet = node.parm("snippet")
 
