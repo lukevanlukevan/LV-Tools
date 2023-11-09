@@ -142,7 +142,7 @@ class gradientManager(QtWidgets.QWidget):
 
                 new_ramp = hou.Ramp(new_basis, tuple(new_keys), tuple(new_values))
 
-                if str(p.eval().isColor()) + " " + str(json_object['isColor']):
+                if str(p.eval().isColor()) == str(json_object['isColor']):
                     p.set(new_ramp)
                 else:
                     pass

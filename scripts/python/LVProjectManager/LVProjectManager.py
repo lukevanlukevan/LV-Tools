@@ -264,8 +264,11 @@ class LVProjectManager(QtWidgets.QWidget):
         path = os.path.join(self.combinedPath, cell)
         if hou.hipFile.name().endswith('untitled.hip'):
             hou.hipFile.load(path)
-        elif hou.ui.displayMessage("Save current file and open?", buttons=("Yes", "No")) == 0:
-            hou.hipFile.save()
+        if hou.hipFile.hasUnsavedChanges():
+            if hou.ui.displayMessage("Save current file and open?", buttons=("Yes", "No")) == 0:
+                hou.hipFile.save()
+                hou.hipFile.load(path)
+        else:
             hou.hipFile.load(path)
 
         hou.hscript("autosave on")
@@ -344,7 +347,7 @@ class LVProjectManager(QtWidgets.QWidget):
 
     def processPath(self, path):
         return hou.expandString(path).replace("C:/Users/PIC-TWO/Partners in Crime Dropbox/Luke Van/STUDIO-PIC/", "$DB/").replace("P:/", "$DB/").replace(
-            "/Users/lukevan/Partners in Crime Dropbox/Luke Van/STUDIO-PIC/", "$DB/").replace("//", "/")
+            "/Users/lukevan/Partners in Crime Dropbox/Luke Van/STUDIO-PIC/", "$DB/").replace("//", "/").replace("\\", "/")
 
     def setEnvs(self):
         hou.hscript("setenv -s %s=%s" % ("JOB", f'{self.processPath(self.basePath)}'))

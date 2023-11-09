@@ -56,6 +56,4 @@ def light_listen():
 
     objs = hou.node("/obj").children()  # type: ignore
     for o in objs:
-        print(o.name())
         cb = o.eventCallbacks()
-        print(cb)

@@ -18,6 +18,7 @@
     <memberTool name="Light_Visibility_Listener"/>
     <memberTool name="Updater"/>
     <memberTool name="render_to_mp4"/>
+    <memberTool name="lv_gpt_comment"/>
   </toolshelf>
 
   <tool name="LV_Color" label="LV Color" icon="SOP_color">
@@ -303,5 +304,21 @@ try:
     LVUpdater.update()
 except:
     print("Something went wrong, this updates with git, so install git and clone the repo to ensure this works.")]]></script>
+  </tool>
+
+  <tool name="render_to_mp4" label="Render to MP4" icon="NETWORKS_rop">
+    <script scriptType="python"><![CDATA[import LVRender
+from imp import reload
+reload(LVRender)
+
+LVRender.post_render(hou.selectedItems()[0])]]></script>
+  </tool>
+
+  <tool name="lv_gpt_comment" label="LV GPT Add Comments" icon="$LV/lv.svg">
+    <script scriptType="python"><![CDATA[import LVAI
+from importlib import reload
+
+reload(LVAI)
+LVAI.call()]]></script>
   </tool>
 </shelfDocument>

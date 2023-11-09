@@ -33,7 +33,8 @@
     <memberTool name="LVUpdate"/>
     <memberTool name="build_hda_help"/>
     <memberTool name="Dbug"/>
-    <memberTool name="ordered_menu"/>
+    <memberTool name="EaseTest"/>
+    <memberTool name="gpt"/>
   </toolshelf>
 
   <tool name="Paste Ease" label="Paste Ease" icon="PLASMA_App">
@@ -123,11 +124,20 @@ reload(HDAUtils)
 HDAUtils.build_help()]]></script>
   </tool>
 
-  <tool name="ordered_menu" label="Ordered Menu Edit" icon="PLASMA_App">
-    <script scriptType="python"><![CDATA[node = hou.selectedItems()[0]
+  <tool name="EaseTest" label="EaseTest" icon="PLASMA_App">
+    <script scriptType="python"><![CDATA[import LVAnimTools
+from imp import reload
 
-spare = node.parm("spare_input0")
-print(node.type().name())
-]]></script>
+reload(LVAnimTools)
+print('---')
+LVAnimTools.flip_x()]]></script>
+  </tool>
+
+  <tool name="gpt" label="gpt" icon="PLASMA_App">
+    <script scriptType="python"><![CDATA[import gpt
+from importlib import reload
+
+reload(gpt)
+gpt.call()]]></script>
   </tool>
 </shelfDocument>
