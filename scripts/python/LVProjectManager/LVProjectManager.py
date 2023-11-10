@@ -5,7 +5,13 @@ import hou
 import os
 import json
 
-from OD import shelftools
+global odstate
+
+try:
+    from OD import shelftools
+    odstate = True
+except:
+    odstate = False
 
 
 class LVProjectManager(QtWidgets.QWidget):
@@ -80,7 +86,8 @@ class LVProjectManager(QtWidgets.QWidget):
         self.initBtn.setFont(QtGui.QFont("Source Sans Pro", 12))
 
         self.flipBtn = self.ui.findChild(QPushButton, "flipBtn")
-        self.flipBtn.clicked.connect(self.flipbook)
+        if odstate:
+            self.flipBtn.clicked.connect(self.flipbook)
         self.flipBtn.setFont(QtGui.QFont("Source Sans Pro", 12))
         # Initial loads
 

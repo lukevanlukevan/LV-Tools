@@ -2,7 +2,7 @@
 
 == Overview ==
 
-Explanation of the node's purpose and operation.
+Simple blend between 2 pieces of geometry by an input attribute. Blendshape SOP has this feature.
 
 @inputs
 

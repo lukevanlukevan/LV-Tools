@@ -2,7 +2,7 @@
 
 == Overview ==
 
-Explanation of the node's purpose and operation.
+Clip geometry and mirror by the same plane.
 
 @inputs
 
