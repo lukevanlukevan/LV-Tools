@@ -89,3 +89,22 @@ def build_help():
                 f.close()
 
                 node.destroy()
+
+
+def change_icon():
+    geo = hou.node("/obj/geo1")
+    print(geo)
+    i = 0
+    findLoadedHDAs()
+    for hda in findLoadedHDAs():
+        if hda.nodeTypeCategory().name() == "Sop":
+            if not "dev" in hda.nodeTypeName().lower():
+                node = geo.createNode(hda.nodeTypeName())
+                hda.setIcon("$LV/lv.svg")
+
+                node.allowEditingOfContents()
+                hda.setIcon("$LV/lv.svg")
+                hou.ui.openTypePropertiesDialog(node)
+                # hda.updateFromNode(node)
+
+                # node.destroy()

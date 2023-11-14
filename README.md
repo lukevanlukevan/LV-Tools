@@ -9,5 +9,9 @@ If you are a git user, its worth it to clear the folder and backup any preferenc
 
 ## Documentation:
 
+[HDAs](/otls/)
 [Scripts](/scripts/python/README.md)
+[Python Panels](/python_panels/)
+[Node Graph Hooks](/python3.9libs/)
+[Shelf Tabs](/toolbar/)
 

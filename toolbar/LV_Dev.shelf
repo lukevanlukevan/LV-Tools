@@ -121,7 +121,7 @@ f.close()]]></script>
     <script scriptType="python"><![CDATA[import HDAUtils
 from imp import reload
 reload(HDAUtils)
-HDAUtils.build_help()]]></script>
+HDAUtils.change_icon()]]></script>
   </tool>
 
   <tool name="EaseTest" label="EaseTest" icon="PLASMA_App">
