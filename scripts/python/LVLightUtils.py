@@ -26,23 +26,26 @@ def listenForLight(nodes):
             node.setColor(c)
 
     for node in sel:
-        flag = node.isDisplayFlagSet()
+        try:
+            flag = node.isDisplayFlagSet()
 
-        if any(node.type().name() == x for x in types):
-            node.removeAllEventCallbacks()
-            node.addEventCallback((hou.nodeEventType.FlagChanged, ), flagChanged)
-            node.parm('light_enabled').setExpression('hou.pwd().isDisplayFlagSet()', hou.exprLanguage.Python)
+            if any(node.type().name() == x for x in types):
+                node.removeAllEventCallbacks()
+                node.addEventCallback((hou.nodeEventType.FlagChanged, ), flagChanged)
+                node.parm('light_enabled').setExpression('hou.pwd().isDisplayFlagSet()', hou.exprLanguage.Python)
 
-            c = hou.Color()
+                c = hou.Color()
 
-            if not flag:
-                hsv = (0, 1, 1)
-                c.setHSV(hsv)
-                node.setColor(c)
-            else:
-                hsv = (0, 0, 1)
-                c.setHSV(hsv)
-                node.setColor(c)
+                if not flag:
+                    hsv = (0, 1, 1)
+                    c.setHSV(hsv)
+                    node.setColor(c)
+                else:
+                    hsv = (0, 0, 1)
+                    c.setHSV(hsv)
+                    node.setColor(c)
+        except:
+            pass
 
 
 def light_listen():
