@@ -6,14 +6,12 @@
   <menuBar>
     <!-- ======================== File Menu ============================== -->
     <subMenu id="file_menu">
-    <label>File</label>
+      <label>File</label>
+        <scriptItem id="lv_saveincremental">
 
-
-	<scriptItem id="lv_saveincremental">
-	
-	<label>Save Incremental</label>
-	<insertAfter>h.save_as</insertAfter>
-	<scriptCode>
+        <label>Save Incremental</label>
+        <insertAfter>h.save_as</insertAfter>
+<scriptCode>
 <![CDATA[
 from imp import reload
 import LVUtils
@@ -21,11 +19,40 @@ reload(LVUtils)
 
 LVUtils.save_incremental()
 ]]></scriptCode>
-	</scriptItem>
+        </scriptItem>
 
 
-    </subMenu>
+      </subMenu>
 
+      <subMenu id="LV_menu">
+        <label>LV Tools</label>
+        <insertAfter>help_menu</insertAfter>
+          <scriptItem id="lv_discord">
+          <label>Join LV Tools Discord</label>
 
+<scriptCode>
+<![CDATA[
+import webbrowser
+webbrowser.open("https://discord.gg/evVztWBG6v", new=0, autoraise=True)
+]]></scriptCode>
+
+          </scriptItem>
+
+          <scriptItem id="lv_update">
+          <label>Update LV Tools (git)</label>
+
+<scriptCode>
+<![CDATA[
+import LVUpdater
+from imp import reload
+reload(LVUpdater)
+try:
+    LVUpdater.update()
+except:
+    print("Something went wrong, this updates with git, so install git and clone the repo to ensure this works.")
+]]></scriptCode>
+
+          </scriptItem>
+      </subMenu>
   </menuBar>
 </mainMenu>
