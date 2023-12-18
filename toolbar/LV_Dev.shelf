@@ -35,6 +35,7 @@
     <memberTool name="Dbug"/>
     <memberTool name="EaseTest"/>
     <memberTool name="gpt"/>
+    <memberTool name="tool_15"/>
   </toolshelf>
 
   <tool name="Paste Ease" label="Paste Ease" icon="PLASMA_App">

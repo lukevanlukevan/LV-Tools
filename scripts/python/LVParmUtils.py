@@ -5,6 +5,29 @@ import re
 from LVUtils import lv_error
 
 
+def moveWrangleParms(kwargs):
+    node = kwargs["parms"][0].node()
+
+    folder_name = "folder_generatedparms_snippet"
+    ptg = node.parmTemplateGroup()
+
+    # Find the folder to move
+    folder = ptg.findFolder(folder_name)
+
+    # Remove the folder from its current location
+    ptg.remove(folder)
+
+    # Add the folder to the new location
+    new_folder = ptg.findFolder('folder1')
+    if new_folder is None:
+        new_folder = hou.FolderParmTemplate('folder1', 'folder1')
+        ptg.append(new_folder)
+    new_folder.addParmTemplate(folder)
+
+    # Set the new parameter template group for the node
+    node.setParmTemplateGroup(ptg)
+
+
 def addFloatParm(kwargs):
     node = kwargs["parms"][0].node()
 

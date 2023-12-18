@@ -96,6 +96,19 @@
            </property>
           </widget>
          </item>
+         <item>
+          <widget class="QPushButton" name="hipbookBtn">
+           <property name="toolTip">
+            <string>Non-dated flipbook called $HIPNAME. Shift Click for custom name.</string>
+           </property>
+           <property name="styleSheet">
+            <string notr="true"/>
+           </property>
+           <property name="text">
+            <string>🎬$HIP-Book</string>
+           </property>
+          </widget>
+         </item>
         </layout>
        </item>
        <item>

@@ -26,7 +26,7 @@ LVParmUtils.addFloatParm(kwargs)
 			</scriptItem>
 
 			<scriptItem>
-				<label>Regenerate Parm UI</label>
+				<label>Move Wrangle Parms</label>
 				<expression>
 					parm = kwargs["parms"]
 					if parm is None:
@@ -40,10 +40,11 @@ from imp import reload
 import LVParmUtils
 reload(LVParmUtils)
 
-LVParmUtils.regenParms(kwargs)
+LVParmUtils.moveWrangleParms(kwargs)
 ]]>
 			</scriptCode>
 			</scriptItem>
+
 
 		</subMenu>
 
@@ -58,6 +59,19 @@ LVParmUtils.regenParms(kwargs)
 
 				return parm[0].parmTemplate().type().name() == 'Ramp'
 			</expression>
+
+			<scriptItem id="LV_randomize_knots">
+				<label>LV Randomize Knots</label>
+				<scriptCode>
+<![CDATA[
+from imp import reload
+import knotcontrol
+reload(knotcontrol)
+
+knotcontrol.randomizeKnots(kwargs)
+]]>
+            </scriptCode>
+			</scriptItem>
 
 			<scriptItem id="LV_distribute_knots">
 				<label>LV Distribute Constant</label>

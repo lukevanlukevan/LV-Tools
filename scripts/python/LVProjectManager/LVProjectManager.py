@@ -89,6 +89,11 @@ class LVProjectManager(QtWidgets.QWidget):
         if odstate:
             self.flipBtn.clicked.connect(self.flipbook)
         self.flipBtn.setFont(QtGui.QFont("Source Sans Pro", 12))
+
+        self.hipbookBtn = self.ui.findChild(QPushButton, "hipbookBtn")
+        if odstate:
+            self.hipbookBtn.clicked.connect(lambda: self.flipbook(True))
+        self.hipbookBtn.setFont(QtGui.QFont("Source Sans Pro", 12))
         # Initial loads
 
         self.noteEdit = self.ui.findChild(QtWidgets.QTextEdit, "notes")
@@ -147,15 +152,24 @@ class LVProjectManager(QtWidgets.QWidget):
 
             self.noteEdit.setText(self.notes)
 
-    def flipbook(self):
-        shelftools.createFlipAndHipCopy()
+    def flipbook(self, named=False):
+        if named:
+            flippath = hou.text.expandString("$HIP/flibook/$HIPNAME.mp4")
+            shelftools.createFlipAndHipCopy(flippath)
+            hou.ui.showInFileBrowser(flippath)
+        else:
+            shelftools.createFlipAndHipCopy()
 
     def initDir(self):
         dirs = ['geo', 'abc', 'tex', 'render']
         p = hou.text.expandString(self.combinedPath)
 
+        if not os.path.exists(p):
+            os.makedirs(p)
+
         for d in dirs:
             c = os.path.join(p, d)
+            print('making:', c)
             if not os.path.exists(c):
                 os.mkdir(c)
 
@@ -317,8 +331,6 @@ class LVProjectManager(QtWidgets.QWidget):
 
             # new = prjs.sort(key=lambda x: os.path.getmtime(x))
 
-            # print(new)
-
             rowPosition = 1
             for job in prjs:
                 if len(job) > 0:
@@ -368,7 +380,7 @@ class LVProjectManager(QtWidgets.QWidget):
             files = os.listdir(file_path)
             for f in files:
                 if not f == 'backup':
-                    print(f)
+                    # print(f)
                     hou.hda.installFile(file_path + "/" + f, oplibraries_file=None, change_oplibraries_file=True, force_use_assets=False)
         except:
             pass

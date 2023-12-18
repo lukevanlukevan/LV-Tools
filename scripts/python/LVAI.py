@@ -1,7 +1,7 @@
 import hou
 import openai
 import os
-from dotenv import load_dotenv, find_dotenv
+from dotenv import load_dotenv, find_dotenv, dotenv_values
 
 
 def setKey():
@@ -9,25 +9,26 @@ def setKey():
     pdir = os.path.dirname(os.path.abspath(__file__))
     os.chdir(pdir)
     load_dotenv(find_dotenv())
-
+    keys = dotenv_values(".env")
+    key = list(keys.values())[0]
     pbase = os.getcwd()
     pdir = os.path.dirname(os.path.abspath(__file__))
-    key = os.getenv("OPENAI_KEY")
-    # print(key)
     os.chdir(pbase)
     if key == "" or key == None:
         c, val = hou.ui.readInput("Please acquire OpenAI key and paste here", buttons=("Ok", "Cancel",), title="Open AI Key", close_choice=1)
         if c == 0:
             os.chdir(pdir)
-            with open(".env", "w") as f:
-                f.write("OPENAI_KEY=" + val)
+            if not val == "":
+                with open(".env", "w") as f:
+                    f.write("OPENAI_KEY=" + val)
             os.chdir(pbase)
             key = val
 
+    return key
+
 
 def call():
-    setKey()
-    key = os.getenv("OPENAI_KEY")
+    key = setKey()
     if (key == ""):
         # print("OpenAI key is not set")
         pass

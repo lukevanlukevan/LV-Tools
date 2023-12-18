@@ -5,6 +5,12 @@ def setTimeline(kwargs):
     playbar = hou.playbar
     range = playbar.frameRange()
     playRange = playbar.playbackRange()
+
+    endmod = playRange[1]/range[1]
+    startmod = playRange[0]/range[0]
+
+    print(endmod)
+
     fps = hou.fps()
 
     btn_idx, values = hou.ui.readMultiInput(
@@ -16,4 +22,5 @@ def setTimeline(kwargs):
     )
 
     playbar.setFrameRange(float(values[1]), float(values[2]))
+    playbar.setPlaybackRange(float(values[1]) * startmod, float(values[2]) * endmod)
     hou.setFps(float(values[0]))
