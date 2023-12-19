@@ -14,4 +14,4 @@ python3.9libs/nodegraphtitle.py
 scripts/python/.env
 scripts/python/gpt.py
 scripts/python/.bak
-scripts/python/gradientManager/ramps/*
+scripts/python/gradientManager/ramps/*.json

@@ -269,7 +269,7 @@ class gradientManager(QtWidgets.QWidget):
             # checking if it is a file
             i += 1
 
-            if os.path.isfile(f):
+            if os.path.isfile(f) and f.endswith(".json"):
 
                 with open(f"{f}", "r") as openfile:
                     json_object = json.load(openfile)
@@ -424,6 +424,21 @@ class gradientManager(QtWidgets.QWidget):
         self.loadRamps()
 
         self.renameRamps()
+
+        # def rename_json_files(folder_path):
+        # Get all JSON files in the folder
+        # json_files = [file for file in os.listdir(folder_path) if file.endswith('.json')]
+
+        # Sort the files in ascending order
+        # json_files.sort()
+
+        # Rename the files with numbered order
+        # for i, file in enumerate(json_files):
+        #     new_name = f'ramp{str(i).zfill(3)}.json'
+        #     os.rename(os.path.join(folder_path, file), os.path.join(folder_path, new_name))
+
+        # Usage example
+        # rename_json_files(self.gradFolder)
 
 
 class GraphView(QtWidgets.QGraphicsView):
