@@ -25,6 +25,11 @@ def is_shift_pressed():
     return modifiers == Qt.ShiftModifier
 
 
+def is_ctrl_pressed():
+    modifiers = QApplication.keyboardModifiers()
+    return modifiers == Qt.ControlModifier
+
+
 def remap(old_val, old_min, old_max, new_min, new_max):
     return (new_max - new_min)*(old_val - old_min) / (old_max - old_min) + new_min
 
@@ -139,51 +144,60 @@ class gradientManager(QtWidgets.QWidget):
 
     def setGrad(self, button):
 
-        i = button.whatsThis()
+        if len(hou.selectedNodes()) == 0:
+            print("Please select a node")
+        else:
+            i = button.whatsThis()
 
-        node = hou.selectedNodes()[0]
-        ramp_parms = [p for p in node.parms() if p.parmTemplate().type() == hou.parmTemplateType.Ramp]
+            node = hou.selectedNodes()[0]
+            ramp_parms = [p for p in node.parms() if p.parmTemplate().type() == hou.parmTemplateType.Ramp]
 
-        p = ramp_parms[0]
+            ramp_names = [p.description() for p in ramp_parms]
 
-        if os.path.isfile(f"{self.gradFolder}/ramp{str(i).zfill(3)}.json"):
+            if is_ctrl_pressed():
+                sel = hou.ui.selectFromList(ramp_names, default_choices=(), exclusive=True, message="Hold shift and click accept to randomize ramp.", title=None, column_header="", num_visible_rows=15, clear_on_cancel=True, width=0, height=0, sort=False)
+                p = ramp_parms[sel[0]]
+            else:
+                p = ramp_parms[0]
 
-            with open(f"{self.gradFolder}/ramp{str(i).zfill(3)}.json", "r") as openfile:
-                json_object = json.load(openfile)
+            if os.path.isfile(f"{self.gradFolder}/ramp{str(i).zfill(3)}.json"):
 
-                basis_type = json_object["ramp_basis"]
-                basis = None
-                types = [hou.rampBasis.Linear, hou.rampBasis.Constant, hou.rampBasis.CatmullRom, hou.rampBasis.MonotoneCubic, hou.rampBasis.Bezier, hou.rampBasis.BSpline, hou.rampBasis.Hermite]
-                basis = types[basis_type]
+                with open(f"{self.gradFolder}/ramp{str(i).zfill(3)}.json", "r") as openfile:
+                    json_object = json.load(openfile)
 
-                keys = json_object["ramp_keys"]
+                    basis_type = json_object["ramp_basis"]
+                    basis = None
+                    types = [hou.rampBasis.Linear, hou.rampBasis.Constant, hou.rampBasis.CatmullRom, hou.rampBasis.MonotoneCubic, hou.rampBasis.Bezier, hou.rampBasis.BSpline, hou.rampBasis.Hermite]
+                    basis = types[basis_type]
 
-                new_keys = []
-                for k in keys:
-                    new_keys.append(k)
+                    keys = json_object["ramp_keys"]
 
-                values = json_object["ramp_values"]
-                new_values = []
+                    new_keys = []
+                    for k in keys:
+                        new_keys.append(k)
 
-                for val in values:
-                    if json_object['isColor'] == False:
-                        new_values.append(val)
+                    values = json_object["ramp_values"]
+                    new_values = []
+
+                    for val in values:
+                        if json_object['isColor'] == False:
+                            new_values.append(val)
+                        else:
+                            test = tuple(val)
+                            new_values.append(test)
+
+                    tvals = tuple(new_values)
+                    if is_shift_pressed():
+                        random.shuffle(new_values)
+
+                    new_basis = (basis, ) * len(new_keys)
+
+                    new_ramp = hou.Ramp(new_basis, tuple(new_keys), tuple(new_values))
+
+                    if str(p.eval().isColor()) == str(json_object['isColor']):
+                        p.set(new_ramp)
                     else:
-                        test = tuple(val)
-                        new_values.append(test)
-
-                tvals = tuple(new_values)
-                if is_shift_pressed():
-                    random.shuffle(new_values)
-
-                new_basis = (basis, ) * len(new_keys)
-
-                new_ramp = hou.Ramp(new_basis, tuple(new_keys), tuple(new_values))
-
-                if str(p.eval().isColor()) == str(json_object['isColor']):
-                    p.set(new_ramp)
-                else:
-                    pass
+                        pass
 
     def stringChanged(self):
         self.rampName = self.rampNameBox.text()
