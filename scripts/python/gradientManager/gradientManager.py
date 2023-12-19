@@ -3,6 +3,7 @@ import sys
 import hou
 import json
 import time
+import random
 
 from PySide2 import QtCore, QtUiTools, QtWidgets, QtGui
 from PySide2.QtWidgets import QMenu, QApplication
@@ -14,6 +15,10 @@ from PySide2.QtGui import QCursor
 
 
 from gradientManager import gradientManager
+
+
+def remap(old_val, old_min, old_max, new_min, new_max):
+    return (new_max - new_min)*(old_val - old_min) / (old_max - old_min) + new_min
 
 
 class gradientManager(QtWidgets.QWidget):
@@ -32,6 +37,7 @@ class gradientManager(QtWidgets.QWidget):
         # self.rMenu = hou.qt.Menu()
 
         self.rampCount = 0
+        self.rampSize = 100
 
         self.rampNameBox = self.ui.findChild(QtWidgets.QLineEdit, "rampName")
         self.rampName = ""
@@ -70,6 +76,16 @@ class gradientManager(QtWidgets.QWidget):
 
         self.graphGrid = self.ui.findChild(QtWidgets.QGridLayout, "graphGrid")
 
+        self.zoomIn = self.ui.findChild(QtWidgets.QPushButton, "zoomIn")
+        self.zoomIn.setStyleSheet("border: none; background-color: hsl(200, 50%, 100); border-radius: 5px; color: hsl(0, 0%, 100%); font-size: 14px;")
+        self.zoomOut = self.ui.findChild(QtWidgets.QPushButton, "zoomOut")
+        self.zoomOut.setStyleSheet("border: none; border-color: white; background-color: hsl(200, 50%, 100); border-radius: 5px; color: hsl(0, 0%, 100%); font-size: 14px;")
+
+        self.zoomBtns = QtWidgets.QButtonGroup()
+        self.zoomBtns.addButton(self.zoomIn, 1)
+        self.zoomBtns.addButton(self.zoomOut, 0)
+        self.zoomBtns.idPressed.connect(self.resizeGraphs)
+
         self.createInterface()  # run create interface
 
         mainLayout = QtWidgets.QVBoxLayout()
@@ -83,6 +99,17 @@ class gradientManager(QtWidgets.QWidget):
         mainLayout.addWidget(self.ui)
         self.setLayout(mainLayout)
         self.stringChanged()
+
+    def resizeGraphs(self, val):
+        if val == 1:
+            self.rampSize += 10
+        else:
+            self.rampSize -= 10
+
+        self.rampSize = max(20, self.rampSize)
+        self.rampSize = min(100, self.rampSize)
+
+        self.loadRamps()
 
     def setToggle(self, button):
         i = button.whatsThis()
@@ -103,6 +130,7 @@ class gradientManager(QtWidgets.QWidget):
         pass
 
     def setGrad(self, button):
+
         i = button.whatsThis()
 
         node = hou.selectedNodes()[0]
@@ -270,7 +298,7 @@ class gradientManager(QtWidgets.QWidget):
                     self.libItem = QtWidgets.QGridLayout()
                     self.libItem.setContentsMargins(5, 5, 5, 5)
                     self.itemThumb = QtWidgets.QPushButton()
-                    self.itemThumb.setMinimumSize(100, 100)
+                    self.itemThumb.setMinimumSize(100, self.rampSize)
 
                     gradStyle = ('''QWidget:hover:!pressed {
                                     background-color: rgba(255, 255, 255, 100);
@@ -293,9 +321,9 @@ class gradientManager(QtWidgets.QWidget):
                     if json_object['isColor'] == False:
                         self.buttonLayout = QtWidgets.QGridLayout()
                         self.buttonLayout.setContentsMargins(0, 0, 0, 0)
-                        self.graph = GraphView(self.itemThumb, json_object['plot_values'])
+                        self.graph = GraphView(self.itemThumb, json_object['plot_values'], self.rampSize)
                         self.graph.setRenderHint(QtGui.QPainter.Antialiasing)
-                        self.graph.setMinimumSize(100, 100)
+                        self.graph.setMinimumSize(100, self.rampSize)
                         self.graph.setWhatsThis(str(i))
                         self.buttonLayout.addWidget(self.graph)
                         self.itemThumb.setLayout(self.buttonLayout)
@@ -399,20 +427,18 @@ class gradientManager(QtWidgets.QWidget):
 
 
 class GraphView(QtWidgets.QGraphicsView):
-    def __init__(self, parent, y_values):
+    def __init__(self, parent, y_values, rampSize):
         super().__init__()
 
         self.parent = parent
 
         self.y_values = y_values
 
-        # set up the scene
-        # self.Qview = QtWidgets.QGraphicsViewe
         self.setEnabled(False)
         self.scene = QtWidgets.QGraphicsScene(parent)
         self.setScene(self.scene)
-        # self.height = self.height()
-        self.height = 100*0.98
+
+        self.height = rampSize*0.98
 
         self.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         self.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
@@ -420,7 +446,6 @@ class GraphView(QtWidgets.QGraphicsView):
         self.setStyleSheet("border: None;")
 
         # set up the pen for drawing the lines
-
         self.setBackgroundBrush(QtGui.QBrush(QtGui.QColor(50, 50, 50)))
         self.pen = QtGui.QPen(QtCore.Qt.white)
         self.pen.setWidth(2)
@@ -441,6 +466,7 @@ class GraphView(QtWidgets.QGraphicsView):
             y1 = self.y_values[i]
             x2 = (i + 1) * x_spacing
             y2 = self.y_values[i + 1]
-            line = QtWidgets.QGraphicsLineItem(x1, 1-y1*self.height, x2, 1-y2*self.height)
+            # line = QtWidgets.QGraphicsLineItem(x1, 1-y1*self.height, x2, 1-y2*self.height)
+            line = QtWidgets.QGraphicsLineItem(x1, remap(y1, 0, 1, -self.height/2, self.height/2), x2, remap(y2, 0, 1, -self.height/2, self.height/2))
             line.setPen(self.pen)
             self.scene.addItem(line)
