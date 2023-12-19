@@ -4,10 +4,13 @@ import hou
 import json
 import time
 import random
+import glob
 
 from PySide2 import QtCore, QtUiTools, QtWidgets, QtGui
 from PySide2.QtWidgets import QMenu, QApplication
 from PySide2.QtGui import QCursor
+from PySide2.QtCore import Qt
+
 # from PyQt5.QtCore import *
 # from PyQt5.QtUiTools import *
 # from PyQt5.QtGui import *
@@ -15,6 +18,11 @@ from PySide2.QtGui import QCursor
 
 
 from gradientManager import gradientManager
+
+
+def is_shift_pressed():
+    modifiers = QApplication.keyboardModifiers()
+    return modifiers == Qt.ShiftModifier
 
 
 def remap(old_val, old_min, old_max, new_min, new_max):
@@ -165,6 +173,8 @@ class gradientManager(QtWidgets.QWidget):
                         new_values.append(test)
 
                 tvals = tuple(new_values)
+                if is_shift_pressed():
+                    random.shuffle(new_values)
 
                 new_basis = (basis, ) * len(new_keys)
 
@@ -248,6 +258,8 @@ class gradientManager(QtWidgets.QWidget):
 
     def loadRamps(self):
 
+        self.renameRamps()
+
         count = self.graphGrid.count()
         for i in range(count):
 
@@ -262,8 +274,12 @@ class gradientManager(QtWidgets.QWidget):
 
         tempi = 0
         placement = -1
-        files = os.listdir(self.gradFolder)
-        files.sort()
+        if not os.path.exists(self.gradFolder):
+            os.makedirs(self.gradFolder)
+
+        # files = os.listdir(self.gradFolder)
+        files = list(filter(os.path.isfile, glob.glob(self.gradFolder + "/*.json")))
+        files.sort(key=lambda x: os.path.getmtime(x))
         for filename in files:
             f = os.path.join(self.gradFolder, filename)
             # checking if it is a file
