@@ -197,12 +197,11 @@ class HDRIManager(QtWidgets.QWidget):
                     fName = folder.split('\\')
                     fName = fName[-1]
 
-                    #JUST USING BASE FOLDER NAME
+                    # JUST USING BASE FOLDER NAME
                     self.folderSelector.addItem(fName)
                     # self.folderSelector.setItemText(i, self.folderNames[i])
 
-
-                #disable proxy names
+                # disable proxy names
                 # for i in range(self.folderSelector.count()):
                 #     self.folderSelector.setItemText(i, self.folderNames[i])
 
@@ -258,11 +257,9 @@ class HDRIManager(QtWidgets.QWidget):
                 gsg.parm('matname').set(matname)
 
                 builder = hou.node(f'{gsg.path()}/matnet1/redshift_vopnet1')
-                    
+
                 builder.moveToGoodPosition()
                 bpath = builder.path()
-
-
 
                 material = hou.node(f"{bpath}/StandardMaterial1")
                 mPos = material.position()
@@ -280,7 +277,6 @@ class HDRIManager(QtWidgets.QWidget):
                     ext = input[1]
                     input = input.split("_")
                     input = input[-1]
-                    
 
                     if input == 'basecolor':
                         input = 'base_color'
@@ -304,15 +300,15 @@ class HDRIManager(QtWidgets.QWidget):
                         input = 'sheen_weight'
                     else:
                         input = 'notmap'
-                        
+
                     if input == 'notmap':
                         pass
                     else:
-                        
+
                         tex = builder.createNode('redshift::TextureSampler')
                         tex.parm("tex0").set(name)
                         nodes.append(tex)
-                        
+
                         tex.setPosition(hou.Vector2(mPos.x()-6, mPos.y()-(2*i)))
 
                         if input == 'base_color':
@@ -435,7 +431,7 @@ class ItemFrame(QtWidgets.QWidget):
             # self.path = os.path.join(self.path, fname)
             # print(thumbname)
             # p = self.path.replace("/","\\")
-            usethumb = os.path.join(os.path.join(self.path, fname),thumbname)    
+            usethumb = os.path.join(os.path.join(self.path, fname), thumbname)
             # print(usethumb)
         else:
             if "terrazzo" in thumbpath:

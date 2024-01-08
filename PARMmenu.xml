@@ -2,8 +2,88 @@
 <menuDocument>
 	<menuBar>
 		<subMenu id="LVM1">
+			<insertAfter>reference_menu</insertAfter>
 
 			<label>LV Tools</label>
+
+						<scriptItem id="LV_randomize_knots">
+				<expression>
+					parm = kwargs["parms"]
+					if parm is None:
+						return False
+
+					return parm[0].parmTemplate().type().name() == 'Ramp'
+				</expression>
+				<label>LV Randomize Knots</label>
+				<scriptCode>
+<![CDATA[
+from imp import reload
+import knotcontrol
+reload(knotcontrol)
+
+knotcontrol.randomizeKnots(kwargs)
+]]>
+            </scriptCode>
+			</scriptItem>
+
+			<scriptItem id="LV_distribute_knots">
+				<expression>
+					parm = kwargs["parms"]
+					if parm is None:
+						return False
+
+					return parm[0].parmTemplate().type().name() == 'Ramp'
+				</expression>
+				<label>LV Distribute Constant</label>
+				<scriptCode>
+<![CDATA[
+from imp import reload
+import knotcontrol
+reload(knotcontrol)
+
+knotcontrol.doDist(kwargs, hou.rampBasis.Constant)
+]]>
+            </scriptCode>
+			</scriptItem>
+
+			<scriptItem id="LV Copy Ramp">
+				<expression>
+					parm = kwargs["parms"]
+					if parm is None:
+						return False
+
+					return parm[0].parmTemplate().type().name() == 'Ramp'
+				</expression>
+				<label>LV Copy Ramp</label>
+				<scriptCode>
+<![CDATA[
+from imp import reload
+import rampSave
+reload(rampSave)
+
+rampSave.save(kwargs)
+]]>
+            </scriptCode>
+			</scriptItem>
+			<scriptItem id="LV Paste Ramp">
+				<expression>
+					parm = kwargs["parms"]
+					if parm is None:
+						return False
+
+					return parm[0].parmTemplate().type().name() == 'Ramp'
+				</expression>
+				<label>LV Paste Ramp</label>
+				<scriptCode>
+<![CDATA[
+from imp import reload
+import rampSave
+reload(rampSave)
+
+rampSave.load(kwargs, hou.rampBasis.Linear)
+]]>
+			</scriptCode>
+			</scriptItem>
 
 			<scriptItem>
 				<label>Add float parm + slider</label>
@@ -46,70 +126,6 @@ LVParmUtils.moveWrangleParms(kwargs)
 			</scriptItem>
 
 
-		</subMenu>
-
-		<subMenu id="LVM2">
-			<insertAfter>reference_menu</insertAfter>
-
-			<label>LV Ramp Tools</label>
-			<expression>
-				parm = kwargs["parms"]
-				if parm is None:
-					return False
-
-				return parm[0].parmTemplate().type().name() == 'Ramp'
-			</expression>
-
-			<scriptItem id="LV_randomize_knots">
-				<label>LV Randomize Knots</label>
-				<scriptCode>
-<![CDATA[
-from imp import reload
-import knotcontrol
-reload(knotcontrol)
-
-knotcontrol.randomizeKnots(kwargs)
-]]>
-            </scriptCode>
-			</scriptItem>
-
-			<scriptItem id="LV_distribute_knots">
-				<label>LV Distribute Constant</label>
-				<scriptCode>
-<![CDATA[
-from imp import reload
-import knotcontrol
-reload(knotcontrol)
-
-knotcontrol.doDist(kwargs, hou.rampBasis.Constant)
-]]>
-            </scriptCode>
-			</scriptItem>
-
-			<scriptItem id="LV Copy Ramp">
-				<label>LV Copy Ramp</label>
-				<scriptCode>
-<![CDATA[
-from imp import reload
-import rampSave
-reload(rampSave)
-
-rampSave.save(kwargs)
-]]>
-            </scriptCode>
-			</scriptItem>
-			<scriptItem id="LV Paste Ramp">
-				<label>LV Paste Ramp</label>
-				<scriptCode>
-<![CDATA[
-from imp import reload
-import rampSave
-reload(rampSave)
-
-rampSave.load(kwargs, hou.rampBasis.Linear)
-]]>
-			</scriptCode>
-			</scriptItem>
 		</subMenu>
 
 		<separatorItem></separatorItem>
