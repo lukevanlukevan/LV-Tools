@@ -37,14 +37,7 @@
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_2">
        <item>
-        <layout class="QGridLayout" name="gridLayout" columnstretch="1,0">
-         <item row="0" column="1">
-          <widget class="QPushButton" name="folders_btn">
-           <property name="text">
-            <string>Add Folder</string>
-           </property>
-          </widget>
-         </item>
+        <layout class="QGridLayout" name="gridLayout" columnstretch="1,0,0">
          <item row="0" column="0">
           <widget class="QComboBox" name="jobs">
            <item>
@@ -52,6 +45,20 @@
              <string>Select path</string>
             </property>
            </item>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="QPushButton" name="folders_btn">
+           <property name="text">
+            <string>Add Folder</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="2">
+          <widget class="QPushButton" name="editBtn">
+           <property name="text">
+            <string>Edit</string>
+           </property>
           </widget>
          </item>
         </layout>
@@ -65,6 +72,13 @@
           <widget class="QPushButton" name="explorerBtn">
            <property name="text">
             <string>Open Explorer</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="newBtn">
+           <property name="text">
+            <string>New Empty File</string>
            </property>
           </widget>
          </item>
@@ -112,6 +126,17 @@
         </layout>
        </item>
        <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_2">
+         <item>
+          <widget class="QCheckBox" name="latestToggle">
+           <property name="text">
+            <string>Latest version only</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
         <widget class="QTableWidget" name="table">
          <property name="dragDropOverwriteMode">
           <bool>false</bool>
@@ -119,9 +144,23 @@
          <property name="rowCount">
           <number>0</number>
          </property>
+         <attribute name="horizontalHeaderCascadingSectionResizes">
+          <bool>false</bool>
+         </attribute>
+         <attribute name="horizontalHeaderDefaultSectionSize">
+          <number>30</number>
+         </attribute>
          <column>
           <property name="text">
            <string>Project</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Version</string>
+          </property>
+          <property name="textAlignment">
+           <set>AlignCenter</set>
           </property>
          </column>
         </widget>

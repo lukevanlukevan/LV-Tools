@@ -7,12 +7,13 @@ from PySide2 import QtCore, QtUiTools, QtWidgets, QtGui
 
 from keyframeAssistant import keyframeAssistant
 
+
 class keyframeAssistant(QtWidgets.QWidget):
 
     def __init__(self):
         super(keyframeAssistant, self).__init__()
 
-        self.folderpath =  hou.getenv("LV") + "/scripts/python/keyframeAssistant"
+        self.folderpath = hou.getenv("LV") + "/scripts/python/keyframeAssistant"
 
         ui_file_path = self.folderpath + "/keyframeAssistant.ui"
 
@@ -43,7 +44,6 @@ class keyframeAssistant(QtWidgets.QWidget):
         self.keyKeyedBtn.clicked.connect(self.keyKeyed)
         self.keyKeyedBtn.setStyleSheet('color: hsl(120, 50%, 50%)')
 
-
         self.parmBtnGroup = QtWidgets.QButtonGroup()
         self.parmBtnGroup.buttonClicked.connect(self.parmBtnClick)
 
@@ -52,17 +52,16 @@ class keyframeAssistant(QtWidgets.QWidget):
         mainLayout.addWidget(self.ui)
         self.setLayout(mainLayout)
 
-    
     def keyAll(self):
         node = self.node
 
         parms = node.parms()
 
-        testParms = ['Translate','Rotate','Scale']
+        testParms = ['Translate', 'Rotate', 'Scale']
 
         for parm in parms:
             if parm.description() in testParms:
-                
+
                 myKey = hou.Keyframe()
                 myKey.setFrame(hou.frame())
                 myKey.setValue(parm.eval())
@@ -73,23 +72,23 @@ class keyframeAssistant(QtWidgets.QWidget):
 
         parms = node.parms()
 
-        testParms = ['Translate','Rotate','Scale']
+        testParms = ['Translate', 'Rotate', 'Scale']
 
         for parm in parms:
             if parm.description() in testParms:
                 # print(parm)
                 kfs = parm.keyframes()
                 kBefore = parm.keyframesBefore(hou.frame())
-            
-                if(len(kBefore)>0):
+
+                if (len(kBefore) > 0):
                     bval = kBefore[-1].value()
-                
+
                 myKey = hou.Keyframe()
                 myKey.setFrame(hou.frame())
                 myKey.setValue(parm.eval())
-                if len(kfs)>0:
-                    if(len(kBefore)>0):
-                        if(bval == parm.eval()):
+                if len(kfs) > 0:
+                    if (len(kBefore) > 0):
+                        if (bval == parm.eval()):
                             pass
                         else:
                             parm.setKeyframe(myKey)
@@ -101,19 +100,18 @@ class keyframeAssistant(QtWidgets.QWidget):
 
         parms = node.parms()
 
-        testParms = ['Translate','Rotate','Scale']
+        testParms = ['Translate', 'Rotate', 'Scale']
 
         for parm in parms:
             if parm.description() in testParms:
                 kfs = parm.keyframes()
-                
+
                 myKey = hou.Keyframe()
                 myKey.setFrame(hou.frame())
                 myKey.setValue(parm.eval())
-                if len(kfs)>0:
+                if len(kfs) > 0:
 
                     parm.setKeyframe(myKey)
-
 
     def createInterface(self):
         pass
@@ -140,17 +138,17 @@ class keyframeAssistant(QtWidgets.QWidget):
                 parm = hou.parm(path)
                 kfs = parm.keyframes()
                 kBefore = parm.keyframesBefore(hou.frame())
-            
-                if(len(kBefore)>0):
+
+                if (len(kBefore) > 0):
                     bval = kBefore[-1].value()
-                
+
                 myKey = hou.Keyframe()
                 myKey.setFrame(hou.frame())
                 myKey.setValue(parm.eval())
-                if len(kfs)>0:
+                if len(kfs) > 0:
 
-                    if(len(kBefore)>0):
-                        if(bval == parm.eval()):
+                    if (len(kBefore) > 0):
+                        if (bval == parm.eval()):
                             pass
                         else:
                             parm.setKeyframe(myKey)
@@ -174,13 +172,12 @@ class keyframeAssistant(QtWidgets.QWidget):
                 myKey.setFrame(hou.frame())
                 myKey.setValue(parm.eval())
                 parm.setKeyframe(myKey)
-                    
 
         # parm =  hou.parm(path)
         # myKey = hou.Keyframe()
         # myKey.setFrame(hou.frame())
         # myKey.setValue(parm.eval())
-        
+
         # parm.setKeyframe(myKey)
 
     def clearParms(self):
@@ -197,9 +194,8 @@ class keyframeAssistant(QtWidgets.QWidget):
 
         self.clearParms()
 
-        
-        testParms = ['Translate','Rotate','Scale']
-        tParms = ['t','r','s']
+        testParms = ['Translate', 'Rotate', 'Scale']
+        tParms = ['t', 'r', 's']
 
         if len(hou.selectedNodes()) == 0:
             self.currentLink.setText("")
@@ -208,8 +204,6 @@ class keyframeAssistant(QtWidgets.QWidget):
             self.currentLink.setText(self.node.path())
             parms = self.node.parms()
             pTuple = self.node.parmTuples()
-        
-            
 
             i = -1
             j = -1
@@ -222,7 +216,7 @@ class keyframeAssistant(QtWidgets.QWidget):
                     # parmLine = singleParm(self, self.mainGrid, i, tuple)
 
                     j = -1
-                    
+
             #         currentDesc = x.description()
 
         count = self.mainGrid.count()
@@ -232,7 +226,7 @@ class keyframeAssistant(QtWidgets.QWidget):
 
 
 class singleParm(QtWidgets.QWidget):
-    def __init__(self, parent, mainGrid, wIndex, tuple ):
+    def __init__(self, parent, mainGrid, wIndex, tuple):
         super(singleParm, self).__init__()
 
         i = wIndex
@@ -240,9 +234,9 @@ class singleParm(QtWidgets.QWidget):
 
         thisframe = hou.frame()
 
-        axisIndex = i%3
-        axis = ["X","Y","Z"]
-            
+        axisIndex = i % 3
+        axis = ["X", "Y", "Z"]
+
         self.name = f'{tuple.description()}:'
 
         self.holder = QtWidgets.QWidget()
@@ -255,7 +249,7 @@ class singleParm(QtWidgets.QWidget):
         self.parmName = QtWidgets.QLabel(self.name)
         self.parmName.setObjectName(u"parmName")
         self.parmName.setMaximumSize(QtCore.QSize(100, 16777215))
-        self.parmName.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
+        self.parmName.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignTrailing | QtCore.Qt.AlignVCenter)
 
         self.allParm = QtWidgets.QPushButton(f'All Parms')
         self.allParm.setMaximumSize(QtCore.QSize(100, 16777215))
@@ -272,8 +266,8 @@ class singleParm(QtWidgets.QWidget):
         j = -1
         for parm in tuple:
             j += 1
-            axisIndex = j%3
-            axis = ["X","Y","Z"]
+            axisIndex = j % 3
+            axis = ["X", "Y", "Z"]
             self.parmBtn = QtWidgets.QPushButton(f'{axis[axisIndex]}')
             # print(parm.path())
             self.parmBtn.setWhatsThis(str(parm.path()))
@@ -282,8 +276,7 @@ class singleParm(QtWidgets.QWidget):
             # myKey = hou.Keyframe()
             # myKey.setFrame(thisframe)
             # myKey.setValue(parm.eval())
-            self.multigrid.addWidget(self.parmBtn, 0,j)
-
+            self.multigrid.addWidget(self.parmBtn, 0, j)
 
         # add widgets to grid
 
@@ -306,7 +299,7 @@ class singleParm(QtWidgets.QWidget):
         # elif axisIndex == 1:
         #     self.parmName.setStyleSheet("color: green")
         # elif axisIndex == 2:
-        #     self.parmName.setStyleSheet("color: blue")      
+        #     self.parmName.setStyleSheet("color: blue")
 
         # layout.addWidget(self.parmName, 0+i, 0, 1, 1) # we need to remove this
 

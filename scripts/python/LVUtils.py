@@ -90,9 +90,12 @@ def colorControl():
 
 
 def openControls():
-    node = hou.selectedNodes()[0]
+    nodes = hou.selectedNodes()
 
-    hou.ui.openParameterInterfaceDialog(node)
+    if len(nodes) > 0:
+        node = nodes[0]
+
+        hou.ui.openParameterInterfaceDialog(node)
 
 
 def save_incremental():

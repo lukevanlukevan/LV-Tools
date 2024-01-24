@@ -16,6 +16,8 @@ from PySide2.QtCore import Qt
 # from PyQt5.QtGui import *
 # from PyQt5.QtWidgets import *
 
+# TODO Float ramps are flipped on Y axis
+
 
 from gradientManager import gradientManager
 

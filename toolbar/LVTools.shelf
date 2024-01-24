@@ -19,6 +19,7 @@
     <memberTool name="Updater"/>
     <memberTool name="render_to_mp4"/>
     <memberTool name="lv_gpt_comment"/>
+    <memberTool name="RS_Snapshot_and_Save"/>
   </toolshelf>
 
   <tool name="LV_Color" label="LV Color" icon="SOP_color">
@@ -320,5 +321,12 @@ from importlib import reload
 
 reload(LVAI)
 LVAI.call()]]></script>
+  </tool>
+
+  <tool name="RS_Snapshot_and_Save" label="RS Snapshot and Save" icon="$LV/lv.svg">
+    <script scriptType="python"><![CDATA[import LVRenderUtils
+from imp import reload
+reload(LVRenderUtils)
+LVRenderUtils.snapshot_and_save(kwargs)]]></script>
   </tool>
 </shelfDocument>

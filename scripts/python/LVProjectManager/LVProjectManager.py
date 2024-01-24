@@ -1,6 +1,6 @@
 # from hutil.Qt import QtWidgets, QtUiTools,
 from PySide2 import QtWidgets, QtUiTools, QtCore, QtGui
-from PySide2.QtWidgets import QPushButton, QComboBox, QTableWidget, QTableWidgetItem
+from PySide2.QtWidgets import QPushButton, QComboBox, QTableWidget, QTableWidgetItem, QHeaderView
 import hou
 import os
 import json
@@ -12,6 +12,8 @@ try:
     odstate = True
 except:
     odstate = False
+
+# TODO Table column for version so it only shows latest (maybe a filter)
 
 
 class LVProjectManager(QtWidgets.QWidget):
@@ -41,6 +43,9 @@ class LVProjectManager(QtWidgets.QWidget):
         self.folderBtn = self.ui.findChild(
             QtWidgets.QPushButton, "folders_btn")
         self.folderBtn.clicked.connect(self.pickFolder)
+        self.editBtn = self.ui.findChild(
+            QtWidgets.QPushButton, "editBtn")
+        self.editBtn.clicked.connect(self.editList)
 
         self.prjRoot = self.ui.findChild(QtWidgets.QLineEdit, "prjRoot")
         self.prjRootPath = self.prjRoot.text()
@@ -57,6 +62,8 @@ class LVProjectManager(QtWidgets.QWidget):
         self.combinedPath = ""
 
         self.currentIndex = -1
+
+        self.show_latest = False
 
         # init global vars
         self.addedPath = ""
@@ -77,6 +84,11 @@ class LVProjectManager(QtWidgets.QWidget):
             self.openDir)
         self.explorerBtn.setFont(QtGui.QFont("Source Sans Pro", 12))
 
+        self.newBtn = self.ui.findChild(
+            QtWidgets.QPushButton, "newBtn")
+        self.newBtn.clicked.connect(self.createNew)
+        self.newBtn.setFont(QtGui.QFont("Source Sans Pro", 12))
+
         self.incBtn = self.ui.findChild(QPushButton, "incBtn")
         self.incBtn.clicked.connect(self.saveInc)
         self.incBtn.setFont(QtGui.QFont("Source Sans Pro", 12))
@@ -94,6 +106,10 @@ class LVProjectManager(QtWidgets.QWidget):
         if odstate:
             self.hipbookBtn.clicked.connect(lambda: self.flipbook(True))
         self.hipbookBtn.setFont(QtGui.QFont("Source Sans Pro", 12))
+
+        self.latestToggle = self.ui.findChild(QtWidgets.QCheckBox, "latestToggle")
+        self.latestToggle.stateChanged.connect(self.toggleLatest)
+
         # Initial loads
 
         self.noteEdit = self.ui.findChild(QtWidgets.QTextEdit, "notes")
@@ -107,18 +123,55 @@ class LVProjectManager(QtWidgets.QWidget):
         # self.noteTab.tabBarClicked
 
         # UI Inits
-        self.table.setColumnWidth(0, 950)
+        # self.table.setColumnWidth(0, 1250)
+        # self.table.setColumnWidth(1, 10)
+        # self.table.resizeColumnToContents(1)
 
         self.header = self.table.horizontalHeader()
-        self.header.setStretchLastSection(True)
+        self.header.setSectionResizeMode(0, QtWidgets.QHeaderView.Stretch)
+        self.header.setSectionResizeMode(1, QtWidgets.QHeaderView.ResizeToContents)
 
         self.loadPrefs()
         self.loadFolders()
         self.loadNotes()
         self.setIndex()
-        self.table.setHorizontalHeaderLabels(["Projects"])
-        # hou.hscript("setenv -s %s=%s" %
-        #             ("DB", f'/Users/lukevan/Partners in Crime Dropbox/Luke Van/STUDIO-PIC/'))
+        self.table.setHorizontalHeaderLabels(["Projects", "Version"])
+
+    def toggleLatest(self):
+        self.show_latest = self.latestToggle.isChecked()
+        self.loadFolders()
+
+    def editList(self):
+        paths = self.prefs['paths']
+
+        sels = hou.ui.selectFromList(paths)
+
+        for i in reversed(sels):
+            # print(i)
+            paths.remove(paths[i])
+            # print('removing', paths[i])
+
+        self.prefs['paths'] = paths
+
+        with open(self.prefpath, "w") as outfile:
+            json.dump(self.prefs, outfile, indent=4)
+
+        self.loadPrefs()
+        self.loadFolders()
+
+    def renameFile(self):
+        pass
+
+    def createNew(self):
+        # print("new")
+        # if hou.hipFile.hasUnsavedChanges() or not hou.hipFile.isNewFile():
+        # hou.hipFile.save()
+        hou.hipFile.clear()
+        idx, name = hou.ui.readInput("New file name:", buttons=('OK',), severity=hou.severityType.Message, default_choice=0, close_choice=-1, help="Version number will be added.", title=None, initial_contents=None)
+        # print(idx)
+        hou.hipFile.setName(name + "_01")
+        newpath = hou.expandString(self.combinedPath) + "/" + name + "_01.hiplc"
+        hou.hipFile.save(newpath.replace("/", "\\"))
 
     def hipNameWithoutVersion(self):
         name = hou.hipFile.basename()
@@ -212,10 +265,14 @@ class LVProjectManager(QtWidgets.QWidget):
 
     def savePrefs(self):
 
-        self.prefs['paths'].append(self.addedPath)
+        if not self.addedPath == "":
+            if self.addedPath in self.prefs['paths']:
+                hou.ui.displayMessage("This folder is already in the list.")
+            else:
+                self.prefs['paths'].append(self.addedPath)
 
-        with open(self.prefpath, "w") as outfile:
-            json.dump(self.prefs, outfile, indent=4)
+                with open(self.prefpath, "w") as outfile:
+                    json.dump(self.prefs, outfile, indent=4)
 
     def saveRecent(self):
 
@@ -281,8 +338,9 @@ class LVProjectManager(QtWidgets.QWidget):
     #     self.setCombinedPath(path)
 
     def loadProject(self, i, j):
-        cell = self.table.item(i, 0).text()
-        path = os.path.join(self.combinedPath, cell)
+        # cell = self.table.item(i, 0).text()
+        cell = self.table.item(i, 0).whatsThis()
+        path = self.combinedPath + "/" + cell
         if hou.hipFile.name().endswith('untitled.hip'):
             hou.hipFile.load(path)
         if hou.hipFile.hasUnsavedChanges():
@@ -329,10 +387,43 @@ class LVProjectManager(QtWidgets.QWidget):
             fpath = self.combinedPath.replace("//", "/") + "/"
             prjs.sort(key=lambda x: os.path.getmtime(hou.expandString(fpath + x)))
 
+            # self.table.setHorizontalHeaderLabels(["Projects", "Version"])
+
             # new = prjs.sort(key=lambda x: os.path.getmtime(x))
 
+            if self.show_latest == True:
+
+                latest_only = []
+
+                for i, job in enumerate(prjs):
+                    if len(job) > 0:
+                        if job.endswith(".hiplc"):
+                            nopath = job.split(".")[0]
+                            name = "_".join(nopath.split("_")[:-1])
+                            ver = int(nopath.split("_")[-1])
+
+                            obj = {
+                                "name": name,
+                                "ver": ver,
+                                "path": job
+                            }
+
+                            higher = False
+
+                            for j, l in enumerate(latest_only):
+                                if l['name'] == name:
+                                    if l['ver'] < ver:
+                                        latest_only[j] = obj
+                                        higher = True
+
+                            if not higher:
+                                latest_only.append(obj)
+
+                prjs = [j['path'] for j in latest_only]
+
             rowPosition = 1
-            for job in prjs:
+            for i, job in enumerate(prjs):
+                # for job in prjs:
                 if len(job) > 0:
                     if job.endswith(".hiplc"):
                         job = job.replace(
@@ -341,16 +432,29 @@ class LVProjectManager(QtWidgets.QWidget):
                         job = job.replace(
                             "/Users/lukevan/Partners in Crime Dropbox/STUDIO-PIC/", "$DB/")
 
+                        nopath = job.split(".")[0]
+                        name = "_".join(nopath.split("_")[:-1])
+                        ver = int(nopath.split("_")[-1])
+
                         self.table.insertRow(0)
                         # Insert at 0 index because we are inserting at the start
 
-                        self.pathItem = QtWidgets.QTableWidgetItem(f"{job}")
+                        self.pathItem = QtWidgets.QTableWidgetItem(f"{name}")
+                        self.pathItem.setWhatsThis(job)
 
                         self.pathItem.setFlags(
                             QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsSelectable)
 
+                        self.verItem = QtWidgets.QTableWidgetItem(f"{ver}")
+
+                        self.verItem.setFlags(
+                            QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsSelectable)
+
                         self.table.setItem(
                             0, 0, self.pathItem)
+
+                        self.table.setItem(
+                            0, 1, self.verItem)
 
                         rowPosition += 1
 
@@ -364,19 +468,46 @@ class LVProjectManager(QtWidgets.QWidget):
             self.table.setItem(
                 0, 0, self.pathItem)
 
+    def showContextMenu(self, widget, position, i):
+        local_pos = position
+
+        sel = -1
+
+        # Iterate over all items in the layout
+        for i in range(self.graphGrid.count()):
+            # Get the widget of the current item
+            widget = self.graphGrid.itemAt(i).widget()
+
+            if widget.underMouse():
+                sel = widget.whatsThis()
+
+        contextMenu = QMenu()
+        contextMenu.setStyleSheet('margin: 2px;')
+        action1 = contextMenu.addAction("Rename Ramp")
+        action2 = contextMenu.addAction("Delete Ramp")
+
+        action = contextMenu.exec_(position)
+        if action == action1:
+            self.renameRamp(sel)
+        if action == action2:
+            self.deleteRamp(sel)
+
+        # handle other actions...
+
     def processPath(self, path):
         return hou.expandString(path).replace("C:/Users/PIC-TWO/Partners in Crime Dropbox/Luke Van/STUDIO-PIC/", "$DB/").replace("P:/", "$DB/").replace(
             "/Users/lukevan/Partners in Crime Dropbox/Luke Van/STUDIO-PIC/", "$DB/").replace("//", "/").replace("\\", "/")
 
     def setEnvs(self):
+        # print(self.processPath(self.basePath))
+        # print(self.processPath(self.combinedPath))
         hou.hscript("setenv -s %s=%s" % ("JOB", f'{self.processPath(self.basePath)}'))
-        hou.hscript("setenv -s %s=%s" % ("HIP", f'{self.processPath(self.combinedPath)}'))
+        hou.hscript("setenv -s %s=%s" % ("HIP", f'{self.processPath(self.combinedPath)+"/"}'))
 
     def loadHDA(self):
         try:
             file_path = hou.text.expandString("$HIP") + "/hda"
 
-            print(file_path)
             files = os.listdir(file_path)
             for f in files:
                 if not f == 'backup':

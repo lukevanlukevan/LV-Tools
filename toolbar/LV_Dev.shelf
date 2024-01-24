@@ -35,8 +35,8 @@
     <memberTool name="Dbug"/>
     <memberTool name="EaseTest"/>
     <memberTool name="gpt"/>
-    <memberTool name="tool_15"/>
-    <memberTool name="frame"/>
+    <memberTool name="keyboardchop"/>
+    <memberTool name="rs_hijack"/>
   </toolshelf>
 
   <tool name="Paste Ease" label="Paste Ease" icon="PLASMA_App">
@@ -141,5 +141,23 @@ from importlib import reload
 
 reload(gpt)
 gpt.call()]]></script>
+  </tool>
+
+  <tool name="rs_hijack" label="RS hijack" icon="PLASMA_App">
+    <script scriptType="python"><![CDATA[# panel = hou.ui.paneTabOfType(
+
+desk = hou.ui.curDesktop()
+
+print(desk.name())
+
+panes = desk.panes()
+for i,pane in enumerate(panes):
+    # print(pane)
+    for tab in pane.tabs():
+        print(tab)
+    # print(i, pane.name(), pane.type().name())
+# print(hou.ui.paneTabUnderCursor())
+
+]]></script>
   </tool>
 </shelfDocument>
