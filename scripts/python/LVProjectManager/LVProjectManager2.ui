@@ -64,6 +64,9 @@
         </layout>
        </item>
        <item>
+        <widget class="QComboBox" name="subDir"/>
+       </item>
+       <item>
         <layout class="QHBoxLayout" name="horizontalLayout">
          <property name="topMargin">
           <number>0</number>
@@ -128,11 +131,31 @@
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_2">
          <item>
+          <widget class="QLineEdit" name="filterString">
+           <property name="placeholderText">
+            <string>Prefix filter, eg. &quot;Project_&quot;</string>
+           </property>
+          </widget>
+         </item>
+         <item>
           <widget class="QCheckBox" name="latestToggle">
            <property name="text">
             <string>Latest version only</string>
            </property>
           </widget>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
          </item>
         </layout>
        </item>

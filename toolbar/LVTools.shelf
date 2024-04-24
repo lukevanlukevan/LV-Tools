@@ -12,7 +12,6 @@
     <memberTool name="LV_Texture_Abs"/>
     <memberTool name="LV_Add_Remove_Sticky_Note_Parent"/>
     <memberTool name="Open_Project_Folder"/>
-    <memberTool name="LV_Wedge_Parm"/>
     <memberTool name="LV_Create_Named_Geo"/>
     <memberTool name="LV_Make_Space"/>
     <memberTool name="Light_Visibility_Listener"/>
@@ -20,6 +19,8 @@
     <memberTool name="render_to_mp4"/>
     <memberTool name="lv_gpt_comment"/>
     <memberTool name="RS_Snapshot_and_Save"/>
+    <memberTool name="LV_wedge_selected"/>
+    <memberTool name="create_lv_mat"/>
   </toolshelf>
 
   <tool name="LV_Color" label="LV Color" icon="SOP_color">
@@ -32,68 +33,9 @@ colorControl()
   </tool>
 
   <tool name="LV_Arrange" label="LV Arrange" icon="$LV/lv.svg">
-    <script scriptType="python"><![CDATA[import os
+    <script scriptType="python"><![CDATA[import LVNodes
 
-obj = hou.node('/obj')
-
-centerPos = hou.Vector2(0,0)
-
-nodes = hou.selectedNodes()
-
-for index, n in enumerate(nodes):
-    if index == 0:
-        nodePos = n.position()
-        centerPos -= nodePos
-    else:
-        ss = ""
-        fb = ""
-        ud = ""
-
-        node = n
-
-        node.setGenericFlag(hou.nodeFlag.DisplayComment,True)
-
-        posx = node.parm('tx').eval()
-        posz = node.parm('tz').eval() * -1
-        posy = node.parm('ty').eval()
-
-        if node.type().name() == 'rslight':
-            intensity = str(node.parm('RSL_intensityMultiplier').eval())
-            exposure = str(node.parm('Light1_exposure').eval())
-            spread = str(node.parm('RSL_spread').eval())
-
-        pos = hou.Vector2(posx,posz)
-        newPos = pos.normalized()
-        newPos *= 3 + (pos.length()/12)
-
-        if posx < 0:
-            ss = "Left"
-        elif posx == 0:
-            ss = ""
-        else:
-            ss = "Right"
-
-        if posz > 0:
-            fb = "Back"
-        elif posz == 0:
-            fb = ""
-        else:
-            fb = "Front"
-
-        if posy > 0:
-            ud = "Top"
-        elif posy == 0:
-            ud = ""
-        else:
-            ud = "Bottom"
-
-        node.setPosition(hou.Vector2(newPos[0]-centerPos[0],newPos[1]-centerPos[1]))
-
-        node.setName(ud + fb + ss + "_" + node.type().name(), True)
-        if node.type().name() == 'rslight':
-            node.setComment('Intensity: ' + intensity + os.linesep +
-            'Exposure: ' + exposure + os.linesep +
-            'Spread: ' + spread)]]></script>
+LVNodes.light_arrange(kwargs)]]></script>
   </tool>
 
   <tool name="LV_Controller" label="LV Controller" icon="$LV/lv.svg">
@@ -242,40 +184,6 @@ anim_editor.layout().setCurrentFrame(hou.frame())
 pf.openDir()]]></script>
   </tool>
 
-  <tool name="LV_Wedge_Parm" label="LV Wedge Parm" icon="ROP_wedge">
-    <script scriptType="python"><![CDATA[d = hou.ui.curDesktop()
-ctx = d.paneTabUnderCursor()
-
-p = hou.parmClipboardContents()[0]['path']
-
-con = ctx.pwd()
-t = con.type().name()
-
-if t == 'topnet' or t == 'topnetmgr':
-
-    try:
-        sel = hou.selectedNodes()[-1]
-        if sel.type().name() == 'wedge':
-            w = sel
-            count = w.parm('wedgeattributes').eval()
-            w.parm('wedgeattributes').set(count+1)
-            w.parm(f'exportchannel{count+1}').set(1)
-            w.parm(f'channel{count+1}').set(p)
-            w.parm(f'name{count+1}').set(p.split("/")[-1])
-            w.parm('previewselection').set(1)
-
-    except:
-        w = con.createNode('wedge')
-        w.setPosition(ctx.cursorPosition())
-        w.parm('wedgeattributes').set(1)
-        w.parm('exportchannel1').set(1)
-        w.parm('channel1').set(p)
-        w.parm('name1').set(p.split("/")[-1])
-        w.parm('previewselection').set(1)
-
-            ]]></script>
-  </tool>
-
   <tool name="LV_Create_Named_Geo" label="LV Create Named Geo" icon="$LV/lv.svg">
     <script scriptType="python"><![CDATA[import LVUtils
 from imp import reload
@@ -328,5 +236,21 @@ LVAI.call()]]></script>
 from imp import reload
 reload(LVRenderUtils)
 LVRenderUtils.snapshot_and_save(kwargs)]]></script>
+  </tool>
+
+  <tool name="LV_wedge_selected" label="LV Wedge Selected Nodes" icon="$LV/lv.svg">
+    <script scriptType="python"><![CDATA[import LVUtils
+from imp import reload
+
+reload(LVUtils)
+LVUtils.build_wedge()]]></script>
+  </tool>
+
+  <tool name="create_lv_mat" label="Create LV Mat" icon="$LV/lv.svg">
+    <script scriptType="python"><![CDATA[from imp import reload
+import LVUtils
+
+reload(LVUtils)
+LVUtils.inline_lvmat()]]></script>
   </tool>
 </shelfDocument>

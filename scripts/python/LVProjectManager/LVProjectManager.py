@@ -1,9 +1,9 @@
-# from hutil.Qt import QtWidgets, QtUiTools,
-from PySide2 import QtWidgets, QtUiTools, QtCore, QtGui
+from PySide2 import QtWidgets, QtUiTools, QtCore, QtGui  # type: ignore # pylint: disable=wildcard-import
 from PySide2.QtWidgets import QPushButton, QComboBox, QTableWidget, QTableWidgetItem, QHeaderView
 import hou
 import os
 import json
+import sys
 
 global odstate
 
@@ -33,6 +33,12 @@ class LVProjectManager(QtWidgets.QWidget):
         self.extraPath = "02_Workflow/01-3D/Houdini/"
 
         self.jobs = self.ui.findChild(QtWidgets.QComboBox, "jobs")
+        self.subdirs = self.ui.findChild(QtWidgets.QComboBox, "subDir")
+        self.subdir = ''
+
+        self.subdir_list = ['None']
+
+        self.subdirs.activated.connect(self.selectSubDir)
 
         # runs once on startup when text is added
         self.jobs.activated.connect(self.selectFolder)
@@ -107,6 +113,10 @@ class LVProjectManager(QtWidgets.QWidget):
             self.hipbookBtn.clicked.connect(lambda: self.flipbook(True))
         self.hipbookBtn.setFont(QtGui.QFont("Source Sans Pro", 12))
 
+        self.filterString = ""
+        self.filterStringLine = self.ui.findChild(QtWidgets.QLineEdit, "filterString")
+        self.filterStringLine.textChanged.connect(self.loadFolders)
+
         self.latestToggle = self.ui.findChild(QtWidgets.QCheckBox, "latestToggle")
         self.latestToggle.stateChanged.connect(self.toggleLatest)
 
@@ -139,6 +149,10 @@ class LVProjectManager(QtWidgets.QWidget):
 
     def toggleLatest(self):
         self.show_latest = self.latestToggle.isChecked()
+        self.prefs['latest'] = self.latestToggle.isChecked()
+
+        with open(self.prefpath, "w") as outfile:
+            json.dump(self.prefs, outfile, indent=4)
         self.loadFolders()
 
     def editList(self):
@@ -163,15 +177,22 @@ class LVProjectManager(QtWidgets.QWidget):
         pass
 
     def createNew(self):
-        # print("new")
-        # if hou.hipFile.hasUnsavedChanges() or not hou.hipFile.isNewFile():
-        # hou.hipFile.save()
+
         hou.hipFile.clear()
-        idx, name = hou.ui.readInput("New file name:", buttons=('OK',), severity=hou.severityType.Message, default_choice=0, close_choice=-1, help="Version number will be added.", title=None, initial_contents=None)
-        # print(idx)
-        hou.hipFile.setName(name + "_01")
-        newpath = hou.expandString(self.combinedPath) + "/" + name + "_01.hiplc"
-        hou.hipFile.save(newpath.replace("/", "\\"))
+        idx, name = hou.ui.readInput("New file name:", buttons=('OK',), severity=hou.severityType.Message, default_choice=1, close_choice=-1, help="Version number will be added.", title=None, initial_contents=None)
+
+        if not name == "":
+            hou.hipFile.setName(name + "_01")
+            if self.subdir != "":
+                newpath = hou.expandString(self.combinedPath + "/" + self.subdir + "/" + name + "_01.hiplc")
+            else:
+                newpath = hou.expandString(self.combinedPath) + "/" + name + "_01.hiplc"
+
+            # print(newpath)
+            hou.hipFile.save(newpath.replace("/", "\\"))
+            self.loadFolders()
+
+        hou.hscript("autosave on")
 
     def hipNameWithoutVersion(self):
         name = hou.hipFile.basename()
@@ -222,7 +243,7 @@ class LVProjectManager(QtWidgets.QWidget):
 
         for d in dirs:
             c = os.path.join(p, d)
-            print('making:', c)
+            # print('making:', c)
             if not os.path.exists(c):
                 os.mkdir(c)
 
@@ -265,14 +286,24 @@ class LVProjectManager(QtWidgets.QWidget):
 
     def savePrefs(self):
 
+        print('here')
+
+        # hacky fix, not sure why not working
+        # self.prefs['latest'] = self.latestToggle.isChecked()
+
         if not self.addedPath == "":
             if self.addedPath in self.prefs['paths']:
                 hou.ui.displayMessage("This folder is already in the list.")
             else:
                 self.prefs['paths'].append(self.addedPath)
+                self.prefs['latest'] = "pony"
+
+                print('saving')
 
                 with open(self.prefpath, "w") as outfile:
                     json.dump(self.prefs, outfile, indent=4)
+                # with open("C:\\Users\\PIC-TWO\\Partners in Crime Dropbox\\Luke Van\\STUDIO-PIC\\05-RESOURCES\\05_Houdini Packages\\LV Tools\\scripts\\python\\LVProjectManager\\Temp.json", "w") as outfile:
+                #     json.dump(self.prefs, outfile, indent=4)
 
     def saveRecent(self):
 
@@ -298,6 +329,12 @@ class LVProjectManager(QtWidgets.QWidget):
         self.prjRoot.setText(self.prefs['rootPath'])
         self.pathPrev.setText("$JOB/" + self.prefs['rootPath'])
         self.extraPath = self.prefs['rootPath']
+        self.subdir = self.prefs['subdir']
+
+        try:
+            self.latestToggle.setChecked(self.prefs['latest'])
+        except:
+            pass
 
     def setCombinedPath(self, path):
         tocombine = path
@@ -329,18 +366,41 @@ class LVProjectManager(QtWidgets.QWidget):
         folder = self.jobs.currentText()
         self.basePath = self.processPath(folder)
         self.currentIndex = self.jobs.currentIndex()
+        self.subdir = ""
         self.saveRecent()
         self.setCombinedPath(self.basePath)
         self.setEnvs()
         self.loadFolders()
         self.setinfoRow()
-    # def setJob(self, path):
-    #     self.setCombinedPath(path)
+
+    def selectSubDir(self):
+        if self.subdirs.currentText() == "Select a subfolder":
+            self.subdir = ""
+        elif self.subdirs.currentText() == "Create new":
+            i, text = hou.ui.readInput("New subfolder name:", buttons=('OK',), severity=hou.severityType.Message, default_choice=0, close_choice=-1, title=None, initial_contents=None)
+            if i == 0:
+                self.subdir = text
+                if not os.path.exists(hou.text.expandString(self.combinedPath + "/" + text)):
+                    os.makedirs(hou.text.expandString(self.combinedPath + "/" + text))
+                self.subdirs.addItem(text)
+                self.subdirs.setCurrentText(text)
+        else:
+            self.subdir = self.subdirs.currentText()
+
+        self.prefs['subdir'] = self.subdir
+        # print(self.subdir)
+        with open(self.prefpath, "w") as outfile:
+            json.dump(self.prefs, outfile, indent=4)
+
+        self.loadFolders()
 
     def loadProject(self, i, j):
         # cell = self.table.item(i, 0).text()
         cell = self.table.item(i, 0).whatsThis()
-        path = self.combinedPath + "/" + cell
+        if self.subdir != "":
+            path = self.combinedPath + "/" + self.subdir + "/" + cell
+        else:
+            path = self.combinedPath + "/" + cell
         if hou.hipFile.name().endswith('untitled.hip'):
             hou.hipFile.load(path)
         if hou.hipFile.hasUnsavedChanges():
@@ -370,7 +430,7 @@ class LVProjectManager(QtWidgets.QWidget):
         return list
 
     def loadFolders(self):
-
+        self.filterString = self.filterStringLine.text()
         try:
             hou.getenv("JOB")
             search_path = self.basePath
@@ -379,15 +439,41 @@ class LVProjectManager(QtWidgets.QWidget):
             for i in range(rows):
                 self.table.removeRow(0)
 
-            prjs = os.listdir(hou.expandString(
-                self.combinedPath).replace("//", "/"))
+            subpath = self.basePath + self.extraPath
+
+            subs = os.listdir(hou.text.expandString(subpath))
+
+            self.subdirs.clear()
+            self.subdirs.addItem("Select a subfolder")
+            self.subdirs.addItem("Create new")
+
+            for s in subs:
+                if os.path.isdir(hou.text.expandString(self.combinedPath + "/" + s)):
+                    self.subdirs.addItem(s)
+
+            self.subdirs.setCurrentText(self.subdir)
+
+            self.table.setHorizontalHeaderLabels(["Projects", "Version"])
+
+            # Get jobs at path + subdir
+
+            search_path = ""
+
+            if self.subdir in subs:
+                search_path = (self.basePath + self.extraPath + "/" + self.subdir).replace("//", "/")
+                prjs = os.listdir(hou.expandString(
+                    search_path))
+            else:
+                search_path = hou.expandString(
+                    self.combinedPath).replace("//", "/")
+                prjs = os.listdir(hou.expandString(
+                    search_path))
 
             prjs.sort()
 
-            fpath = self.combinedPath.replace("//", "/") + "/"
-            prjs.sort(key=lambda x: os.path.getmtime(hou.expandString(fpath + x)))
+            fpath = search_path.replace("//", "/") + "/"
 
-            # self.table.setHorizontalHeaderLabels(["Projects", "Version"])
+            prjs.sort(key=lambda x: os.path.getmtime(hou.expandString(fpath + x)))
 
             # new = prjs.sort(key=lambda x: os.path.getmtime(x))
 
@@ -421,11 +507,17 @@ class LVProjectManager(QtWidgets.QWidget):
 
                 prjs = [j['path'] for j in latest_only]
 
+            if self.filterString != "":
+                prjs = [x for x in prjs if x.lower().startswith(self.filterString.lower())]
+
             rowPosition = 1
+            prjs = [prj for prj in prjs if prj.endswith(".hiplc")]
             for i, job in enumerate(prjs):
                 # for job in prjs:
                 if len(job) > 0:
                     if job.endswith(".hiplc"):
+
+                        # per machine path conversion
                         job = job.replace(
                             "C:/Users/PIC-TWO/Partners in Crime Dropbox/Luke Van/STUDIO-PIC/", "$DB/")
                         job = job.replace("P:/", "$DB/")
@@ -458,9 +550,32 @@ class LVProjectManager(QtWidgets.QWidget):
 
                         rowPosition += 1
 
+            if len(prjs) == 0:
+                self.table.insertRow(0)
+                self.pathItem = QtWidgets.QTableWidgetItem("No .hip found")
+                self.pathItem.setFlags(QtCore.Qt.ItemIsSelectable)
+                self.table.setItem(
+                    0, 0, self.pathItem)
+
         except Exception as e:
             #     # if not type(e) == FileNotFoundError:
-            # print(e)
+            # e_type, e_object, e_traceback = sys.exc_info()
+
+            # e_filename = os.path.split(
+            #     e_traceback.tb_frame.f_code.co_filename
+            # )[1]
+
+            # e_message = str(e)
+
+            # e_line_number = e_traceback.tb_lineno
+
+            # print(f'exception type: {e_type}')
+
+            # print(f'exception filename: {e_filename}')
+
+            # print(f'exception line number: {e_line_number}')
+
+            # print(f'exception message: {e_message}')
             self.table.clear()
             self.table.insertRow(0)
             self.pathItem = QtWidgets.QTableWidgetItem("No .hip found")
@@ -481,7 +596,7 @@ class LVProjectManager(QtWidgets.QWidget):
             if widget.underMouse():
                 sel = widget.whatsThis()
 
-        contextMenu = QMenu()
+        contextMenu = QMenu()  # type: ignore
         contextMenu.setStyleSheet('margin: 2px;')
         action1 = contextMenu.addAction("Rename Ramp")
         action2 = contextMenu.addAction("Delete Ramp")

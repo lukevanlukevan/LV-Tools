@@ -6,7 +6,7 @@
 
 			<label>LV Tools</label>
 
-						<scriptItem id="LV_randomize_knots">
+			<scriptItem id="LV_randomize_knots">
 				<expression>
 					parm = kwargs["parms"]
 					if parm is None:
@@ -16,14 +16,14 @@
 				</expression>
 				<label>LV Randomize Knots</label>
 				<scriptCode>
-<![CDATA[
+					<![CDATA[
 from imp import reload
 import knotcontrol
 reload(knotcontrol)
 
 knotcontrol.randomizeKnots(kwargs)
 ]]>
-            </scriptCode>
+				</scriptCode>
 			</scriptItem>
 
 			<scriptItem id="LV_distribute_knots">
@@ -36,14 +36,14 @@ knotcontrol.randomizeKnots(kwargs)
 				</expression>
 				<label>LV Distribute Constant</label>
 				<scriptCode>
-<![CDATA[
+					<![CDATA[
 from imp import reload
 import knotcontrol
 reload(knotcontrol)
 
 knotcontrol.doDist(kwargs, hou.rampBasis.Constant)
 ]]>
-            </scriptCode>
+				</scriptCode>
 			</scriptItem>
 
 			<scriptItem id="LV Copy Ramp">
@@ -56,14 +56,14 @@ knotcontrol.doDist(kwargs, hou.rampBasis.Constant)
 				</expression>
 				<label>LV Copy Ramp</label>
 				<scriptCode>
-<![CDATA[
+					<![CDATA[
 from imp import reload
 import rampSave
 reload(rampSave)
 
 rampSave.save(kwargs)
 ]]>
-            </scriptCode>
+				</scriptCode>
 			</scriptItem>
 			<scriptItem id="LV Paste Ramp">
 				<expression>
@@ -75,14 +75,14 @@ rampSave.save(kwargs)
 				</expression>
 				<label>LV Paste Ramp</label>
 				<scriptCode>
-<![CDATA[
+					<![CDATA[
 from imp import reload
 import rampSave
 reload(rampSave)
 
 rampSave.load(kwargs, hou.rampBasis.Linear)
 ]]>
-			</scriptCode>
+				</scriptCode>
 			</scriptItem>
 
 			<scriptItem>
@@ -95,14 +95,14 @@ rampSave.load(kwargs, hou.rampBasis.Linear)
 					return parm[0].name() == 'snippet'
 				</expression>
 				<scriptCode>
-<![CDATA[
+					<![CDATA[
 from imp import reload
 import LVParmUtils
 reload(LVParmUtils)
 
 LVParmUtils.addFloatParm(kwargs)
 ]]>
-			</scriptCode>
+				</scriptCode>
 			</scriptItem>
 
 			<scriptItem>
@@ -115,14 +115,14 @@ LVParmUtils.addFloatParm(kwargs)
 					return parm[0].name() == 'snippet'
 				</expression>
 				<scriptCode>
-<![CDATA[
+					<![CDATA[
 from imp import reload
 import LVParmUtils
 reload(LVParmUtils)
 
 LVParmUtils.moveWrangleParms(kwargs)
 ]]>
-			</scriptCode>
+				</scriptCode>
 			</scriptItem>
 
 

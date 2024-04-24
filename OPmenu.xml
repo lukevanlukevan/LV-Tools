@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<menuDocument>
+	<menu>
+
+		<!-- <subMenu id="ODMaster"> -->
+		<!-- <label>ODTools</label> -->
+
+		<separatorItem />
+
+		<scriptItem id="LV_comment_cache_size">
+			<label>LV Cache Size Comment</label>
+
+			<scriptCode><![CDATA[
+from imp import reload
+import LVNodes
+reload(LVNodes)
+LVNodes.comment_cache_size(kwargs)
+        ]]>			</scriptCode>
+		</scriptItem>
+
+		<!-- </subMenu> -->
+
+	</menu>
+</menuDocument>

@@ -15,9 +15,9 @@
     <memberTool name="Key"/>
     <memberTool name="Change all tex"/>
     <memberTool name="connect tex"/>
-    <memberTool name="tool_2"/>
+    <memberTool name="create_lv_mat"/>
     <memberTool name="tool_4"/>
-    <memberTool name="Create LV Mat"/>
+    <memberTool name="create_lv_mat"/>
     <memberTool name="OD Render Batch File"/>
     <memberTool name="Toggle RS Lights"/>
     <memberTool name="tool_3"/>
@@ -37,6 +37,9 @@
     <memberTool name="gpt"/>
     <memberTool name="keyboardchop"/>
     <memberTool name="rs_hijack"/>
+    <memberTool name="temp keyframe setting"/>
+    <memberTool name="set_ends"/>
+    <memberTool name="GetSize"/>
   </toolshelf>
 
   <tool name="Paste Ease" label="Paste Ease" icon="PLASMA_App">
@@ -151,13 +154,21 @@ desk = hou.ui.curDesktop()
 print(desk.name())
 
 panes = desk.panes()
-for i,pane in enumerate(panes):
+# for i,pane in enumerate(panes):
     # print(pane)
-    for tab in pane.tabs():
-        print(tab)
+    # for tab in pane.tabs():
+        # print(tab.type().name())
     # print(i, pane.name(), pane.type().name())
-# print(hou.ui.paneTabUnderCursor())
+print(hou.ui.paneTabUnderCursor())
 
 ]]></script>
+  </tool>
+
+  <tool name="GetSize" label="GetSize" icon="PLASMA_App">
+    <script scriptType="python"><![CDATA[node = hou.selectedItems()[0]
+
+type = node.type().name()
+
+print(type)]]></script>
   </tool>
 </shelfDocument>

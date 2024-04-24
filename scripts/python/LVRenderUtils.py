@@ -13,7 +13,6 @@ def snapshot_and_save(kwargs):
 
     rop = hou.node("/out")
     children = rop.children()
-    print(children)
 
     rs_rops = list(filter(lambda x: x.type().name() == 'Redshift_ROP', children))
     if len(rs_rops) == 0:
@@ -24,14 +23,17 @@ def snapshot_and_save(kwargs):
 
         old_range = rop.parm("trange").eval()
         old_output = rop.parm("RS_outputFileNamePrefix").eval()
+        old_mplay = rop.parm("RS_renderToMPlay").eval()
 
         rop.parm("trange").set("off")
         rop.parm("RS_outputFileNamePrefix").set(outpath + ".png")
+        # rop.parm("RS_renderToMPlay").set(0)
 
         rop.parm("execute").pressButton()
 
         rop.parm("trange").set(old_range)
         rop.parm("RS_outputFileNamePrefix").set(old_output)
+        # rop.parm("RS_renderToMPlay").set(old_mplay)
 
         source_file = hou.hipFile.path()
         destination_file = outpath + ".hip"

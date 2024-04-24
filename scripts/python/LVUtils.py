@@ -100,3 +100,22 @@ def openControls():
 
 def save_incremental():
     hou.hipFile.saveAndIncrementFileName()
+
+
+def build_wedge():
+    sel = hou.selectedItems()
+
+    for node in sel:
+        parms = node.parms()
+
+        sel_parms = [parm.name() for parm in parms]
+
+        hou.ui.selectParm(message=f"Select parm from {node.name()}", title=f"Wedge {node.name()}", initial_parms=list(node.parms()))
+        # hou.ui.selectFromList(parms, message=f"Select parm from {node.name()}", title=f"Wedge {node.name()}")
+
+
+def inline_lvmat(**kwargs):
+    nodes = hou.selectedItems()
+
+    for node in nodes:
+        node.createOutputNode("lv_mat")
