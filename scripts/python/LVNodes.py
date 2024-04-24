@@ -66,7 +66,7 @@ def light_arrange(*kwargs):
                                 'Spread: ' + spread)
 
 
-def comment_cache_size(*kwargs):
+def comment_cache_size(kwargs=hou.pwd()):
 
     def convert_size(size_bytes):
         if size_bytes == 0:
@@ -78,11 +78,12 @@ def comment_cache_size(*kwargs):
         return "%s %s" % (s, size_name[i])
 
     try:
-        if kwargs[0]["node"] is not None:
-            node = kwargs[0]["node"]
-        else:
-            hou.ui.displayMessage("Unable to detect path. Please select a node and try again.")
-            return
+        # if kwargs["node"] is not None:
+        #     node = kwargs["node"]
+        # else:
+        basenode = kwargs
+        parm = basenode.parent()
+        node = parm
 
         path = ""
         ntype = node.type().name()
