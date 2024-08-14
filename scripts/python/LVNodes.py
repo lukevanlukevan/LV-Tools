@@ -110,3 +110,57 @@ def comment_cache_size(kwargs=hou.pwd()):
     except Exception as e:
         print(e)
         hou.ui.displayMessage("Unable to detect path. Please share error in console on Discord.")
+
+
+def transfer_transform(kwargs=hou.pwd()):
+    # node = kwargs
+
+    nodes = hou.selectedNodes()
+    n1 = nodes[0]
+    n2 = nodes[1]
+
+    n2.parm('tx').set(n1.parm('tx').eval())
+    n2.parm('ty').set(n1.parm('ty').eval())
+    n2.parm('tz').set(n1.parm('tz').eval())
+    n2.parm('rx').set(n1.parm('rx').eval())
+    n2.parm('ry').set(n1.parm('ry').eval())
+    n2.parm('rz').set(n1.parm('rz').eval())
+    n2.parm('sx').set(n1.parm('sx').eval())
+    n2.parm('sy').set(n1.parm('sy').eval())
+    n2.parm('sz').set(n1.parm('sz').eval())
+
+    n1.parm('tx').set(0)
+    n1.parm('ty').set(0)
+    n1.parm('tz').set(0)
+    n1.parm('rx').set(0)
+    n1.parm('ry').set(0)
+    n1.parm('rz').set(0)
+    n1.parm('sx').set(1)
+    n1.parm('sy').set(1)
+    n1.parm('sz').set(1)
+
+    n1.setInput(0, n2)
+
+
+def createRSFocusTarget(kwargs):
+    # print(kwargs)
+    cam = hou.selectedNodes()[0]
+    pos = cam.position()
+    if cam.type().name() != "cam":
+        hou.ui.displayMessage("Please select a camera node.")
+        return
+    else:
+        ft = hou.node("/obj").createNode("null", "FT")
+        cam.parm("RS_campro_dofUseHoudiniCamera").set(0)
+        cam.parm("RS_campro_dofObject").set(ft.path())
+
+
+def resetPsr(kwargs):
+    nodes = hou.selectedNodes()
+    for n in nodes:
+        n.parm("tx").set(0)
+        n.parm("ty").set(0)
+        n.parm("tz").set(0)
+        n.parm("rx").set(0)
+        n.parm("ry").set(0)
+        n.parm("rz").set(0)

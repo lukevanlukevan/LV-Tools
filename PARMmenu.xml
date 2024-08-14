@@ -46,6 +46,26 @@ knotcontrol.doDist(kwargs, hou.rampBasis.Constant)
 				</scriptCode>
 			</scriptItem>
 
+			<scriptItem id="LV_sort_knots">
+				<expression>
+					parm = kwargs["parms"]
+					if parm is None:
+						return False
+
+					return parm[0].parmTemplate().type().name() == 'Ramp'
+				</expression>
+				<label>LV Sort By Value</label>
+				<scriptCode>
+					<![CDATA[
+from imp import reload
+import knotcontrol
+reload(knotcontrol)
+
+knotcontrol.sortKnots(kwargs)
+]]>
+				</scriptCode>
+			</scriptItem>
+
 			<scriptItem id="LV Copy Ramp">
 				<expression>
 					parm = kwargs["parms"]
@@ -121,6 +141,32 @@ import LVParmUtils
 reload(LVParmUtils)
 
 LVParmUtils.moveWrangleParms(kwargs)
+]]>
+				</scriptCode>
+			</scriptItem>
+
+			<scriptItem>
+				<label>Swap Values</label>
+				<scriptCode>
+					<![CDATA[
+from imp import reload
+import LVParmUtils
+reload(LVParmUtils)
+
+LVParmUtils.swapDouble(kwargs)
+]]>
+				</scriptCode>
+			</scriptItem>
+
+			<scriptItem>
+				<label>Resize Camera</label>
+				<scriptCode>
+					<![CDATA[
+from imp import reload
+import LVParmUtils
+reload(LVParmUtils)
+
+LVParmUtils.resizeCam(kwargs)
 ]]>
 				</scriptCode>
 			</scriptItem>

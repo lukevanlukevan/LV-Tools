@@ -16,7 +16,7 @@ def post_render(node=hou.pwd()):
         wide = wide.replace("$F2", "%02d")
 
     full = hou.expandString(wide)
-    print("full: ", full)
+    # print("full: ", full)
 
     video = "".join(full.split(".")[:-1]) + ".mp4"
 
@@ -24,7 +24,9 @@ def post_render(node=hou.pwd()):
     video = video.replace("%03d", "")
     video = video.replace("%02d", "")
 
-    command = f'ffmpeg -framerate 25 -y -start_number {start} -i "{full}" -c:v libx264 -crf 23 -pix_fmt yuv420p "{video}"'
+    command = f'ffmpeg -framerate 25 -y -start_number {int(start)} -i "{full}" -c:v libx264 -crf 23 -pix_fmt yuv420p "{video}"'
+
+    print(command)
 
     subprocess.Popen(command)
 

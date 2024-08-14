@@ -5,6 +5,37 @@ import re
 from LVUtils import lv_error
 
 
+def swapDouble(kwargs):
+    parm = kwargs["parms"][0]
+    parms = kwargs["parms"]
+    node = kwargs["parms"][0].node()
+    l = len(kwargs["parms"])
+
+    vals = [p.eval() for p in parms]
+
+    for i, parm in enumerate(parms):
+        parm.set(vals[(i + 1) % l])
+
+
+def resizeCam(kwargs):
+    parms = kwargs["parms"]
+    x = parms[0].eval()
+    y = parms[1].eval()
+
+    width = parms[0].eval()
+
+    close, value = hou.ui.readInput("Resize Camera", buttons=("Cancel", "Width", "Height"), close_choice=0, default_choice=1)
+
+    if not close == 0:
+        value = int(value)
+        if close == 1:
+            parms[0].set(value)
+            parms[1].set(value * y / x)
+        else:
+            parms[1].set(value)
+            parms[0].set(value * x / y)
+
+
 def moveWrangleParms(kwargs):
     node = kwargs["parms"][0].node()
 

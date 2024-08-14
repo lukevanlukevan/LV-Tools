@@ -286,7 +286,7 @@ class LVProjectManager(QtWidgets.QWidget):
 
     def savePrefs(self):
 
-        print('here')
+        # print('here')
 
         # hacky fix, not sure why not working
         # self.prefs['latest'] = self.latestToggle.isChecked()
@@ -298,7 +298,7 @@ class LVProjectManager(QtWidgets.QWidget):
                 self.prefs['paths'].append(self.addedPath)
                 self.prefs['latest'] = "pony"
 
-                print('saving')
+                # print('saving')
 
                 with open(self.prefpath, "w") as outfile:
                     json.dump(self.prefs, outfile, indent=4)
@@ -483,7 +483,7 @@ class LVProjectManager(QtWidgets.QWidget):
 
                 for i, job in enumerate(prjs):
                     if len(job) > 0:
-                        if job.endswith(".hiplc"):
+                        if job.endswith(".hiplc") or job.endswith(".hip"):
                             nopath = job.split(".")[0]
                             name = "_".join(nopath.split("_")[:-1])
                             ver = int(nopath.split("_")[-1])

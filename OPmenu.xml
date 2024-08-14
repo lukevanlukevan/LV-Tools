@@ -18,6 +18,29 @@ LVNodes.comment_cache_size(kwargs)
         ]]>			</scriptCode>
 		</scriptItem>
 
+		<scriptItem id="LV_transfer_transform">
+			<label>LV Transfer Transform</label>
+
+			<scriptCode><![CDATA[
+from imp import reload
+import LVNodes
+reload(LVNodes)
+LVNodes.transfer_transform(kwargs)
+        ]]>			</scriptCode>
+		</scriptItem>
+
+		<scriptItem id="LV_transfer_transform">
+			<label>LV Transfer Transform</label>
+
+			<scriptCode><![CDATA[
+from imp import reload
+import LVRenderUtils
+reload(LVRenderUtils)
+LVRenderUtils.fix_output(kwargs)
+			]]>			</scriptCode>
+		</scriptItem>
+
+
 		<!-- </subMenu> -->
 
 	</menu>

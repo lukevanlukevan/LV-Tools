@@ -20,7 +20,7 @@
     <memberTool name="create_lv_mat"/>
     <memberTool name="OD Render Batch File"/>
     <memberTool name="Toggle RS Lights"/>
-    <memberTool name="tool_3"/>
+    <memberTool name="hmp_knob1_ccw"/>
     <memberTool name="setParent"/>
     <memberTool name="dummy"/>
     <memberTool name="LV Make Space"/>
@@ -36,10 +36,13 @@
     <memberTool name="EaseTest"/>
     <memberTool name="gpt"/>
     <memberTool name="keyboardchop"/>
-    <memberTool name="rs_hijack"/>
     <memberTool name="temp keyframe setting"/>
-    <memberTool name="set_ends"/>
     <memberTool name="GetSize"/>
+    <memberTool name="Export PRj"/>
+    <memberTool name="rebuild cam parms"/>
+    <memberTool name="LocalizeExternal"/>
+    <memberTool name="FindNotLocal"/>
+    <memberTool name="connect to output"/>
   </toolshelf>
 
   <tool name="Paste Ease" label="Paste Ease" icon="PLASMA_App">
@@ -146,29 +149,76 @@ reload(gpt)
 gpt.call()]]></script>
   </tool>
 
-  <tool name="rs_hijack" label="RS hijack" icon="PLASMA_App">
-    <script scriptType="python"><![CDATA[# panel = hou.ui.paneTabOfType(
-
-desk = hou.ui.curDesktop()
-
-print(desk.name())
-
-panes = desk.panes()
-# for i,pane in enumerate(panes):
-    # print(pane)
-    # for tab in pane.tabs():
-        # print(tab.type().name())
-    # print(i, pane.name(), pane.type().name())
-print(hou.ui.paneTabUnderCursor())
-
-]]></script>
-  </tool>
-
   <tool name="GetSize" label="GetSize" icon="PLASMA_App">
     <script scriptType="python"><![CDATA[node = hou.selectedItems()[0]
 
 type = node.type().name()
 
 print(type)]]></script>
+  </tool>
+
+  <tool name="rebuild cam parms" label="rebuildcamparms" icon="PLASMA_App">
+    <script scriptType="python"><![CDATA[node = hou.selectedItems()[0]
+
+tname = node.type().name()
+
+flags = [
+"RS_campro_colorMOcioFile"
+]
+
+if tname == "cam":
+    parms = node.parms()
+    newparms = [[parm.name(), parm.eval(), parm.description()] for parm in parms if parm.name().startswith("RS")]
+    hou.hscript('Redshift_removeCameraSpareParameters')
+    hou.hscript('Redshift_cameraSpareParameters')
+    for p in newparms:
+        try:
+            if not p[0] in flags:
+                node.parm(p[0]).set(p[1])
+        except:
+            print("Failed to find: " + p[2] + f"({p[0]})")
+        ]]></script>
+  </tool>
+
+  <tool name="LocalizeExternal" label="LocalizeExternal" icon="PLASMA_App">
+    <script scriptType="python"><![CDATA[from OD import shelftools
+
+shelftools.localizeExternals(hdas = None) ]]></script>
+  </tool>
+
+  <tool name="FindNotLocal" label="FindNotLocal" icon="PLASMA_App">
+    <script scriptType="python"><![CDATA[from shutil import copy
+from os import path
+import os
+
+files = hou.fileReferences()
+
+hip = hou.text.expandString("$HIP")
+
+def isInside(goodpath, checkpath):
+    if checkpath.startswith(goodpath):
+        return True, "", checkpath
+    else:
+        head, tail = path.split(checkpath)
+        
+        newpath = path.join(hip, "tex", tail)
+        return False, newpath, checkpath
+
+for parm, file in files:
+    exclude = ["hda", "hdalc", "db", ".h"]
+    
+    if not any(file.endswith(ex) for ex in exclude):
+        safe, swapped, orig = isInside("Z:", file)
+        import os
+        if not os.path.exists(path.join(hip, "tex")):
+            os.makedirs(path.join(hip, "tex"))
+        if not safe:
+            try:
+                copy(orig.replace("/", "\\"), swapped.replace("/", "\\"))
+            except:
+                print("failed file:", orig)
+            hou.hscript(f'opchange "{orig}" "{swapped}"')
+            
+            ]]></script>
   </tool>
 </shelfDocument>

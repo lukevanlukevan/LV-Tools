@@ -5,27 +5,30 @@ import nodegraphview as view
 from datetime import datetime
 
 
-def do_stuff(uievent):
+def your_function():
+    print("consistent double click")
+
+def createEventHandler(uievent, pending_actions):
     if isinstance(uievent, MouseEvent):
         if (uievent.eventtype == 'mousedown'):
-            ctrl = uievent.modifierstate.ctrl
-            shift = uievent.modifierstate.shift
-            alt = uievent.modifierstate.alt
-            if (ctrl and shift and not alt):
-                try:
-                    pos = uievent.mousepos
-                    editor = uievent.editor
-                    items = editor.networkItemsInBox(pos, pos, for_select=True)
-                    node = items[-1][0]
+            try:
+                if not hou.session.first_click:
+                    if hou.session.first_click - datetime.now() > 1000:
+                        hou.session.first_click = datetime.now()
+                else:
+                    second = datetime.now()
+                    diff = second - hou.session.first_click
+                    mil_diff = diff.total_seconds() * 1000
+                    # print(mil_diff)
+                    # if diff > 500:
+                    if not mil_diff < 200:
+                        hou.session.first_click = datetime.now()
 
-                    name = node.name()
+                    else:
+                        your_function()
 
-                    name = "OUT_" + name
+            except:
+                hou.session.first_click = datetime.now()
 
-                    null = node.createOutputNode('null', name)
-                    null.moveToGoodPosition()
-                    return True
-                except:
-                    return False
-    else:
-        return False
+        return None, True
+    return None, False

@@ -21,6 +21,9 @@
     <memberTool name="RS_Snapshot_and_Save"/>
     <memberTool name="LV_wedge_selected"/>
     <memberTool name="create_lv_mat"/>
+    <memberTool name="create_focus_target"/>
+    <memberTool name="resetPsr"/>
+    <memberTool name="lv_view_closest"/>
   </toolshelf>
 
   <tool name="LV_Color" label="LV Color" icon="SOP_color">
@@ -252,5 +255,43 @@ import LVUtils
 
 reload(LVUtils)
 LVUtils.inline_lvmat()]]></script>
+  </tool>
+
+  <tool name="create_focus_target" label="LV Create Focus Target" icon="$LV/lv.svg">
+    <toolMenuContext name="network">
+      <contextNetType>OBJ</contextNetType>
+    </toolMenuContext>
+    <toolSubmenu>LV</toolSubmenu>
+    <script scriptType="python"><![CDATA[from importlib import reload
+import LVNodes
+reload(LVNodes)
+
+LVNodes.createRSFocusTarget(kwargs)]]></script>
+    <keywordList>
+      <keyword>FT target focus</keyword>
+    </keywordList>
+  </tool>
+
+  <tool name="resetPsr" label="LV Reset PSR" icon="$LV/lv.svg">
+    <toolMenuContext name="network">
+      <contextNetType>OBJ</contextNetType>
+    </toolMenuContext>
+    <toolSubmenu>LV</toolSubmenu>
+    <script scriptType="python"><![CDATA[from imp import reload
+import LVNodes
+reload(LVNodes)
+
+LVNodes.resetPsr(kwargs)]]></script>
+    <keywordList>
+      <keyword>psr reset</keyword>
+    </keywordList>
+  </tool>
+
+  <tool name="lv_view_closest" label="LV View Closest" icon="$LV/lv.svg">
+    <script scriptType="python"><![CDATA[from imp import reload
+import LVUtils
+reload(LVUtils)
+
+LVUtils.view_closest()]]></script>
   </tool>
 </shelfDocument>

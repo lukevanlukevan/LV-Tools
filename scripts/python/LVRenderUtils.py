@@ -40,3 +40,13 @@ def snapshot_and_save(kwargs):
 
         shutil.copy(source_file, destination_file)
         hou.ui.showInFileBrowser(destination_file)
+
+
+def fix_output(kwargs):
+    rop = kwargs["node"]
+    old_output = rop.parm("RS_outputFileNamePrefix").eval()
+    pngname = old_output.replace(".exr", ".png")
+    rop.parm("RS_outputFileNamePrefix").set(pngname)
+
+    type_parm = rop.parm("RS_outputFileFormat")
+    type_parm.set(".png")

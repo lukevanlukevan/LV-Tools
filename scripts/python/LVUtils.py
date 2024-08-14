@@ -119,3 +119,21 @@ def inline_lvmat(**kwargs):
 
     for node in nodes:
         node.createOutputNode("lv_mat")
+
+def view_closest():
+    net = hou.ui.paneTabUnderCursor()
+    if not net.type() == hou.paneTabType.NetworkEditor:
+        return
+    else:
+        netpos = net.cursorPosition()
+        b = net.visibleBounds()
+        min = b.min()
+        max = b.max()
+        tl = hou.Vector2(min.x(), max.y())
+        br = hou.Vector2(max.x(), min.y())
+
+        visnodes = net.networkItemsInBox(net.posToScreen(tl), net.posToScreen(br), for_select=True)
+        sorted_visnodes = sorted([node[0] for node in visnodes if node[1] == "node"], key=lambda x: (netpos - x.position()).length())
+
+        sorted_visnodes[0].setGenericFlag(hou.nodeFlag.Display, True)
+        sorted_visnodes[0].setGenericFlag(hou.nodeFlag.Render, True)

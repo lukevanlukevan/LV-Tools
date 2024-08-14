@@ -514,6 +514,6 @@ class GraphView(QtWidgets.QGraphicsView):
             x2 = (i + 1) * x_spacing
             y2 = self.y_values[i + 1]
             # line = QtWidgets.QGraphicsLineItem(x1, 1-y1*self.height, x2, 1-y2*self.height)
-            line = QtWidgets.QGraphicsLineItem(x1, remap(y1, 0, 1, -self.height/2, self.height/2), x2, remap(y2, 0, 1, -self.height/2, self.height/2))
+            line = QtWidgets.QGraphicsLineItem(x1, remap(y1, 0, 1, self.height/2, -self.height/2), x2, remap(y2, 0, 1, self.height/2, -self.height/2))
             line.setPen(self.pen)
             self.scene.addItem(line)
