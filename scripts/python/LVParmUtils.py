@@ -29,11 +29,11 @@ def resizeCam(kwargs):
     if not close == 0:
         value = int(value)
         if close == 1:
-            parms[0].set(value)
-            parms[1].set(value * y / x)
+            parms[0].set(int(value))
+            parms[1].set(int(value * y / x))
         else:
-            parms[1].set(value)
-            parms[0].set(value * x / y)
+            parms[1].set(int(value))
+            parms[0].set(int(value * x / y))
 
 
 def moveWrangleParms(kwargs):
@@ -225,3 +225,15 @@ def regenParms(kwargs):
     snippet = node.parm("snippet").eval()
 
     vexpressionmenu.createSpareParmsFromChCalls(node, 'snippet')
+
+def get_render_paths():
+    renderpaths = hou.text.expandString("$LV/util/renderpaths")
+    with open(renderpaths, 'r') as f:
+        content = f.read().splitlines()
+    output = [item for item in content for _ in range(2)]
+    return output
+
+def set_render_paths(kwargs):
+    parm = kwargs['parms'][0]
+    sel = kwargs['selectedtoken']
+    parm.set(sel)

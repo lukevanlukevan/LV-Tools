@@ -3,7 +3,9 @@ from PySide2.QtWidgets import QPushButton, QComboBox, QTableWidget, QTableWidget
 import hou
 import os
 import json
+import re
 import sys
+import fnmatch
 
 global odstate
 
@@ -508,7 +510,7 @@ class LVProjectManager(QtWidgets.QWidget):
                 prjs = [j['path'] for j in latest_only]
 
             if self.filterString != "":
-                prjs = [x for x in prjs if x.lower().startswith(self.filterString.lower())]
+                prjs = [x for x in prjs if fnmatch.fnmatch(x, self.filterString + "*")]
 
             rowPosition = 1
             prjs = [prj for prj in prjs if prj.endswith(".hiplc")]

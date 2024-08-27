@@ -173,6 +173,29 @@ LVParmUtils.resizeCam(kwargs)
 
 
 		</subMenu>
+		<subMenu id="LVM2">
+			<insertAfter>LVM1</insertAfter>
+
+			<label>LV Path Presets</label>
+			<scriptMenuStripDynamic id="myUniqueDynamicStripId">
+				<contentsScriptCode><![CDATA[
+from imp import reload
+import LVParmUtils
+reload(LVParmUtils)
+return LVParmUtils.get_render_paths()
+]]>				</contentsScriptCode>
+				<scriptCode><![CDATA[
+import hou
+from imp import reload
+import LVParmUtils
+reload(LVParmUtils)
+selected_token = kwargs["selectedtoken"]
+selected_label = kwargs["selectedlabel"]
+LVParmUtils.set_render_paths(kwargs)
+]]>				</scriptCode>
+			</scriptMenuStripDynamic>
+		</subMenu>
+
 
 		<separatorItem></separatorItem>
 	</menuBar>

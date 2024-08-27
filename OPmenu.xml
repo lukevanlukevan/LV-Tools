@@ -40,6 +40,19 @@ LVRenderUtils.fix_output(kwargs)
 			]]>			</scriptCode>
 		</scriptItem>
 
+		<scriptItem id="LV_Shader_Switch_to_Materials">
+
+			<label>LV Shader Switch to Materials</label>
+			<scriptCode>
+				<![CDATA[
+from imp import reload
+import LVMatUtils
+reload(LVMatUtils)
+
+LVMatUtils.shader_switch_to_mat(kwargs)
+]]>
+			</scriptCode>
+		</scriptItem>
 
 		<!-- </subMenu> -->
 
