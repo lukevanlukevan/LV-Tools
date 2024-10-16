@@ -4,7 +4,7 @@ from PySide2.QtWidgets import QPushButton, QComboBox, QTableWidget, QTableWidget
 import hou
 import os
 import json
-from imp import reload
+from importlib import reload
 
 import LVParmUtils
 reload(LVParmUtils)

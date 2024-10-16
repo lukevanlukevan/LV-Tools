@@ -1,6 +1,6 @@
 import hou
 import LVLightUtils
-from imp import reload
+from importlib import reload
 
 reload(LVLightUtils)
 

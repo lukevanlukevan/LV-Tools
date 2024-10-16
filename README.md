@@ -1,14 +1,12 @@
 # LV Tools for Houdini
 
-## Version 1.0.0
-
 # PLEASE NOTE:
 
 # LV Tools
 
 A collection of HDAs that I use everyday to make my life easier/better/faster.
 
-Free to use! If you would like to support me, you can do so at [Gumroad](https://wobblypictures.gumroad.com/) or [buy me a coffee](https://www.buymeacoffee.com/lukevan).
+This is a pay-what-you-want project! If you would like to support me, you can do so at [buy me a coffee](https://www.buymeacoffee.com/lukevan) or [PayPal](https://paypal.me/wobblypictures?country.x=ZA&locale.x=en_US).
 
 ### Installation:
 
@@ -27,6 +25,6 @@ If you are a git user, its worth it to clear the folder and backup any preferenc
 [HDAs](/otls/)
 [Scripts](/scripts/python/README.md)
 [Python Panels](/python_panels/)
-[Node Graph Hooks](/python3.9libs/)
+[Node Graph Hooks](/python3.10libs/)
 [Shelf Tabs](/toolbar/)
 

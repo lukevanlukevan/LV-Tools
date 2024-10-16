@@ -24,6 +24,7 @@
     <memberTool name="create_focus_target"/>
     <memberTool name="resetPsr"/>
     <memberTool name="lv_view_closest"/>
+    <memberTool name="LV_set_quickmark"/>
   </toolshelf>
 
   <tool name="LV_Color" label="LV Color" icon="SOP_color">
@@ -43,14 +44,14 @@ LVNodes.light_arrange(kwargs)]]></script>
 
   <tool name="LV_Controller" label="LV Controller" icon="$LV/lv.svg">
     <script scriptType="python"><![CDATA[from LVUtils import openControls
-from imp import reload
+from importlib import reload
 
 openControls()]]></script>
   </tool>
 
   <tool name="LV_Texture_Abs" label="LV Texture Abs" icon="$LV/lv.svg">
     <script scriptType="python"><![CDATA[import tex
-from imp import reload
+from importlib import reload
 reload(tex)
 tex.createAbs()]]></script>
   </tool>
@@ -189,28 +190,28 @@ pf.openDir()]]></script>
 
   <tool name="LV_Create_Named_Geo" label="LV Create Named Geo" icon="$LV/lv.svg">
     <script scriptType="python"><![CDATA[import LVUtils
-from imp import reload
+from importlib import reload
 reload(LVUtils)
 LVUtils.createNamedGeo(kwargs)]]></script>
   </tool>
 
   <tool name="LV_Make_Space" label="LV Make Space" icon="$LV/lv.svg">
     <script scriptType="python"><![CDATA[import LVUtils
-from imp import reload
+from importlib import reload
 reload(LVUtils)
 LVUtils.makeSpace(kwargs)]]></script>
   </tool>
 
   <tool name="Light_Visibility_Listener" label="Light Visibility Listener" icon="OBJ_light_area">
     <script scriptType="python"><![CDATA[import LVLightUtils
-from imp import reload
+from importlib import reload
 reload(LVLightUtils)
 LVLightUtils.listenForLight(hou.selectedItems())]]></script>
   </tool>
 
   <tool name="Updater" label="Updater" icon="BUTTONS_download">
     <script scriptType="python"><![CDATA[import LVUpdater
-from imp import reload
+from importlib import reload
 reload(LVUpdater)
 try:
     LVUpdater.update()
@@ -220,7 +221,7 @@ except:
 
   <tool name="render_to_mp4" label="Render to MP4" icon="NETWORKS_rop">
     <script scriptType="python"><![CDATA[import LVRender
-from imp import reload
+from importlib import reload
 reload(LVRender)
 
 LVRender.post_render(hou.selectedItems()[0])]]></script>
@@ -236,21 +237,21 @@ LVAI.call()]]></script>
 
   <tool name="RS_Snapshot_and_Save" label="RS Snapshot and Save" icon="$LV/lv.svg">
     <script scriptType="python"><![CDATA[import LVRenderUtils
-from imp import reload
+from importlib import reload
 reload(LVRenderUtils)
 LVRenderUtils.snapshot_and_save(kwargs)]]></script>
   </tool>
 
   <tool name="LV_wedge_selected" label="LV Wedge Selected Nodes" icon="$LV/lv.svg">
     <script scriptType="python"><![CDATA[import LVUtils
-from imp import reload
+from importlib import reload
 
 reload(LVUtils)
 LVUtils.build_wedge()]]></script>
   </tool>
 
   <tool name="create_lv_mat" label="Create LV Mat" icon="$LV/lv.svg">
-    <script scriptType="python"><![CDATA[from imp import reload
+    <script scriptType="python"><![CDATA[from importlib import reload
 import LVUtils
 
 reload(LVUtils)
@@ -277,7 +278,7 @@ LVNodes.createRSFocusTarget(kwargs)]]></script>
       <contextNetType>OBJ</contextNetType>
     </toolMenuContext>
     <toolSubmenu>LV</toolSubmenu>
-    <script scriptType="python"><![CDATA[from imp import reload
+    <script scriptType="python"><![CDATA[from importlib import reload
 import LVNodes
 reload(LVNodes)
 
@@ -288,10 +289,18 @@ LVNodes.resetPsr(kwargs)]]></script>
   </tool>
 
   <tool name="lv_view_closest" label="LV View Closest" icon="$LV/lv.svg">
-    <script scriptType="python"><![CDATA[from imp import reload
+    <script scriptType="python"><![CDATA[from importlib import reload
 import LVUtils
 reload(LVUtils)
 
 LVUtils.view_closest()]]></script>
+  </tool>
+
+  <tool name="LV_set_quickmark" label="LV Set Quickmark" icon="$LV/lv.svg">
+    <script scriptType="python"><![CDATA[import LVTimelineUtils
+from importlib import reload
+reload(LVTimelineUtils)
+
+LVTimelineUtils.set_quickmark(kwargs)]]></script>
   </tool>
 </shelfDocument>

@@ -6,7 +6,7 @@
  same interface or of the interfaces menu are not allowed
  in a single file. -->
   <interface name="LV_node_utils" label="LV Node Utils" icon="MISC_python" showNetworkNavigationBar="false" help_url="">
-    <script><![CDATA[from imp import reload
+    <script><![CDATA[from importlib import reload
 from lvnodeutils import lvnodeutils
 reload(lvnodeutils)
 
@@ -14,7 +14,7 @@ def onCreateInterface():
     global panel
     panel = lvnodeutils.lvnodeutils()
     return panel
-    
+
 def onNodePathChanged(node):
     panel.getNode(node)]]></script>
     <includeInToolbarMenu menu_position="431" create_separator="false"/>

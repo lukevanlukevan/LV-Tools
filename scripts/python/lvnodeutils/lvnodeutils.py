@@ -4,7 +4,7 @@ import hou
 
 import os
 import json
-from imp import reload  # type: ignore
+from importlib import reload  # type: ignore
 
 import LVParmUtils
 reload(LVParmUtils)

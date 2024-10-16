@@ -6,7 +6,7 @@
  same interface or of the interfaces menu are not allowed
  in a single file. -->
   <interface name="LV_RS_Light_Link" label="LV RS Light Link" icon="BUTTONS_light_include" showNetworkNavigationBar="false" help_url="">
-    <script><![CDATA[from imp import reload
+    <script><![CDATA[from importlib import reload
 from RSLightLink import RSLightLink
 reload(RSLightLink)
 
@@ -15,7 +15,7 @@ panel = RSLightLink.RSLightLink()
 def onCreateInterface():
     global panel
     return panel
-    
+
 def onNodePathChanged(node):
     global panel
     panel.setLink()]]></script>

@@ -13,7 +13,7 @@
         <insertAfter>h.save_as</insertAfter>
 <scriptCode>
 <![CDATA[
-from imp import reload
+from importlib import reload
 import LVUtils
 reload(LVUtils)
 
@@ -44,7 +44,7 @@ webbrowser.open("https://discord.gg/evVztWBG6v", new=0, autoraise=True)
 <scriptCode>
 <![CDATA[
 import LVUpdater
-from imp import reload
+from importlib import reload
 reload(LVUpdater)
 try:
     LVUpdater.update()

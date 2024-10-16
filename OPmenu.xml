@@ -2,59 +2,61 @@
 <menuDocument>
 	<menu>
 
-		<!-- <subMenu id="ODMaster"> -->
-		<!-- <label>ODTools</label> -->
+		<subMenu id="LVM0">
+			<!-- <insertAfter>reference_menu</insertAfter> -->
 
-		<separatorItem />
+			<label>LV Tools</label>
 
-		<scriptItem id="LV_comment_cache_size">
-			<label>LV Cache Size Comment</label>
+			<separatorItem />
 
-			<scriptCode><![CDATA[
-from imp import reload
+			<scriptItem id="LV_comment_cache_size">
+				<label>LV Cache Size Comment</label>
+
+				<scriptCode><![CDATA[
+from importlib import reload
 import LVNodes
 reload(LVNodes)
 LVNodes.comment_cache_size(kwargs)
-        ]]>			</scriptCode>
-		</scriptItem>
+        ]]>				</scriptCode>
+			</scriptItem>
 
-		<scriptItem id="LV_transfer_transform">
-			<label>LV Transfer Transform</label>
+			<scriptItem id="LV_transfer_transform">
+				<label>LV Transfer Transform</label>
 
-			<scriptCode><![CDATA[
-from imp import reload
+				<scriptCode><![CDATA[
+from importlib import reload
 import LVNodes
 reload(LVNodes)
 LVNodes.transfer_transform(kwargs)
-        ]]>			</scriptCode>
-		</scriptItem>
+        ]]>				</scriptCode>
+			</scriptItem>
 
-		<scriptItem id="LV_transfer_transform">
-			<label>LV Transfer Transform</label>
+			<scriptItem id="LV_transfer_transform">
+				<label>LV Transfer Transform</label>
 
-			<scriptCode><![CDATA[
-from imp import reload
+				<scriptCode><![CDATA[
+from importlib import reload
 import LVRenderUtils
 reload(LVRenderUtils)
 LVRenderUtils.fix_output(kwargs)
-			]]>			</scriptCode>
-		</scriptItem>
+			]]>				</scriptCode>
+			</scriptItem>
 
-		<scriptItem id="LV_Shader_Switch_to_Materials">
+			<scriptItem id="LV_Shader_Switch_to_Materials">
 
-			<label>LV Shader Switch to Materials</label>
-			<scriptCode>
-				<![CDATA[
-from imp import reload
+				<label>LV Shader Switch to Materials</label>
+				<scriptCode>
+					<![CDATA[
+from importlib import reload
 import LVMatUtils
 reload(LVMatUtils)
 
 LVMatUtils.shader_switch_to_mat(kwargs)
 ]]>
-			</scriptCode>
-		</scriptItem>
+				</scriptCode>
+			</scriptItem>
 
-		<!-- </subMenu> -->
+		</subMenu>
 
 	</menu>
 </menuDocument>

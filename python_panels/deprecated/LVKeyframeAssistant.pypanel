@@ -6,7 +6,7 @@
  same interface or of the interfaces menu are not allowed
  in a single file. -->
   <interface name="LV_Keyframe_Assistant" label="LV Keyframe Assistant" icon="PLAYBAR_set_key" showNetworkNavigationBar="false" help_url="">
-    <script><![CDATA[from imp import reload
+    <script><![CDATA[from importlib import reload
 from keyframeAssistant import keyframeAssistant
 reload(keyframeAssistant)
 

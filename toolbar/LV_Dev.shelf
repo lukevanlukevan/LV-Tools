@@ -28,7 +28,7 @@
     <memberTool name="Create Named Geo"/>
     <memberTool name="add float parm"/>
     <memberTool name="sticky test"/>
-    <memberTool name="tool_8"/>
+    <memberTool name="launch"/>
     <memberTool name="tool_9"/>
     <memberTool name="LVUpdate"/>
     <memberTool name="build_hda_help"/>
@@ -67,7 +67,7 @@ for parm in keyframes.keys():
         i = i + 1
         kfs.append(key)
         if i < 1:
-        
+
             parm.deleteKeyframeAtFrame(key.frame())
             newKey = hou.Keyframe()
             newKey.fromJSON(c1)
@@ -77,7 +77,7 @@ for parm in keyframes.keys():
             newKey = hou.Keyframe()
             newKey.fromJSON(c2)
             parm.setKeyframe(newKey)
-            
+
 #normalize values
 
 toff = kfs[0].time()
@@ -106,7 +106,7 @@ fdiff = kfs[1].frame() -  kfs[0].frame() #length of set
 for key in kfs:
     #if (key.frame()-1) > 0:
     key.setFrame(math.floor(key.frame() * (hou.fps()/(key.frame()-1) ) ) )
-            
+
 #start saving out
 c1 = kfs[0].asJSON(save_keys_in_frames=True)
 c2 = kfs[1].asJSON(save_keys_in_frames=True)
@@ -127,14 +127,14 @@ f.close()]]></script>
 
   <tool name="build_hda_help" label="Build HDA Help" icon="BUTTONS_help">
     <script scriptType="python"><![CDATA[import HDAUtils
-from imp import reload
+from importlib import reload
 reload(HDAUtils)
 HDAUtils.change_icon()]]></script>
   </tool>
 
   <tool name="EaseTest" label="EaseTest" icon="PLASMA_App">
     <script scriptType="python"><![CDATA[import LVAnimTools
-from imp import reload
+from importlib import reload
 
 reload(LVAnimTools)
 print('---')
@@ -200,13 +200,13 @@ def isInside(goodpath, checkpath):
         return True, "", checkpath
     else:
         head, tail = path.split(checkpath)
-        
+
         newpath = path.join(hip, "tex", tail)
         return False, newpath, checkpath
 
 for parm, file in files:
     exclude = ["hda", "hdalc", "db", ".h"]
-    
+
     if not any(file.endswith(ex) for ex in exclude):
         safe, swapped, orig = isInside("Z:", file)
         import os
@@ -218,7 +218,7 @@ for parm, file in files:
             except:
                 print("failed file:", orig)
             hou.hscript(f'opchange "{orig}" "{swapped}"')
-            
+
             ]]></script>
   </tool>
 </shelfDocument>

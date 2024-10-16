@@ -17,7 +17,7 @@
 				<label>LV Randomize Knots</label>
 				<scriptCode>
 					<![CDATA[
-from imp import reload
+from importlib import reload
 import knotcontrol
 reload(knotcontrol)
 
@@ -37,7 +37,7 @@ knotcontrol.randomizeKnots(kwargs)
 				<label>LV Distribute Constant</label>
 				<scriptCode>
 					<![CDATA[
-from imp import reload
+from importlib import reload
 import knotcontrol
 reload(knotcontrol)
 
@@ -57,7 +57,7 @@ knotcontrol.doDist(kwargs, hou.rampBasis.Constant)
 				<label>LV Sort By Value</label>
 				<scriptCode>
 					<![CDATA[
-from imp import reload
+from importlib import reload
 import knotcontrol
 reload(knotcontrol)
 
@@ -77,7 +77,7 @@ knotcontrol.sortKnots(kwargs)
 				<label>LV Copy Ramp</label>
 				<scriptCode>
 					<![CDATA[
-from imp import reload
+from importlib import reload
 import rampSave
 reload(rampSave)
 
@@ -96,7 +96,7 @@ rampSave.save(kwargs)
 				<label>LV Paste Ramp</label>
 				<scriptCode>
 					<![CDATA[
-from imp import reload
+from importlib import reload
 import rampSave
 reload(rampSave)
 
@@ -116,7 +116,7 @@ rampSave.load(kwargs, hou.rampBasis.Linear)
 				</expression>
 				<scriptCode>
 					<![CDATA[
-from imp import reload
+from importlib import reload
 import LVParmUtils
 reload(LVParmUtils)
 
@@ -136,7 +136,7 @@ LVParmUtils.addFloatParm(kwargs)
 				</expression>
 				<scriptCode>
 					<![CDATA[
-from imp import reload
+from importlib import reload
 import LVParmUtils
 reload(LVParmUtils)
 
@@ -149,7 +149,7 @@ LVParmUtils.moveWrangleParms(kwargs)
 				<label>Swap Values</label>
 				<scriptCode>
 					<![CDATA[
-from imp import reload
+from importlib import reload
 import LVParmUtils
 reload(LVParmUtils)
 
@@ -162,7 +162,7 @@ LVParmUtils.swapDouble(kwargs)
 				<label>Resize Camera</label>
 				<scriptCode>
 					<![CDATA[
-from imp import reload
+from importlib import reload
 import LVParmUtils
 reload(LVParmUtils)
 
@@ -179,14 +179,14 @@ LVParmUtils.resizeCam(kwargs)
 			<label>LV Path Presets</label>
 			<scriptMenuStripDynamic id="myUniqueDynamicStripId">
 				<contentsScriptCode><![CDATA[
-from imp import reload
+from importlib import reload
 import LVParmUtils
 reload(LVParmUtils)
 return LVParmUtils.get_render_paths()
 ]]>				</contentsScriptCode>
 				<scriptCode><![CDATA[
 import hou
-from imp import reload
+from importlib import reload
 import LVParmUtils
 reload(LVParmUtils)
 selected_token = kwargs["selectedtoken"]
