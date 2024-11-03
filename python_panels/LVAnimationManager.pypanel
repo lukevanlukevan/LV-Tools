@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pythonPanelDocument>
+	<!-- This file contains definitions of Python interfaces and the
+ interfaces menu.  It should not be hand-edited when it is being
+ used by the application.  Note, that two definitions of the
+ same interface or of the interfaces menu are not allowed
+ in a single file. -->
+	<interface name="LV_Anim_Manager" label="LV Animation Manager" icon="COP2_ramp" showNetworkNavigationBar="false" help_url="">
+		<script><![CDATA[from importlib import reload
+from animManager import animManager
+reload(animManager)
+
+def onCreateInterface():
+    return animManager.animManager()]]></script>
+		<includeInPaneTabMenu menu_position="0" create_separator="false"/>
+		<includeInToolbarMenu menu_position="420" create_separator="false"/>
+		<help><![CDATA[]]></help>
+	</interface>
+</pythonPanelDocument>
