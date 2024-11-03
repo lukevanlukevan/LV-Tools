@@ -114,6 +114,7 @@ class animManager(QtWidgets.QWidget):
             colorstring = 'QPushButton {background-color: rgb(' + str(color[0] * 255) + ',' + str(color[1] * 255) + ',' + str(color[2] * 255) + '); border: 1;}'
             empty_btn.setStyleSheet(colorstring)
             empty_btn.setFlat(True)
+            empty_btn.clicked.connect(partial(self.picker, index))
             self.bookmarks.addWidget(empty_btn, index, 0)
 
             bookmark_btn = QtWidgets.QPushButton(str(int(book.startFrame())))
@@ -121,7 +122,7 @@ class animManager(QtWidgets.QWidget):
             bookmark_btn.clicked.connect(partial(self.handleGridClick, index, delete=False))
             self.bookmarks.addWidget(bookmark_btn, index, 1)
 
-            delbtn = QtWidgets.QPushButton("X")
+            delbtn = QtWidgets.QPushButton("❌")
             delbtn.setFixedSize(20, 20)
             delbtn.clicked.connect(partial(self.handleGridClick, index, delete=True))
             self.bookmarks.addWidget(delbtn, index, 2)
@@ -129,6 +130,14 @@ class animManager(QtWidgets.QWidget):
         # Add a vertical spacer at the end
         spacer = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.bookmarks.addItem(spacer, len(hou.anim.bookmarks()), 0, 1, 3)
+
+    def picker(self, index):
+        color = hou.ui.selectColor(initial_color=hou.anim.bookmarks()[index].color())
+        self.set_color(index, color)
+
+    def set_color(self, index, color):
+        hou.anim.bookmarks()[index].setColor(color)
+        self.reload_bookmarks()
 
     def handleGridClick(self, index, delete):
         bookmark = hou.anim.bookmarks()[index]
