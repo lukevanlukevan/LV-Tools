@@ -8,6 +8,29 @@ from functools import partial
 from PySide2 import QtCore, QtUiTools, QtWidgets, QtGui
 from PySide2.QtWidgets import QGridLayout
 
+class ColorSwatchButton(QtWidgets.QPushButton):
+    rightClicked = QtCore.Signal()
+
+    def __init__(self, *args, **kwargs):
+        super(ColorSwatchButton, self).__init__(*args, **kwargs)
+
+    def mousePressEvent(self, event):
+        if event.button() == QtCore.Qt.RightButton:
+            self.rightClicked.emit()
+        else:
+            super(ColorSwatchButton, self).mousePressEvent(event)
+
+class RightClickableButton(QtWidgets.QPushButton):
+    rightClicked = QtCore.Signal()
+
+    def __init__(self, *args, **kwargs):
+        super(RightClickableButton, self).__init__(*args, **kwargs)
+
+    def mousePressEvent(self, event):
+        if event.button() == QtCore.Qt.RightButton:
+            self.rightClicked.emit()
+        else:
+            super(RightClickableButton, self).mousePressEvent(event)
 
 class animManager(QtWidgets.QWidget):
 
@@ -38,12 +61,14 @@ class animManager(QtWidgets.QWidget):
         mainLayout.addLayout(diretion_btns)
 
         # bookmark btns
-        bookmark_btn = QtWidgets.QPushButton("Bookmark this frame")
+        bookmark_btn = RightClickableButton("Bookmark this frame")
         bookmark_btn.setMinimumWidth(50)
         bookmark_btn.clicked.connect(self.init_bookmark)
+        bookmark_btn.rightClicked.connect(self.handleMainButtonRightClick)
+        bookmark_btn.setToolTip("Left click: Bookmark this frame\nRight click: Create with custom name")
         mainLayout.addWidget(bookmark_btn)
 
-        # Create a scroll area for the bookmarks
+        # scroll area for the btns
         scroll_area = QtWidgets.QScrollArea()
         scroll_area.setWidgetResizable(True)
         scroll_content = QtWidgets.QWidget()
@@ -52,7 +77,6 @@ class animManager(QtWidgets.QWidget):
         scroll_area.setWidget(scroll_content)
         mainLayout.addWidget(scroll_area)
 
-        # mainLayout.addWidget(self.ui)
         self.setLayout(mainLayout)
 
         self.reload_bookmarks()
@@ -108,18 +132,27 @@ class animManager(QtWidgets.QWidget):
                 child.widget().deleteLater()
 
         for index, book in enumerate(hou.anim.bookmarks()):
-            empty_btn = QtWidgets.QPushButton()
+            empty_btn = ColorSwatchButton()
             empty_btn.setFixedSize(20, 20)
             color = book.color().rgb()
             colorstring = 'QPushButton {background-color: rgb(' + str(color[0] * 255) + ',' + str(color[1] * 255) + ',' + str(color[2] * 255) + '); border: 1;}'
             empty_btn.setStyleSheet(colorstring)
             empty_btn.setFlat(True)
+            empty_btn.setToolTip(f"Left click: Change color\nRight click: Rename")
             empty_btn.clicked.connect(partial(self.picker, index))
+            empty_btn.rightClicked.connect(partial(self.handleRightClick, index))
             self.bookmarks.addWidget(empty_btn, index, 0)
 
-            bookmark_btn = QtWidgets.QPushButton(str(int(book.startFrame())))
+            if book.name() == "":
+                label_string = "Frame: " + str(int(book.startFrame()))
+            else:
+                label_string = book.name()
+
+            bookmark_btn = RightClickableButton(label_string)
             bookmark_btn.setMinimumWidth(40)
             bookmark_btn.clicked.connect(partial(self.handleGridClick, index, delete=False))
+            bookmark_btn.rightClicked.connect(partial(self.handleRightClick, index))
+            bookmark_btn.setToolTip(f"Left click: Jump to frame\nRight click: Rename")
             self.bookmarks.addWidget(bookmark_btn, index, 1)
 
             delbtn = QtWidgets.QPushButton("❌")
@@ -127,9 +160,23 @@ class animManager(QtWidgets.QWidget):
             delbtn.clicked.connect(partial(self.handleGridClick, index, delete=True))
             self.bookmarks.addWidget(delbtn, index, 2)
 
-        # Add a vertical spacer at the end
         spacer = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.bookmarks.addItem(spacer, len(hou.anim.bookmarks()), 0, 1, 3)
+
+    def handleRightClick(self, index):
+        if index is not None:
+            idx, name = hou.ui.readInput("Enter a name for the bookmark", buttons=("OK", "Cancel"))
+            if idx == 0:
+                hou.anim.bookmarks()[index].setName(name)
+                self.reload_bookmarks()
+        else:
+            idx, name = hou.ui.readInput("Enter a name for the new bookmark", buttons=("OK", "Cancel"))
+            if idx == 0:
+                curr_frame = hou.frame()
+                book = hou.anim.newBookmark(name, int(curr_frame), int(curr_frame))
+                color = hou.Color((random.random(), random.random(), random.random()))
+                book.setColor(color)
+                self.reload_bookmarks()
 
     def picker(self, index):
         color = hou.ui.selectColor(initial_color=hou.anim.bookmarks()[index].color())
@@ -156,10 +203,19 @@ class animManager(QtWidgets.QWidget):
     def jump_to_key(self, index):
         hou.setFrame(index)
 
-    def init_bookmark(self):
+    def init_bookmark(self, label=None):
         self.get_graph()
         curr_frame = hou.frame()
-        book = hou.anim.newBookmark(str(curr_frame), int(curr_frame), int(curr_frame))
+        label = label if label else str(curr_frame)
+        book = hou.anim.newBookmark(label, int(curr_frame), int(curr_frame))
         color = hou.Color((random.random(), random.random(), random.random()))
         book.setColor(color)
         self.reload_bookmarks()
+
+    def handleMainButtonRightClick(self):
+        idx, label = hou.ui.readInput("Enter a name for the bookmark", buttons=("OK", "Cancel"), initial_contents=str(hou.frame()), title="Bookmark this frame")
+        if idx == 0:
+            if not label == "":
+                self.init_bookmark(label)
+            else :
+                self.init_bookmark()
