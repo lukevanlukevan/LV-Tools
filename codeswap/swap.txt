@@ -1,0 +1,17 @@
+# Script code that runs for each task in the node.
+#
+# The following variables are available:
+# work_item    - the work item currently running 
+# graph        - the graph attributes for the current work item
+#
+# In addition to the above, in-process scripts can also access:
+# self         - the current PDG node
+# parent_item  - the parent work item, if it exists
+
+name = work_item.stringAttribValue("filename")
+
+wedge = int(name.split(".")[0].split("_")[-1])
+frame = int(name.split(".")[1])
+
+work_item.setIntAttrib("wedge", wedge, -1)
+work_item.setIntAttrib("frame", name, -1)
