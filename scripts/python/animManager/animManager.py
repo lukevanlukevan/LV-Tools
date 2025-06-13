@@ -77,9 +77,24 @@ class animManager(QtWidgets.QWidget):
         scroll_area.setWidget(scroll_content)
         mainLayout.addWidget(scroll_area)
 
+        flipx_btn = QtWidgets.QPushButton("Flip X")
+        flipx_btn.setMinimumWidth(50)
+        flipx_btn.clicked.connect(self.flip_x)
+
+        self.reload_btn = QtWidgets.QPushButton("Reload")
+        self.reload_btn.clicked.connect(self.reload_bookmarks)
+        mainLayout.addWidget(self.reload_btn)
+        # mainLayout.addWidget(flipx_btn)
+
+        # self.setMinimumWidth(200)
+
         self.setLayout(mainLayout)
 
         self.reload_bookmarks()
+
+    def update_width_label(self, event):
+        self.width_label.setText(f"Current width: {self.width()}")
+        super(animManager, self).resizeEvent(event)
 
     def createInterface(self):
         pass
@@ -219,3 +234,31 @@ class animManager(QtWidgets.QWidget):
                 self.init_bookmark(label)
             else :
                 self.init_bookmark()
+
+    def flip_x(self):
+        self.get_graph()
+        for parm in self.parms:
+            keyframes = parm.keyframes()
+            if keyframes:
+                normal_keys = [key.asJSON(save_keys_in_frames=True) for key in keyframes]
+                reversed_keys = normal_keys[::-1]
+                start_frame = keyframes[0].frame()
+                end_frame = keyframes[-1].frame()
+                new_keyframes = []
+                for key in reversed_keys:
+                    print(key)
+                    new_frame = end_frame - (key["frame"] - start_frame)
+                    new_key = hou.Keyframe()
+                    new_key.setFrame(new_frame)
+                    new_key.setValue(key["value"])
+                    if "slope" in key:
+                        new_key.setSlope(-key["slope"])
+                    if "accel" in key:
+                        new_key.setAccel(-key["accel"])
+                    if "inSlope" in key and "outSlope" in key:
+                        in_slope = key["inSlope"]
+                        out_slope = key["outSlope"]
+                        new_key.setInSlope(-out_slope)
+                        new_key.setOutSlope(-in_slope)
+                    new_keyframes.append(new_key)
+                parm.setKeyframes(new_keyframes)

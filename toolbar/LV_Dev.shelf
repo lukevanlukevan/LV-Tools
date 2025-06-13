@@ -8,41 +8,18 @@
   <toolshelf name="LV Dev" label="LV Dev">
     <memberTool name="Copy Paste Ease"/>
     <memberTool name="Paste Ease"/>
-    <memberTool name="flipx"/>
-    <memberTool name="flipy"/>
-    <memberTool name="RefreshMenu"/>
-    <memberTool name="&quot;Can you share working files&quot;"/>
-    <memberTool name="Key"/>
-    <memberTool name="Change all tex"/>
-    <memberTool name="connect tex"/>
     <memberTool name="create_lv_mat"/>
-    <memberTool name="tool_4"/>
     <memberTool name="create_lv_mat"/>
-    <memberTool name="OD Render Batch File"/>
-    <memberTool name="Toggle RS Lights"/>
     <memberTool name="hmp_knob1_ccw"/>
-    <memberTool name="setParent"/>
-    <memberTool name="dummy"/>
-    <memberTool name="LV Make Space"/>
-    <memberTool name="tool_5"/>
-    <memberTool name="Create Named Geo"/>
-    <memberTool name="add float parm"/>
-    <memberTool name="sticky test"/>
-    <memberTool name="launch"/>
-    <memberTool name="tool_9"/>
-    <memberTool name="LVUpdate"/>
     <memberTool name="build_hda_help"/>
-    <memberTool name="Dbug"/>
     <memberTool name="EaseTest"/>
     <memberTool name="gpt"/>
-    <memberTool name="keyboardchop"/>
-    <memberTool name="temp keyframe setting"/>
     <memberTool name="GetSize"/>
-    <memberTool name="Export PRj"/>
-    <memberTool name="rebuild cam parms"/>
+    <memberTool name="stylesheet"/>
     <memberTool name="LocalizeExternal"/>
     <memberTool name="FindNotLocal"/>
     <memberTool name="connect to output"/>
+    <memberTool name="tool_2"/>
   </toolshelf>
 
   <tool name="Paste Ease" label="Paste Ease" icon="PLASMA_App">
@@ -157,29 +134,6 @@ type = node.type().name()
 print(type)]]></script>
   </tool>
 
-  <tool name="rebuild cam parms" label="rebuildcamparms" icon="PLASMA_App">
-    <script scriptType="python"><![CDATA[node = hou.selectedItems()[0]
-
-tname = node.type().name()
-
-flags = [
-"RS_campro_colorMOcioFile"
-]
-
-if tname == "cam":
-    parms = node.parms()
-    newparms = [[parm.name(), parm.eval(), parm.description()] for parm in parms if parm.name().startswith("RS")]
-    hou.hscript('Redshift_removeCameraSpareParameters')
-    hou.hscript('Redshift_cameraSpareParameters')
-    for p in newparms:
-        try:
-            if not p[0] in flags:
-                node.parm(p[0]).set(p[1])
-        except:
-            print("Failed to find: " + p[2] + f"({p[0]})")
-        ]]></script>
-  </tool>
-
   <tool name="LocalizeExternal" label="LocalizeExternal" icon="PLASMA_App">
     <script scriptType="python"><![CDATA[from OD import shelftools
 
@@ -220,5 +174,12 @@ for parm, file in files:
             hou.hscript(f'opchange "{orig}" "{swapped}"')
 
             ]]></script>
+  </tool>
+
+  <tool name="stylesheet" label="stylesheet" icon="PLASMA_App">
+    <script scriptType="python"><![CDATA[ps = hou.ui.floatingPanels()
+fp = ps[0].qtParentWindow().children()[1]
+
+print(fp)]]></script>
   </tool>
 </shelfDocument>

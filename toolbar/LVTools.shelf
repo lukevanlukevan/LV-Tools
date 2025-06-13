@@ -25,6 +25,7 @@
     <memberTool name="resetPsr"/>
     <memberTool name="lv_view_closest"/>
     <memberTool name="LV_set_quickmark"/>
+    <memberTool name="lv_push_pull_text"/>
   </toolshelf>
 
   <tool name="LV_Color" label="LV Color" icon="SOP_color">
@@ -302,5 +303,12 @@ from importlib import reload
 reload(LVTimelineUtils)
 
 LVTimelineUtils.set_quickmark(kwargs)]]></script>
+  </tool>
+
+  <tool name="lv_push_pull_text" label="LV Push/Pull Text" icon="$LV/lv.svg">
+    <script scriptType="python"><![CDATA[import LVUtils
+from importlib import reload
+reload(LVUtils)
+LVUtils.snippet_to_text(kwargs)]]></script>
   </tool>
 </shelfDocument>

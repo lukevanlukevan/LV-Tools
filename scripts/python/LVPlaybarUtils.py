@@ -9,7 +9,6 @@ def setTimeline(kwargs):
     endmod = playRange[1]/range[1]
     startmod = playRange[0]/range[0]
 
-    print(endmod)
 
     fps = hou.fps()
 

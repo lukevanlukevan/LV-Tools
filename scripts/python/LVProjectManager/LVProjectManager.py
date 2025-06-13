@@ -1,5 +1,11 @@
 from PySide2 import QtWidgets, QtUiTools, QtCore, QtGui  # type: ignore # pylint: disable=wildcard-import
-from PySide2.QtWidgets import QPushButton, QComboBox, QTableWidget, QTableWidgetItem, QHeaderView
+from PySide2.QtWidgets import (
+    QPushButton,
+    QComboBox,
+    QTableWidget,
+    QTableWidgetItem,
+    QHeaderView,
+)
 import hou
 import os
 import json
@@ -11,6 +17,7 @@ global odstate
 
 try:
     from OD import shelftools
+
     odstate = True
 except:
     odstate = False
@@ -36,9 +43,9 @@ class LVProjectManager(QtWidgets.QWidget):
 
         self.jobs = self.ui.findChild(QtWidgets.QComboBox, "jobs")
         self.subdirs = self.ui.findChild(QtWidgets.QComboBox, "subDir")
-        self.subdir = ''
+        self.subdir = ""
 
-        self.subdir_list = ['None']
+        self.subdir_list = ["None"]
 
         self.subdirs.activated.connect(self.selectSubDir)
 
@@ -48,11 +55,9 @@ class LVProjectManager(QtWidgets.QWidget):
         self.table = self.ui.findChild(QtWidgets.QTableWidget, "table")
         self.table.cellDoubleClicked.connect(self.loadProject)
 
-        self.folderBtn = self.ui.findChild(
-            QtWidgets.QPushButton, "folders_btn")
+        self.folderBtn = self.ui.findChild(QtWidgets.QPushButton, "folders_btn")
         self.folderBtn.clicked.connect(self.pickFolder)
-        self.editBtn = self.ui.findChild(
-            QtWidgets.QPushButton, "editBtn")
+        self.editBtn = self.ui.findChild(QtWidgets.QPushButton, "editBtn")
         self.editBtn.clicked.connect(self.editList)
 
         self.prjRoot = self.ui.findChild(QtWidgets.QLineEdit, "prjRoot")
@@ -86,14 +91,11 @@ class LVProjectManager(QtWidgets.QWidget):
 
         # row buttons
 
-        self.explorerBtn = self.ui.findChild(
-            QtWidgets.QPushButton, "explorerBtn")
-        self.explorerBtn.clicked.connect(
-            self.openDir)
+        self.explorerBtn = self.ui.findChild(QtWidgets.QPushButton, "explorerBtn")
+        self.explorerBtn.clicked.connect(self.openDir)
         self.explorerBtn.setFont(QtGui.QFont("Source Sans Pro", 12))
 
-        self.newBtn = self.ui.findChild(
-            QtWidgets.QPushButton, "newBtn")
+        self.newBtn = self.ui.findChild(QtWidgets.QPushButton, "newBtn")
         self.newBtn.clicked.connect(self.createNew)
         self.newBtn.setFont(QtGui.QFont("Source Sans Pro", 12))
 
@@ -151,14 +153,14 @@ class LVProjectManager(QtWidgets.QWidget):
 
     def toggleLatest(self):
         self.show_latest = self.latestToggle.isChecked()
-        self.prefs['latest'] = self.latestToggle.isChecked()
+        self.prefs["latest"] = self.latestToggle.isChecked()
 
         with open(self.prefpath, "w") as outfile:
             json.dump(self.prefs, outfile, indent=4)
         self.loadFolders()
 
     def editList(self):
-        paths = self.prefs['paths']
+        paths = self.prefs["paths"]
 
         sels = hou.ui.selectFromList(paths)
 
@@ -167,7 +169,7 @@ class LVProjectManager(QtWidgets.QWidget):
             paths.remove(paths[i])
             # print('removing', paths[i])
 
-        self.prefs['paths'] = paths
+        self.prefs["paths"] = paths
 
         with open(self.prefpath, "w") as outfile:
             json.dump(self.prefs, outfile, indent=4)
@@ -179,14 +181,24 @@ class LVProjectManager(QtWidgets.QWidget):
         pass
 
     def createNew(self):
-
         hou.hipFile.clear()
-        idx, name = hou.ui.readInput("New file name:", buttons=('OK',), severity=hou.severityType.Message, default_choice=1, close_choice=-1, help="Version number will be added.", title=None, initial_contents=None)
+        idx, name = hou.ui.readInput(
+            "New file name:",
+            buttons=("OK",),
+            severity=hou.severityType.Message,
+            default_choice=1,
+            close_choice=-1,
+            help="Version number will be added.",
+            title=None,
+            initial_contents=None,
+        )
 
         if not name == "":
             hou.hipFile.setName(name + "_01")
             if self.subdir != "":
-                newpath = hou.expandString(self.combinedPath + "/" + self.subdir + "/" + name + "_01.hiplc")
+                newpath = hou.expandString(
+                    self.combinedPath + "/" + self.subdir + "/" + name + "_01.hiplc"
+                )
             else:
                 newpath = hou.expandString(self.combinedPath) + "/" + name + "_01.hiplc"
 
@@ -215,14 +227,13 @@ class LVProjectManager(QtWidgets.QWidget):
 
             self.notepath = self.combinedPath + "/notes/" + self.hipNameWithoutVersion()
 
-            with open(hou.text.expandString(self.notepath), 'w') as f:
+            with open(hou.text.expandString(self.notepath), "w") as f:
                 f.write(self.notes)
 
     def loadNotes(self):
         self.notepath = hou.getenv("HIP") + "/notes/" + self.hipNameWithoutVersion()
 
         if os.path.isfile(self.notepath):
-
             with open(self.notepath, "r") as openfile:
                 self.notes = openfile.read()
 
@@ -237,7 +248,7 @@ class LVProjectManager(QtWidgets.QWidget):
             shelftools.createFlipAndHipCopy()
 
     def initDir(self):
-        dirs = ['geo', 'abc', 'tex', 'render']
+        dirs = ["geo", "abc", "tex", "render"]
         p = hou.text.expandString(self.combinedPath)
 
         if not os.path.exists(p):
@@ -257,7 +268,6 @@ class LVProjectManager(QtWidgets.QWidget):
 
     def updatePrefs(self, item, val):
         if os.path.isfile(self.prefpath):
-
             with open(self.prefpath, "r") as openfile:
                 self.prefs = json.load(openfile)
 
@@ -267,7 +277,6 @@ class LVProjectManager(QtWidgets.QWidget):
             json.dump(self.prefs, outfile, indent=4)
 
     def setIndex(self):
-
         self.jobs.setCurrentIndex(self.currentIndex)
         self.selectFolder()
 
@@ -282,23 +291,21 @@ class LVProjectManager(QtWidgets.QWidget):
         self.loadFolders()
 
     def openDir(self):
-        path = hou.expandString(
-            self.combinedPath.replace("//", "/"))
+        path = hou.expandString(self.combinedPath.replace("//", "/"))
         hou.ui.showInFileBrowser(path + "/")
 
     def savePrefs(self):
-
         # print('here')
 
         # hacky fix, not sure why not working
         # self.prefs['latest'] = self.latestToggle.isChecked()
 
         if not self.addedPath == "":
-            if self.addedPath in self.prefs['paths']:
+            if self.addedPath in self.prefs["paths"]:
                 hou.ui.displayMessage("This folder is already in the list.")
             else:
-                self.prefs['paths'].append(self.addedPath)
-                self.prefs['latest'] = "pony"
+                self.prefs["paths"].append(self.addedPath)
+                self.prefs["latest"] = "pony"
 
                 # print('saving')
 
@@ -308,15 +315,13 @@ class LVProjectManager(QtWidgets.QWidget):
                 #     json.dump(self.prefs, outfile, indent=4)
 
     def saveRecent(self):
-
-        self.prefs['recent'] = self.currentIndex
+        self.prefs["recent"] = self.currentIndex
 
         with open(self.prefpath, "w") as outfile:
             json.dump(self.prefs, outfile, indent=4)
 
     def loadPrefs(self):
         if os.path.isfile(self.prefpath):
-
             with open(self.prefpath, "r") as openfile:
                 self.prefs = json.load(openfile)
 
@@ -324,17 +329,17 @@ class LVProjectManager(QtWidgets.QWidget):
         self.jobs.clear()
         self.jobs.addItem("Select a job")
 
-        for path in self.prefs['paths']:
+        for path in self.prefs["paths"]:
             self.jobs.addItem(path)
 
-        self.currentIndex = self.prefs['recent']
-        self.prjRoot.setText(self.prefs['rootPath'])
-        self.pathPrev.setText("$JOB/" + self.prefs['rootPath'])
-        self.extraPath = self.prefs['rootPath']
-        self.subdir = self.prefs['subdir']
+        self.currentIndex = self.prefs["recent"]
+        self.prjRoot.setText(self.prefs["rootPath"])
+        self.pathPrev.setText("$JOB/" + self.prefs["rootPath"])
+        self.extraPath = self.prefs["rootPath"]
+        self.subdir = self.prefs["subdir"]
 
         try:
-            self.latestToggle.setChecked(self.prefs['latest'])
+            self.latestToggle.setChecked(self.prefs["latest"])
         except:
             pass
 
@@ -358,7 +363,8 @@ class LVProjectManager(QtWidgets.QWidget):
 
     def pickFolder(self):
         self.basePath = self.processPath(
-            hou.ui.selectFile(file_type=hou.fileType.Directory))
+            hou.ui.selectFile(file_type=hou.fileType.Directory)
+        )
 
         self.pathAdded()
         self.loadFolders()
@@ -379,17 +385,27 @@ class LVProjectManager(QtWidgets.QWidget):
         if self.subdirs.currentText() == "Select a subfolder":
             self.subdir = ""
         elif self.subdirs.currentText() == "Create new":
-            i, text = hou.ui.readInput("New subfolder name:", buttons=('OK',), severity=hou.severityType.Message, default_choice=0, close_choice=-1, title=None, initial_contents=None)
+            i, text = hou.ui.readInput(
+                "New subfolder name:",
+                buttons=("OK",),
+                severity=hou.severityType.Message,
+                default_choice=0,
+                close_choice=-1,
+                title=None,
+                initial_contents=None,
+            )
             if i == 0:
                 self.subdir = text
-                if not os.path.exists(hou.text.expandString(self.combinedPath + "/" + text)):
+                if not os.path.exists(
+                    hou.text.expandString(self.combinedPath + "/" + text)
+                ):
                     os.makedirs(hou.text.expandString(self.combinedPath + "/" + text))
                 self.subdirs.addItem(text)
                 self.subdirs.setCurrentText(text)
         else:
             self.subdir = self.subdirs.currentText()
 
-        self.prefs['subdir'] = self.subdir
+        self.prefs["subdir"] = self.subdir
         # print(self.subdir)
         with open(self.prefpath, "w") as outfile:
             json.dump(self.prefs, outfile, indent=4)
@@ -403,10 +419,15 @@ class LVProjectManager(QtWidgets.QWidget):
             path = self.combinedPath + "/" + self.subdir + "/" + cell
         else:
             path = self.combinedPath + "/" + cell
-        if hou.hipFile.name().endswith('untitled.hip'):
+        if hou.hipFile.name().endswith("untitled.hip"):
             hou.hipFile.load(path)
         if hou.hipFile.hasUnsavedChanges():
-            if hou.ui.displayMessage("Save current file and open?", buttons=("Yes", "No")) == 0:
+            if (
+                hou.ui.displayMessage(
+                    "Save current file and open?", buttons=("Yes", "No")
+                )
+                == 0
+            ):
                 hou.hipFile.save()
                 hou.hipFile.load(path)
         else:
@@ -462,14 +483,13 @@ class LVProjectManager(QtWidgets.QWidget):
             search_path = ""
 
             if self.subdir in subs:
-                search_path = (self.basePath + self.extraPath + "/" + self.subdir).replace("//", "/")
-                prjs = os.listdir(hou.expandString(
-                    search_path))
+                search_path = (
+                    self.basePath + self.extraPath + "/" + self.subdir
+                ).replace("//", "/")
+                prjs = os.listdir(hou.expandString(search_path))
             else:
-                search_path = hou.expandString(
-                    self.combinedPath).replace("//", "/")
-                prjs = os.listdir(hou.expandString(
-                    search_path))
+                search_path = hou.expandString(self.combinedPath).replace("//", "/")
+                prjs = os.listdir(hou.expandString(search_path))
 
             prjs.sort()
 
@@ -480,7 +500,6 @@ class LVProjectManager(QtWidgets.QWidget):
             # new = prjs.sort(key=lambda x: os.path.getmtime(x))
 
             if self.show_latest == True:
-
                 latest_only = []
 
                 for i, job in enumerate(prjs):
@@ -488,67 +507,73 @@ class LVProjectManager(QtWidgets.QWidget):
                         if job.endswith(".hiplc") or job.endswith(".hip"):
                             nopath = job.split(".")[0]
                             name = "_".join(nopath.split("_")[:-1])
-                            ver = int(nopath.split("_")[-1])
+                            verstring = nopath.split("_")[-1]
+                            ver = int(verstring) if verstring.isdigit() else "N/A"
 
-                            obj = {
-                                "name": name,
-                                "ver": ver,
-                                "path": job
-                            }
+                            obj = {"name": name, "ver": ver, "path": job}
 
                             higher = False
 
                             for j, l in enumerate(latest_only):
-                                if l['name'] == name:
-                                    if l['ver'] < ver:
+                                if l["name"] == name:
+                                    if l["ver"] < ver:
                                         latest_only[j] = obj
                                         higher = True
 
                             if not higher:
                                 latest_only.append(obj)
 
-                prjs = [j['path'] for j in latest_only]
+                prjs = [j["path"] for j in latest_only]
 
             if self.filterString != "":
                 prjs = [x for x in prjs if fnmatch.fnmatch(x, self.filterString + "*")]
 
             rowPosition = 1
-            prjs = [prj for prj in prjs if prj.endswith(".hiplc")]
+
+            prjs = [
+                prj
+                for prj in prjs
+                if any(prj.endswith(ext) for ext in [".hiplc", ".hip", "hipnc"])
+            ]
             for i, job in enumerate(prjs):
                 # for job in prjs:
                 if len(job) > 0:
                     if job.endswith(".hiplc"):
-
                         # per machine path conversion
                         job = job.replace(
-                            "C:/Users/PIC-TWO/Partners in Crime Dropbox/Luke Van/STUDIO-PIC/", "$DB/")
+                            "C:/Users/PIC-TWO/Partners in Crime Dropbox/Luke Van/STUDIO-PIC/",
+                            "$DB/",
+                        )
                         job = job.replace("P:/", "$DB/")
                         job = job.replace(
-                            "/Users/lukevan/Partners in Crime Dropbox/STUDIO-PIC/", "$DB/")
+                            "/Users/lukevan/Partners in Crime Dropbox/STUDIO-PIC/",
+                            "$DB/",
+                        )
 
                         nopath = job.split(".")[0]
+
                         name = "_".join(nopath.split("_")[:-1])
-                        ver = int(nopath.split("_")[-1])
+                        verstring = nopath.split("_")[-1]
+                        ver = int(verstring) if verstring.isdigit() else "N/A"
 
                         self.table.insertRow(0)
-                        # Insert at 0 index because we are inserting at the start
 
                         self.pathItem = QtWidgets.QTableWidgetItem(f"{name}")
                         self.pathItem.setWhatsThis(job)
 
                         self.pathItem.setFlags(
-                            QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsSelectable)
+                            QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsSelectable
+                        )
 
                         self.verItem = QtWidgets.QTableWidgetItem(f"{ver}")
 
                         self.verItem.setFlags(
-                            QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsSelectable)
+                            QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsSelectable
+                        )
 
-                        self.table.setItem(
-                            0, 0, self.pathItem)
+                        self.table.setItem(0, 0, self.pathItem)
 
-                        self.table.setItem(
-                            0, 1, self.verItem)
+                        self.table.setItem(0, 1, self.verItem)
 
                         rowPosition += 1
 
@@ -556,10 +581,10 @@ class LVProjectManager(QtWidgets.QWidget):
                 self.table.insertRow(0)
                 self.pathItem = QtWidgets.QTableWidgetItem("No .hip found")
                 self.pathItem.setFlags(QtCore.Qt.ItemIsSelectable)
-                self.table.setItem(
-                    0, 0, self.pathItem)
+                self.table.setItem(0, 0, self.pathItem)
 
         except Exception as e:
+            print(e)
             #     # if not type(e) == FileNotFoundError:
             # e_type, e_object, e_traceback = sys.exc_info()
 
@@ -582,8 +607,7 @@ class LVProjectManager(QtWidgets.QWidget):
             self.table.insertRow(0)
             self.pathItem = QtWidgets.QTableWidgetItem("No .hip found")
             self.pathItem.setFlags(QtCore.Qt.ItemIsSelectable)
-            self.table.setItem(
-                0, 0, self.pathItem)
+            self.table.setItem(0, 0, self.pathItem)
 
     def showContextMenu(self, widget, position, i):
         local_pos = position
@@ -599,7 +623,7 @@ class LVProjectManager(QtWidgets.QWidget):
                 sel = widget.whatsThis()
 
         contextMenu = QMenu()  # type: ignore
-        contextMenu.setStyleSheet('margin: 2px;')
+        contextMenu.setStyleSheet("margin: 2px;")
         action1 = contextMenu.addAction("Rename Ramp")
         action2 = contextMenu.addAction("Delete Ramp")
 
@@ -612,14 +636,31 @@ class LVProjectManager(QtWidgets.QWidget):
         # handle other actions...
 
     def processPath(self, path):
-        return hou.expandString(path).replace("C:/Users/PIC-TWO/Partners in Crime Dropbox/Luke Van/STUDIO-PIC/", "$DB/").replace("P:/", "$DB/").replace(
-            "/Users/lukevan/Partners in Crime Dropbox/Luke Van/STUDIO-PIC/", "$DB/").replace("//", "/").replace("\\", "/")
+        return (
+            hou.expandString(path)
+            .replace(
+                "C:/Users/PIC-TWO/Partners in Crime Dropbox/Luke Van/STUDIO-PIC/",
+                "$DB/",
+            )
+            .replace("P:/", "$DB/")
+            .replace(
+                "/Users/lukevan/Partners in Crime Dropbox/Luke Van/STUDIO-PIC/", "$DB/"
+            )
+            .replace("//", "/")
+            .replace("\\", "/")
+        )
 
     def setEnvs(self):
-        # print(self.processPath(self.basePath))
-        # print(self.processPath(self.combinedPath))
-        hou.hscript("setenv -s %s=%s" % ("JOB", f'{self.processPath(self.basePath)}'))
-        hou.hscript("setenv -s %s=%s" % ("HIP", f'{self.processPath(self.combinedPath)+"/"}'))
+        # get jobname
+        jobName = self.basePath.split("\\")[-1].split("/")[-2]
+        jobName = jobName.replace(" ", "_")
+        jobName = jobName.replace("-", "_")
+        jobName = jobName[3:]
+        hou.hscript("setenv -s %s=%s" % ("JOBNAME", f"{jobName}"))
+        hou.hscript("setenv -s %s=%s" % ("JOB", f"{self.processPath(self.basePath)}"))
+        hou.hscript(
+            "setenv -s %s=%s" % ("HIP", f"{self.processPath(self.combinedPath) + '/'}")
+        )
 
     def loadHDA(self):
         try:
@@ -627,8 +668,13 @@ class LVProjectManager(QtWidgets.QWidget):
 
             files = os.listdir(file_path)
             for f in files:
-                if not f == 'backup':
+                if not f == "backup":
                     # print(f)
-                    hou.hda.installFile(file_path + "/" + f, oplibraries_file=None, change_oplibraries_file=True, force_use_assets=False)
+                    hou.hda.installFile(
+                        file_path + "/" + f,
+                        oplibraries_file=None,
+                        change_oplibraries_file=True,
+                        force_use_assets=False,
+                    )
         except:
             pass

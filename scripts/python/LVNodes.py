@@ -111,6 +111,26 @@ def comment_cache_size(kwargs=hou.pwd()):
         print(e)
         hou.ui.displayMessage("Unable to detect path. Please share error in console on Discord.")
 
+def swap_nodes(kwargs=hou.pwd()):
+    nodes = hou.selectedNodes()
+    n1 = nodes[0]
+    n2 = nodes[1]
+
+    n1in = n1.inputs()
+    n2in = n2.inputs()
+
+    for i in n1in:
+        print(i)
+        linked_out = i.outputs()
+        print("linked_out")
+        for o in linked_out:
+            print(o)
+        # if linked_out[0] == n2:
+        #     n1.setInput(n1in.index(i), n2)
+    # for i in n2in:
+    #     linked_out = i.outputs()
+
+
 
 def transfer_transform(kwargs=hou.pwd()):
     # node = kwargs

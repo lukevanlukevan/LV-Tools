@@ -52,7 +52,6 @@ def light_listen():
 
     def prep(event_type, **kwargs):
         single = kwargs['child_node']
-
         listenForLight(tuple([single]))
     hou.node("/obj").removeAllEventCallbacks()  # type: ignore
     hou.node("/obj").addEventCallback((hou.nodeEventType.ChildCreated,), prep)  # type: ignore

@@ -31,15 +31,15 @@ LVNodes.transfer_transform(kwargs)
         ]]>				</scriptCode>
 			</scriptItem>
 
-			<scriptItem id="LV_transfer_transform">
-				<label>LV Transfer Transform</label>
+			<scriptItem id="LV_swap_nodes">
+				<label>LV Swap Nodes</label>
 
 				<scriptCode><![CDATA[
 from importlib import reload
-import LVRenderUtils
-reload(LVRenderUtils)
-LVRenderUtils.fix_output(kwargs)
-			]]>				</scriptCode>
+import LVNodes
+reload(LVNodes)
+LVNodes.swap_nodes(kwargs)
+        ]]>				</scriptCode>
 			</scriptItem>
 
 			<scriptItem id="LV_Shader_Switch_to_Materials">
