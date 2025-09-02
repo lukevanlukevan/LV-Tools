@@ -1,0 +1,3 @@
+    # pyproject.toml
+[tool.pyright]
+stubPath = "C:/Users/PIC-TWO/AppData/Roaming/Python/Python313/site-packages/hou-stubs" # Path to your stubs directory
