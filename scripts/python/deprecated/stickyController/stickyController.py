@@ -3,20 +3,21 @@ import sys
 import hou
 import json
 
-from PySide2 import QtCore, QtUiTools, QtWidgets, QtGui
+from hutil.PySide import QtCore, QtUiTools, QtWidgets, QtGui
+
 # from PyQt5.QtCore import *
 # from PyQt5.QtUiTools import *
 # from PyQt5.QtGui import *
-from PySide2.QtWidgets import QGridLayout, QHBoxLayout
+from hutil.PySide.QtWidgets import QGridLayout, QHBoxLayout
 
 from stickyController import stickyController
 
-class StickyController(QtWidgets.QWidget):
 
+class StickyController(QtWidgets.QWidget):
     def __init__(self):
         super(StickyController, self).__init__()
 
-        self.folderpath =  hou.getenv("LV") + "/scripts/python/stickyController"
+        self.folderpath = hou.getenv("LV") + "/scripts/python/stickyController"
 
         ui_file_path = self.folderpath + "/BasePanel.ui"
 
@@ -38,7 +39,6 @@ class StickyController(QtWidgets.QWidget):
         self.hb2 = self.ui.findChild(QHBoxLayout, "hb2")
         self.hb1.addWidget(self.c1)
         self.hb2.addWidget(self.c2)
-        
 
     # node = hou.pwd()
     # note = node.parm("note")
@@ -52,8 +52,8 @@ class StickyController(QtWidgets.QWidget):
     # tcolor = hou.Color((tc))
     # bgcolor = hou.Color((bgc))
 
-
     # sNote.setTextSize(slider)
     # sNote.setTextColor(tcolor)
     # sNote.setColor(bgcolor)
     # sNote.setDrawBackground(bg)
+

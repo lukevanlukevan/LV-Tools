@@ -95,8 +95,7 @@
          <item>
           <widget class="QPushButton" name="initBtn">
            <property name="styleSheet">
-            <string notr="true">background-color: hsl(25, 50%, 60%);
-</string>
+            <string notr="true"/>
            </property>
            <property name="text">
             <string>Initialize Working Folder</string>

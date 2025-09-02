@@ -5,8 +5,9 @@ import hou
 import json
 from functools import partial
 
-from PySide2 import QtCore, QtUiTools, QtWidgets, QtGui
-from PySide2.QtWidgets import QGridLayout
+from hutil.PySide import QtCore, QtUiTools, QtWidgets, QtGui
+from hutil.PySide.QtWidgets import QGridLayout
+
 
 class ColorSwatchButton(QtWidgets.QPushButton):
     rightClicked = QtCore.Signal()
@@ -20,6 +21,7 @@ class ColorSwatchButton(QtWidgets.QPushButton):
         else:
             super(ColorSwatchButton, self).mousePressEvent(event)
 
+
 class RightClickableButton(QtWidgets.QPushButton):
     rightClicked = QtCore.Signal()
 
@@ -32,8 +34,8 @@ class RightClickableButton(QtWidgets.QPushButton):
         else:
             super(RightClickableButton, self).mousePressEvent(event)
 
-class animManager(QtWidgets.QWidget):
 
+class animManager(QtWidgets.QWidget):
     def __init__(self):
         super(animManager, self).__init__()
 
@@ -65,7 +67,9 @@ class animManager(QtWidgets.QWidget):
         bookmark_btn.setMinimumWidth(50)
         bookmark_btn.clicked.connect(self.init_bookmark)
         bookmark_btn.rightClicked.connect(self.handleMainButtonRightClick)
-        bookmark_btn.setToolTip("Left click: Bookmark this frame\nRight click: Create with custom name")
+        bookmark_btn.setToolTip(
+            "Left click: Bookmark this frame\nRight click: Create with custom name"
+        )
         mainLayout.addWidget(bookmark_btn)
 
         # scroll area for the btns
@@ -109,13 +113,21 @@ class animManager(QtWidgets.QWidget):
             for parm in parms:
                 after = parm.keyframesAfter(curr_frame)
                 if after:
-                    keys = [all_keys.append(key.frame()) for key in after if key.frame() > curr_frame]
+                    keys = [
+                        all_keys.append(key.frame())
+                        for key in after
+                        if key.frame() > curr_frame
+                    ]
             all_keys.sort()
         elif direction == "prev":
             for parm in parms:
                 before = parm.keyframesBefore(curr_frame)
                 if before:
-                    keys = [all_keys.append(key.frame()) for key in before if key.frame() < curr_frame]
+                    keys = [
+                        all_keys.append(key.frame())
+                        for key in before
+                        if key.frame() < curr_frame
+                    ]
             all_keys.sort(reverse=True)
 
         closest_key = all_keys[0] if all_keys else None
@@ -150,7 +162,15 @@ class animManager(QtWidgets.QWidget):
             empty_btn = ColorSwatchButton()
             empty_btn.setFixedSize(20, 20)
             color = book.color().rgb()
-            colorstring = 'QPushButton {background-color: rgb(' + str(color[0] * 255) + ',' + str(color[1] * 255) + ',' + str(color[2] * 255) + '); border: 1;}'
+            colorstring = (
+                "QPushButton {background-color: rgb("
+                + str(color[0] * 255)
+                + ","
+                + str(color[1] * 255)
+                + ","
+                + str(color[2] * 255)
+                + "); border: 1;}"
+            )
             empty_btn.setStyleSheet(colorstring)
             empty_btn.setFlat(True)
             empty_btn.setToolTip(f"Left click: Change color\nRight click: Rename")
@@ -165,7 +185,9 @@ class animManager(QtWidgets.QWidget):
 
             bookmark_btn = RightClickableButton(label_string)
             bookmark_btn.setMinimumWidth(40)
-            bookmark_btn.clicked.connect(partial(self.handleGridClick, index, delete=False))
+            bookmark_btn.clicked.connect(
+                partial(self.handleGridClick, index, delete=False)
+            )
             bookmark_btn.rightClicked.connect(partial(self.handleRightClick, index))
             bookmark_btn.setToolTip(f"Left click: Jump to frame\nRight click: Rename")
             self.bookmarks.addWidget(bookmark_btn, index, 1)
@@ -175,17 +197,23 @@ class animManager(QtWidgets.QWidget):
             delbtn.clicked.connect(partial(self.handleGridClick, index, delete=True))
             self.bookmarks.addWidget(delbtn, index, 2)
 
-        spacer = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        spacer = QtWidgets.QSpacerItem(
+            20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding
+        )
         self.bookmarks.addItem(spacer, len(hou.anim.bookmarks()), 0, 1, 3)
 
     def handleRightClick(self, index):
         if index is not None:
-            idx, name = hou.ui.readInput("Enter a name for the bookmark", buttons=("OK", "Cancel"))
+            idx, name = hou.ui.readInput(
+                "Enter a name for the bookmark", buttons=("OK", "Cancel")
+            )
             if idx == 0:
                 hou.anim.bookmarks()[index].setName(name)
                 self.reload_bookmarks()
         else:
-            idx, name = hou.ui.readInput("Enter a name for the new bookmark", buttons=("OK", "Cancel"))
+            idx, name = hou.ui.readInput(
+                "Enter a name for the new bookmark", buttons=("OK", "Cancel")
+            )
             if idx == 0:
                 curr_frame = hou.frame()
                 book = hou.anim.newBookmark(name, int(curr_frame), int(curr_frame))
@@ -228,11 +256,16 @@ class animManager(QtWidgets.QWidget):
         self.reload_bookmarks()
 
     def handleMainButtonRightClick(self):
-        idx, label = hou.ui.readInput("Enter a name for the bookmark", buttons=("OK", "Cancel"), initial_contents=str(hou.frame()), title="Bookmark this frame")
+        idx, label = hou.ui.readInput(
+            "Enter a name for the bookmark",
+            buttons=("OK", "Cancel"),
+            initial_contents=str(hou.frame()),
+            title="Bookmark this frame",
+        )
         if idx == 0:
             if not label == "":
                 self.init_bookmark(label)
-            else :
+            else:
                 self.init_bookmark()
 
     def flip_x(self):
@@ -240,7 +273,9 @@ class animManager(QtWidgets.QWidget):
         for parm in self.parms:
             keyframes = parm.keyframes()
             if keyframes:
-                normal_keys = [key.asJSON(save_keys_in_frames=True) for key in keyframes]
+                normal_keys = [
+                    key.asJSON(save_keys_in_frames=True) for key in keyframes
+                ]
                 reversed_keys = normal_keys[::-1]
                 start_frame = keyframes[0].frame()
                 end_frame = keyframes[-1].frame()
@@ -262,3 +297,4 @@ class animManager(QtWidgets.QWidget):
                         new_key.setOutSlope(-in_slope)
                     new_keyframes.append(new_key)
                 parm.setKeyframes(new_keyframes)
+

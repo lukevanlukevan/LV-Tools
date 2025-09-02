@@ -1,5 +1,5 @@
-from PySide2 import QtWidgets, QtUiTools, QtCore, QtGui  # type: ignore # pylint: disable=wildcard-import
-from PySide2.QtWidgets import (
+from hutil.PySide import QtWidgets, QtUiTools, QtCore, QtGui  # type: ignore # pylint: disable=wildcard-import
+from hutil.PySide.QtWidgets import (
     QPushButton,
     QComboBox,
     QTableWidget,

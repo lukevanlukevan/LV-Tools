@@ -7,7 +7,18 @@
 
 			<label>LV Tools</label>
 
-			<separatorItem />
+      <separatorItem />
+
+      <scriptItem id="LV_quick_share">
+        <label>LV Quick Share Obj</label>
+
+        <scriptCode><![CDATA[
+from importlib import reload
+import LVUtils
+reload(LVUtils)
+LVUtils.quick_obj(kwargs)
+            ]]>				</scriptCode>
+            </scriptItem>
 
 			<scriptItem id="LV_comment_cache_size">
 				<label>LV Cache Size Comment</label>

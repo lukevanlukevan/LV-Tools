@@ -5,8 +5,8 @@ import json
 import re
 # from PIL import Image
 
-from PySide2 import QtCore, QtUiTools, QtWidgets, QtGui
-from PySide2 import QtWidgets
+from hutil.PySide import QtCore, QtUiTools, QtWidgets, QtGui
+from hutil.PySide import QtWidgets
 # from PyQt5.QtCore import *
 # from PyQt5.QtUiTools import *
 # from PyQt5.QtGui import *

@@ -1,5 +1,5 @@
-from PySide2 import QtWidgets, QtUiTools, QtCore, QtGui  # type: ignore
-from PySide2.QtWidgets import QPushButton, QComboBox, QTableWidget, QTableWidgetItem  # type: ignore
+from hutil.PySide import QtWidgets, QtUiTools, QtCore, QtGui  # type: ignore
+from hutil.PySide.QtWidgets import QPushButton, QComboBox, QTableWidget, QTableWidgetItem  # type: ignore
 import hou
 
 import os

@@ -1,12 +1,18 @@
 # from hutil.Qt import QtWidgets, QtUiTools,
-from PySide2 import QtWidgets, QtUiTools, QtCore, QtGui
-from PySide2.QtWidgets import QPushButton, QComboBox, QTableWidget, QTableWidgetItem
+from hutil.PySide import QtWidgets, QtUiTools, QtCore, QtGui
+from hutil.PySide.QtWidgets import (
+    QPushButton,
+    QComboBox,
+    QTableWidget,
+    QTableWidgetItem,
+)
 import hou
 import os
 import json
 from importlib import reload
 
 import LVParmUtils
+
 reload(LVParmUtils)
 
 
@@ -49,5 +55,7 @@ class lvnodeutils(QtWidgets.QWidget):
 
         # end create buttons
 
-        spacer = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        spacer = QtWidgets.QSpacerItem(
+            20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding
+        )
         btnLayout.addItem(spacer)

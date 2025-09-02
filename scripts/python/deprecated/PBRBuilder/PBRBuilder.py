@@ -3,7 +3,7 @@ import sys
 import hou
 import json
 
-from PySide2 import QtCore, QtUiTools, QtWidgets, QtGui
+from hutil.PySide import QtCore, QtUiTools, QtWidgets, QtGui
 # from PyQt5.QtCore import *
 # from PyQt5.QtUiTools import *
 # from PyQt5.QtGui import *

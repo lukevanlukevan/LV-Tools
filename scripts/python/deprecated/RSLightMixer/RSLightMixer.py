@@ -3,9 +3,9 @@ import sys
 import hou
 import json
 
-from PySide2 import QtCore, QtUiTools, QtWidgets, QtGui
-from PySide2.QtWidgets import QWidget, QGridLayout, QVBoxLayout, QSlider, QLabel, QPushButton, QHBoxLayout, QCheckBox
-from PySide2.QtCore import Qt
+from hutil.PySide import QtCore, QtUiTools, QtWidgets, QtGui
+from hutil.PySide.QtWidgets import QWidget, QGridLayout, QVBoxLayout, QSlider, QLabel, QPushButton, QHBoxLayout, QCheckBox
+from hutil.PySide.QtCore import Qt
 
 from RSLightMixer import RSLightMixer
 

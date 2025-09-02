@@ -6,8 +6,8 @@ import json
 import requests
 import zipfile
 
-from PySide2 import QtCore, QtUiTools, QtWidgets, QtGui
-from PySide2.QtWidgets import QGridLayout
+from hutil.PySide import QtCore, QtUiTools, QtWidgets, QtGui
+from hutil.PySide.QtWidgets import QGridLayout
 
 class nodeShare(QtWidgets.QWidget):
     def __init__(self, parent=None):

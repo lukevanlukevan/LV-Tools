@@ -2,6 +2,12 @@ import hou
 from husd import assetutils
 
 
+def quick_obj(kwargs):
+    node = kwargs["node"]
+    filepath = hou.text.expandString("D:/geoshare/quick.obj")
+    node.geometry().saveToFile(filepath)
+
+
 def lv_error(f, message):
     print("------------------------")
     print(f"Error running: {f}")

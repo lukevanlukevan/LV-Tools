@@ -5,8 +5,8 @@ import json
 import re
 # from PIL import Image
 
-from PySide2 import QtCore, QtUiTools, QtWidgets, QtGui
-from PySide2 import QtWidgets
+from hutil.PySide import QtCore, QtUiTools, QtWidgets, QtGui
+from hutil.PySide import QtWidgets
 # from PyQt5.QtCore import *
 # from PyQt5.QtUiTools import *
 # from PyQt5.QtGui import *
@@ -25,8 +25,8 @@ Current state:
 
 """
 
-class HDRIManager(QtWidgets.QWidget):
 
+class HDRIManager(QtWidgets.QWidget):
     def __init__(self):
         super().__init__()
         # ui stuff
@@ -41,8 +41,9 @@ class HDRIManager(QtWidgets.QWidget):
         self.refreshBtn.clicked.connect(self.startBrowser)
 
         self.favBtn = self.ui.findChild(QtWidgets.QPushButton, "favBtn")
-        self.favBtn.setIcon(QtGui.QIcon(
-            (QtGui.QPixmap(f"{os.path.dirname(__file__)}/icon/fav2.png"))))
+        self.favBtn.setIcon(
+            QtGui.QIcon((QtGui.QPixmap(f"{os.path.dirname(__file__)}/icon/fav2.png")))
+        )
         self.favBtn.clicked.connect(self.toggleFav)
 
         self.initLoad()
@@ -66,21 +67,29 @@ class HDRIManager(QtWidgets.QWidget):
         self.slider.valueChanged.connect(self.sliderChanged)
 
         # COMBO BOX
-        self.folderSelector = self.ui.findChild(
-            QtWidgets.QComboBox, "folderSelector")
+        self.folderSelector = self.ui.findChild(QtWidgets.QComboBox, "folderSelector")
 
         self.folders = []
-        self.folderNames = ['Car Paint', 'Everyday Material Collection', 'Metal Vol 1',
-                            'Modern Surface Material Collection', 'Paper', 'Tech Products', 'Terrazzo', 'Wood Vol 1', 'Wood Vol 2']
+        self.folderNames = [
+            "Car Paint",
+            "Everyday Material Collection",
+            "Metal Vol 1",
+            "Modern Surface Material Collection",
+            "Paper",
+            "Tech Products",
+            "Terrazzo",
+            "Wood Vol 1",
+            "Wood Vol 2",
+        ]
 
-        self.matpath = ''
-        self.thumbroot = ''
+        self.matpath = ""
+        self.thumbroot = ""
         self.thumbPath = ""
         self.thumbPaths = []
 
         self.loadPrefs()
 
-        if self.gsgpath == '':
+        if self.gsgpath == "":
             pass
         else:
             self.mainList = self.ui.findChild(QtWidgets.QListWidget, "mainList")
@@ -103,8 +112,7 @@ class HDRIManager(QtWidgets.QWidget):
             self.mainList.itemClicked.connect(self.clicked)
 
             # TRIGGER CHANGE WHEN COMBO BOX CHANGED
-            self.folderSelector.currentIndexChanged.connect(
-                self.folderSelectorChanged)
+            self.folderSelector.currentIndexChanged.connect(self.folderSelectorChanged)
 
             self.loadPrefs()
 
@@ -130,11 +138,17 @@ class HDRIManager(QtWidgets.QWidget):
 
     def toggleFav(self, checked):
         if checked:
-            self.favBtn.setIcon(QtGui.QIcon(
-                (QtGui.QPixmap(f"{os.path.dirname(__file__)}/icon/fav1.png"))))
+            self.favBtn.setIcon(
+                QtGui.QIcon(
+                    (QtGui.QPixmap(f"{os.path.dirname(__file__)}/icon/fav1.png"))
+                )
+            )
         else:
-            self.favBtn.setIcon(QtGui.QIcon(
-                (QtGui.QPixmap(f"{os.path.dirname(__file__)}/icon/fav2.png"))))
+            self.favBtn.setIcon(
+                QtGui.QIcon(
+                    (QtGui.QPixmap(f"{os.path.dirname(__file__)}/icon/fav2.png"))
+                )
+            )
 
     def openMaterialFolder(self):
         # print(self.mainList.currentItem()
@@ -150,7 +164,7 @@ class HDRIManager(QtWidgets.QWidget):
     def initLoad(self):
         with open(f"{os.path.dirname(__file__)}/prefs.json", "r") as outfile:
             obj = json.load(outfile)
-            self.gsgpath = obj['gsglib']
+            self.gsgpath = obj["gsglib"]
 
     def showMenu(self, position):
         self.menu.exec_(self.mapToGlobal(position))
@@ -159,22 +173,24 @@ class HDRIManager(QtWidgets.QWidget):
         msg = errorMessage
 
         icon = self.ui.findChild(QtWidgets.QLabel, "errorIcon")
-        if (severity == 0):
+        if severity == 0:
+            error = QtGui.QPixmap(f"{os.path.dirname(__file__)}/icon/good.png").scaled(
+                18, 18, QtCore.Qt.KeepAspectRatio
+            )
+        elif severity == 1:
             error = QtGui.QPixmap(
-                f"{os.path.dirname(__file__)}/icon/good.png").scaled(18, 18, QtCore.Qt.KeepAspectRatio)
-        elif (severity == 1):
+                f"{os.path.dirname(__file__)}/icon/warning.png"
+            ).scaled(18, 18, QtCore.Qt.KeepAspectRatio)
+        elif severity == 2:
             error = QtGui.QPixmap(
-                f"{os.path.dirname(__file__)}/icon/warning.png").scaled(18, 18, QtCore.Qt.KeepAspectRatio)
-        elif (severity == 2):
-            error = QtGui.QPixmap(
-                f"{os.path.dirname(__file__)}/icon/error2.png").scaled(18, 18, QtCore.Qt.KeepAspectRatio)
+                f"{os.path.dirname(__file__)}/icon/error2.png"
+            ).scaled(18, 18, QtCore.Qt.KeepAspectRatio)
         icon.setPixmap(error)
         box = self.ui.findChild(QtWidgets.QLabel, "errorBox")
         box.setText(msg)
         box.setContentsMargins(5, 0, 0, 0)
         box.setStyleSheet("font-size: 12pt")
-        central = self.ui.findChild(
-            QtWidgets.QWidget, "centralwidget").layout()
+        central = self.ui.findChild(QtWidgets.QWidget, "centralwidget").layout()
         grid = QtWidgets.QGridLayout()
         grid.addWidget(box, 0, 1)
         grid.addWidget(icon, 0, 0)
@@ -197,8 +213,7 @@ class HDRIManager(QtWidgets.QWidget):
                     path = os.path.join(self.matpath, folder)
                     if os.path.isdir(path):
                         self.folders.append(path)
-                        self.thumbPaths.append(
-                            os.path.join(self.thumbroot, folder))
+                        self.thumbPaths.append(os.path.join(self.thumbroot, folder))
 
                 for folder in self.folders:
                     self.folderSelector.addItem(folder)
@@ -216,7 +231,8 @@ class HDRIManager(QtWidgets.QWidget):
             self.errorCatcher("Ready", 0)
         except:
             self.errorCatcher(
-                "Failed to start browser. Please check GSG path and refresh.", 1)
+                "Failed to start browser. Please check GSG path and refresh.", 1
+            )
 
     def clicked(self, item):
         self.mainList.update()
@@ -230,7 +246,8 @@ class HDRIManager(QtWidgets.QWidget):
             self.fillList()
         except:
             self.errorCatcher(
-                "Failed to start browser. Please check GSG path and refresh.", 2)
+                "Failed to start browser. Please check GSG path and refresh.", 2
+            )
 
     def sliderChanged(self, value):
         pass
@@ -257,40 +274,38 @@ class HDRIManager(QtWidgets.QWidget):
             material = hou.node(f"{bpath}/StandardMaterial1")
             mPos = material.position()
 
-            inputIndex = ['base_color', "metalness",
-                          "bump_input", "refl_roughness"]
+            inputIndex = ["base_color", "metalness", "bump_input", "refl_roughness"]
             i = -1
             for file in os.listdir(path):
                 i += 1
                 name = os.path.join(path, file)
-                tex = builder.createNode('redshift::TextureSampler')
+                tex = builder.createNode("redshift::TextureSampler")
                 # tex.setPosition(hou.Vector2(mPos.x()-6, mPos.y()-(2*i)))
 
                 input = tex.parm("tex0").eval()[:-4]
                 input = input.split("_")
                 input = input[-1]
-                if input == 'basecolor':
-                    tex.parm('tex0_colorSpace').set('sRGB')
+                if input == "basecolor":
+                    tex.parm("tex0_colorSpace").set("sRGB")
                 else:
-                    tex.parm('tex0_colorSpace').set('Raw')
-                if input == 'basecolor':
-                    input = 'base_color'
-                elif input == 'metallic':
-                    input = 'metalness'
-                elif input == 'anisotropyangle':
-                    input = 'refl_aniso_rotation'
-                elif input == 'anisotropylevel' or input == 'anisotropy':
-                    input = 'refl_aniso'
-                elif input == 'roughness':
-                    input = 'refl_roughness'
-                elif input == 'normal':
-                    input = 'bump_input'
-                elif input == 'edgetint':
-                    input = 'refl_color'
-                    
-                    
-                if input == 'bump_input':
-                    bump = builder.createNode('redshift::BumpMap')
+                    tex.parm("tex0_colorSpace").set("Raw")
+                if input == "basecolor":
+                    input = "base_color"
+                elif input == "metallic":
+                    input = "metalness"
+                elif input == "anisotropyangle":
+                    input = "refl_aniso_rotation"
+                elif input == "anisotropylevel" or input == "anisotropy":
+                    input = "refl_aniso"
+                elif input == "roughness":
+                    input = "refl_roughness"
+                elif input == "normal":
+                    input = "bump_input"
+                elif input == "edgetint":
+                    input = "refl_color"
+
+                if input == "bump_input":
+                    bump = builder.createNode("redshift::BumpMap")
                     bump.setInput(0, tex)
                     bump.parm("inputType").set("1")
                     bump.moveToGoodPosition()
@@ -299,7 +314,7 @@ class HDRIManager(QtWidgets.QWidget):
                     try:
                         material.setNamedInput(input, tex, 0)
                     except:
-                        print(f'{tex} was bad')
+                        print(f"{tex} was bad")
                 tex.movetoGoodPosition()
 
     def fillList(self):
@@ -307,10 +322,9 @@ class HDRIManager(QtWidgets.QWidget):
         directory = self.directory
 
         i = -1
-        if self.gsgpath == '' or self.thumbPath == '':
+        if self.gsgpath == "" or self.thumbPath == "":
             pass
         else:
-
             for filename in os.listdir(directory):
                 # we are in GSG Material Style Root
                 folder = os.path.join(directory, filename)
@@ -328,8 +342,7 @@ class HDRIManager(QtWidgets.QWidget):
                         else:
                             if self.favmode == 1:
                                 if f in self.favs:
-                                    self.addItem(os.path.join(
-                                        folder, files[0]), f)
+                                    self.addItem(os.path.join(folder, files[0]), f)
                                 else:
                                     pass
                             else:
@@ -354,7 +367,7 @@ class HDRIManager(QtWidgets.QWidget):
 
     def setPrefs(self):
         gsg = self.gsgPathLine.text().replace("/", "\\")
-        if gsg == '':
+        if gsg == "":
             pass
         else:
             if gsg.endswith("\\"):
@@ -364,7 +377,7 @@ class HDRIManager(QtWidgets.QWidget):
 
             prefs = {
                 "currentIndex": f"{self.folderSelector.currentIndex()}",
-                "gsglib": self.gsgPathLine.text()
+                "gsglib": self.gsgPathLine.text(),
             }
         with open(f"{os.path.dirname(__file__)}/prefs.json", "w") as outfile:
             json.dump(prefs, outfile)
@@ -372,17 +385,17 @@ class HDRIManager(QtWidgets.QWidget):
     def loadPrefs(self):
         with open(f"{os.path.dirname(__file__)}/prefs.json", "r") as outfile:
             obj = json.load(outfile)
-            index = obj['currentIndex']
+            index = obj["currentIndex"]
 
-            self.gsgPathLine.setText(obj['gsglib'])
-            self.gsgpath = obj['gsglib']
+            self.gsgPathLine.setText(obj["gsglib"])
+            self.gsgpath = obj["gsglib"]
             # self.folderSelectorChanged(0)
 
 
 class ItemFrame(QtWidgets.QWidget):
     def __init__(self, item, filename, thumbpath, parent_item, isfav):
         super().__init__()
-        self.path = item.split('\\')
+        self.path = item.split("\\")
         self.path.pop(-1)
         self.path = "/".join(self.path)
 
@@ -401,7 +414,7 @@ class ItemFrame(QtWidgets.QWidget):
             thumbname = thumbname.split("_")
             index = thumbname[-1].zfill(3)
             thumbname.pop(-1)
-            thumbname = "".join(thumbname)+index+'_preview_380.jpg'
+            thumbname = "".join(thumbname) + index + "_preview_380.jpg"
 
         elif "msmc" in thumbpath:
             thumbname = filename.replace(" ", "_")
@@ -409,21 +422,21 @@ class ItemFrame(QtWidgets.QWidget):
             thumbname = thumbname.split("_")
             index = thumbname[-1].zfill(2)
             thumbname.pop(-1)
-            thumbname = "".join(thumbname)+index+'_preview_380.jpg'
+            thumbname = "".join(thumbname) + index + "_preview_380.jpg"
             # print(thumbname) # debug file name matches
         elif "paper" in thumbpath:
             thumbname = filename.replace(" ", "_")[4:]
             thumbname = thumbname.split("_")
             index = thumbname[-1].zfill(2)
             thumbname.pop(-1)
-            thumbname = "".join(thumbname)+index+'_preview_380.jpg'
+            thumbname = "".join(thumbname) + index + "_preview_380.jpg"
             # print(thumbname) # debug file name matches
         elif "metal" in thumbpath:
             thumbname = filename.replace(" ", "_")[14:]
             thumbname = thumbname.split("_")
             index = thumbname[-1].zfill(2)
             thumbname.pop(-1)
-            thumbname = "".join(thumbname)+index+'_preview_380.jpg'
+            thumbname = "".join(thumbname) + index + "_preview_380.jpg"
             print(thumbname)  # debug file name matches
         elif "carpaint" in thumbpath:
             thumbname = filename.replace(" ", "_")[14:]
@@ -432,7 +445,7 @@ class ItemFrame(QtWidgets.QWidget):
             thumbname = thumbname.split("_")
             index = thumbname[-1].zfill(2)
             thumbname.pop(-1)
-            thumbname = "".join(thumbname)+index+'_preview_380.jpg'
+            thumbname = "".join(thumbname) + index + "_preview_380.jpg"
             # print(thumbname) # debug file name matches
         else:
             thumbname = filename.replace(" ", "_")[14:]
@@ -440,7 +453,7 @@ class ItemFrame(QtWidgets.QWidget):
             thumbname = thumbname.split("_")
             index = thumbname[-1].zfill(2)
             thumbname.pop(-1)
-            thumbname = "".join(thumbname)+index+'_preview_380.jpg'
+            thumbname = "".join(thumbname) + index + "_preview_380.jpg"
             # print(thumbname) # debug file name matches
 
         j = -1
@@ -458,8 +471,9 @@ class ItemFrame(QtWidgets.QWidget):
             pix = QtGui.QPixmap(missing)
         else:
             pix = QtGui.QPixmap(usethumb)
-        self.image = QtWidgets.QLabel(pixmap=QtGui.QPixmap(
-            pix).scaled(200, 200, QtCore.Qt.KeepAspectRatio))
+        self.image = QtWidgets.QLabel(
+            pixmap=QtGui.QPixmap(pix).scaled(200, 200, QtCore.Qt.KeepAspectRatio)
+        )
         # round corners
         # path = QtGui.QPainterPath()
         # path.addRoundedRect(QtCore.QRectF(0,0,200,200), 10,10)
@@ -467,9 +481,11 @@ class ItemFrame(QtWidgets.QWidget):
         # self.image.setMask(mask)
 
         self.favPix = QtGui.QPixmap(
-            f"{os.path.dirname(__file__)}/icon/fav1.png").scaled(16, 16, QtCore.Qt.KeepAspectRatio)
+            f"{os.path.dirname(__file__)}/icon/fav1.png"
+        ).scaled(16, 16, QtCore.Qt.KeepAspectRatio)
         self.nofavPix = QtGui.QPixmap(
-            f"{os.path.dirname(__file__)}/icon/fav2.png").scaled(16, 16, QtCore.Qt.KeepAspectRatio)
+            f"{os.path.dirname(__file__)}/icon/fav2.png"
+        ).scaled(16, 16, QtCore.Qt.KeepAspectRatio)
 
         labelName = filename
         index = self.main.folderSelector.currentIndex()
@@ -481,13 +497,12 @@ class ItemFrame(QtWidgets.QWidget):
             labelName = labelName[4:]
 
         self.menu = QtWidgets.QMenu(self)
-        self.menu.addAction('Favorite', self.setFav)
-        self.menu.addAction('Unfavorite', self.removeFav)
-        self.menu.addAction('Open Material Folder', self.showMaterialFolder)
+        self.menu.addAction("Favorite", self.setFav)
+        self.menu.addAction("Unfavorite", self.removeFav)
+        self.menu.addAction("Open Material Folder", self.showMaterialFolder)
 
-        self.imageLabel = QtWidgets.QLabel(
-            labelName, alignment=QtCore.Qt.AlignCenter)
-        self.imageLabel.setStyleSheet('font: 9pt;')
+        self.imageLabel = QtWidgets.QLabel(labelName, alignment=QtCore.Qt.AlignCenter)
+        self.imageLabel.setStyleSheet("font: 9pt;")
         self.imageLabel.setWordWrap(True)
         layout = QtWidgets.QGridLayout(self)
         layout.setContentsMargins(10, 10, 10, 10)
@@ -518,12 +533,9 @@ class ItemFrame(QtWidgets.QWidget):
         print(self.main.mainList.currentItem())
 
     def setFav(self):
-
         self.main.favs.append(self.filename.replace(" ", "_"))
         print(self.main.favs)
-        favs = {
-            "favs": self.main.favs
-        }
+        favs = {"favs": self.main.favs}
 
         with open(f"{os.path.dirname(__file__)}/favs.json", "w") as outfile:
             json.dump(favs, outfile)
@@ -531,13 +543,11 @@ class ItemFrame(QtWidgets.QWidget):
         self.set_fav(1)
 
     def removeFav(self):
-        print(f'CURRENT LIST: {self.main.favs}')
+        print(f"CURRENT LIST: {self.main.favs}")
         self.main.favs.remove(self.filename.replace(" ", "_"))
-        print(f'CURRENT LIST: {self.main.favs}')
+        print(f"CURRENT LIST: {self.main.favs}")
 
-        favs = {
-            "favs": self.main.favs
-        }
+        favs = {"favs": self.main.favs}
 
         with open(f"{os.path.dirname(__file__)}/favs.json", "w") as outfile:
             json.dump(favs, outfile)

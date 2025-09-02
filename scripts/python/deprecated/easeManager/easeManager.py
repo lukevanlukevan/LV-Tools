@@ -1,7 +1,7 @@
 from gradientManager import gradientManager
-from PySide2.QtCore import Qt
-from PySide2.QtGui import QCursor
-from PySide2.QtWidgets import QMenu, QApplication
+from hutil.PySide.QtCore import Qt
+from hutil.PySide.QtGui import QCursor
+from hutil.PySide.QtWidgets import QMenu, QApplication
 import glob
 import random
 import time
@@ -10,8 +10,8 @@ import sys
 import hou
 import json
 
-from PySide2 import QtCore, QtUiTools, QtWidgets, QtGui
-from PySide2.QtWidgets import QGridLayout
+from hutil.PySide import QtCore, QtUiTools, QtWidgets, QtGui
+from hutil.PySide.QtWidgets import QGridLayout
 
 # TODO Float eases are flipped on Y axis
 

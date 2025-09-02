@@ -3,9 +3,9 @@ import sys
 import hou
 import json
 
-from PySide2 import QtCore, QtUiTools, QtWidgets, QtGui
-from PySide2.QtWidgets import QGridLayout, QTreeView
-from PySide2.QtCore import Qt, QAbstractItemModel, QModelIndex
+from hutil.PySide import QtCore, QtUiTools, QtWidgets, QtGui
+from hutil.PySide.QtWidgets import QGridLayout, QTreeView
+from hutil.PySide.QtCore import Qt, QAbstractItemModel, QModelIndex
 
 
 class PathTreeModel(QAbstractItemModel):
@@ -100,7 +100,6 @@ class PathBrowser(QtWidgets.QWidget):
         self.folderpath = os.path.dirname(os.path.realpath(__file__))
         self.selection_callbacks = []  # List to store callback functions
         self.setup_ui()
-        print(kwargs)
 
     def getPaths(self, node_path):
         node = hou.node(node_path)
@@ -115,7 +114,6 @@ class PathBrowser(QtWidgets.QWidget):
 
     def setup_ui(self):
         # Create main layout
-        print(self)
         mainLayout = QtWidgets.QVBoxLayout()
 
         self.node_chooser = hou.qt.NodeChooserButton()
@@ -124,13 +122,21 @@ class PathBrowser(QtWidgets.QWidget):
         self.node_path = ""
         mainLayout.addWidget(self.node_chooser)
 
+        self.currentBtn = QtWidgets.QPushButton("Current node")
+        self.currentBtn.clicked.connect(
+            lambda x: self.set_paths(hou.selectedItems()[0])
+        )
+        mainLayout.addWidget(self.currentBtn)
+
         # Create tree view
         self.tree_view = QTreeView()
         self.tree_model = PathTreeModel()
         self.tree_view.setModel(self.tree_model)
 
         # Connect selection changed signal
-        self.tree_view.selectionModel().selectionChanged.connect(self._on_selection_changed)
+        self.tree_view.selectionModel().selectionChanged.connect(
+            self._on_selection_changed
+        )
 
         # Add tree view to layout
         mainLayout.addWidget(self.tree_view)
@@ -178,11 +184,10 @@ class PathBrowser(QtWidgets.QWidget):
         self.tree_model = PathTreeModel(paths)
         self.tree_view.setModel(self.tree_model)
         # Connect selection changed signal to new model
-        self.tree_view.selectionModel().selectionChanged.connect(self._on_selection_changed)
+        self.tree_view.selectionModel().selectionChanged.connect(
+            self._on_selection_changed
+        )
         self.tree_view.expandAll()  # Expand all items by default
 
     def createInterface(self):
         pass
-
-
-
