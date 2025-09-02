@@ -1,0 +1,73 @@
+= LV 3D Print Output =
+
+== Overview ==
+
+Explanation of the node's purpose and operation.
+
+@inputs
+
+Label:
+
+What the input is for.
+
+@parameters
+
+Set Height:
+	#input:
+	toggle: Set Height
+
+Height:
+	#height:
+	float: Height
+
+Check Line Width:
+	#c_width:
+	toggle: Check Line Width
+
+Offset by:
+	#offset_y:
+	float: Offset by
+
+Check Line Height:
+	#c_height:
+	toggle: Check Line Height
+
+over:
+	#over:
+	: over
+
+Check Overhang:
+	#c_over:
+	toggle: Check Overhang
+
+Overhang Angle2:
+	#angle:
+	float: Overhang Angle2
+
+File Name:
+	#name:
+	string: File Name
+
+Save to Disk:
+	#execute:
+	button: Save to Disk
+
+Open In Slicer:
+	#openSlicer:
+	button: Open In Slicer
+
+path:
+	#path:
+	string: path
+
+parms:
+	#parms:
+	: parms
+
+Print Base Folder:
+	#baseFolder:
+	string: Print Base Folder
+
+Slicer Path (.exe):
+	#slicerPath:
+	string: Slicer Path (.exe)

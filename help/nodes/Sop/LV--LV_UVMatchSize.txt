@@ -1,0 +1,89 @@
+= LV UV Match Size =
+
+== Overview ==
+
+Explanation of the node's purpose and operation.
+
+@inputs
+
+Label:
+
+What the input is for.
+
+@parameters
+
+Target Size:
+	#sizex:
+	float: Target Size
+
+Target Size:
+	#sizey:
+	float: Target Size
+
+Target Size:
+	#sizez:
+	float: Target Size
+
+Translate:
+	#dotranslate:
+	toggle: Translate
+
+Justify X:
+	#justify_x:
+	menu: Justify X
+
+to:
+	#goal_x:
+	menu: to
+
+Offset by:
+	#offset_x:
+	float: Offset by
+
+Justify Y:
+	#justify_y:
+	menu: Justify Y
+
+to:
+	#goal_y:
+	menu: to
+
+Offset by:
+	#offset_y:
+	float: Offset by
+
+Justify Z:
+	#justify_z:
+	menu: Justify Z
+
+to:
+	#goal_z:
+	menu: to
+
+Offset by:
+	#offset_z:
+	float: Offset by
+
+Scale to Fit:
+	#doscale:
+	toggle: Scale to Fit
+
+Uniform Scale:
+	#uniformscale:
+	toggle: Uniform Scale
+
+Scale Axis:
+	#scale_axis:
+	menu: Scale Axis
+
+Scale X:
+	#scale_x:
+	toggle: Scale X
+
+Scale Y:
+	#scale_y:
+	toggle: Scale Y
+
+Scale Z:
+	#scale_z:
+	toggle: Scale Z

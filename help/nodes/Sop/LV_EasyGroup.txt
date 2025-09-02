@@ -1,0 +1,45 @@
+= LV Easy Group =
+
+== Overview ==
+
+Explanation of the node's purpose and operation.
+
+@inputs
+
+Label:
+
+What the input is for.
+
+@parameters
+
+Group Name:
+	#groupname:
+	string: Group Name
+
+Invert:
+	#invert:
+	toggle: Invert
+
+X Size:
+	#xsize:
+	float: X Size
+
+Y Size:
+	#ysize:
+	float: Y Size
+
+Z Size:
+	#zsize:
+	float: Z Size
+
+X Offset:
+	#xoff:
+	float: X Offset
+
+Y Offset:
+	#yoff:
+	float: Y Offset
+
+Z Offset:
+	#zoff:
+	float: Z Offset

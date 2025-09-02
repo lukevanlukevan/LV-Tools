@@ -1,0 +1,58 @@
+{
+	"fileversion":"20.0.653",
+	"name":"LVNetwork",
+	"categories":"Standard",
+	"pane":"network",
+	"label":"LVNetwork",
+	"type":"submenu",
+	"items":{
+		"0":{
+			"label":"LV Create Named Geo",
+			"type":"script_action",
+			"icon":"$LV/lv.svg",
+			"script":"radialmenu.runShelfTool(kwargs, 'LV_Create_Named_Geo')"
+		},
+		"2":{
+			"label":"LV Color",
+			"type":"script_action",
+			"icon":"SOP_color",
+			"script":"radialmenu.runShelfTool(kwargs, 'LV_Color')"
+		},
+		"3":{
+			"label":"LV Texture Abs",
+			"type":"script_action",
+			"icon":"$LV/lv.svg",
+			"script":"radialmenu.runShelfTool(kwargs, 'LV_Texture_Abs')"
+		},
+		"4":{
+			"label":"Layout Tools",
+			"type":"submenu",
+			"items":{
+				"2":{
+					"label":"LV Arrange",
+					"type":"script_action",
+					"icon":"$LV/lv.svg",
+					"script":"radialmenu.runShelfTool(kwargs, 'LV_Arrange')"
+				},
+				"6":{
+					"label":"LV Make Space",
+					"type":"script_action",
+					"icon":"$LV/lv.svg",
+					"script":"radialmenu.runShelfTool(kwargs, 'LV_Make_Space')"
+				}
+			}
+		},
+		"5":{
+			"label":"Light Visibility Listener",
+			"type":"script_action",
+			"icon":"OBJ_light_area",
+			"script":"radialmenu.runShelfTool(kwargs, 'Light_Visibility_Listener')"
+		},
+		"6":{
+			"label":"add float parm",
+			"type":"script_action",
+			"icon":"$LV/lv.svg",
+			"script":"radialmenu.runShelfTool(kwargs, 'add float parm')"
+		}
+	}
+}

@@ -1,0 +1,28 @@
+from __future__ import print_function
+import hou
+import nodegraphprefs as prefs
+
+
+def networkEditorTitleLeft(editor):
+    try:
+        title = ''
+        pwd = editor.pwd()
+        title = 'Follow @wobblypictures\non Twitter'
+        # print('updated')
+
+    except:
+        title = ''
+
+    return title
+
+
+def networkEditorTitleRight(editor):
+    try:
+        title = ''
+        pwd = editor.pwd()
+        title += pwd.childTypeCategory().label()
+
+    except:
+        title = ''
+
+    return title

@@ -1,0 +1,93 @@
+= LV Balancer =
+
+== Overview ==
+
+Explanation of the node's purpose and operation.
+
+@inputs
+
+Label:
+
+What the input is for.
+
+@parameters
+
+Simple Stack:
+	#btype:
+	toggle: Simple Stack
+
+size:
+	#size:
+	: size
+
+Overall Size:
+	#maxSize:
+	float: Overall Size
+
+rand:
+	#rand:
+	: rand
+
+Random Scale Seed:
+	#seed:
+	int: Random Scale Seed
+
+Min Scale:
+	#scalemin:
+	float: Min Scale
+
+Max Scale:
+	#scalemax:
+	float: Max Scale
+
+Random Scale Weighting:
+	#ramp_:
+	ramp: Random Scale Weighting
+
+randsettings2:
+	#randsettings2:
+	: randsettings2
+
+Random Orientation:
+	#randomorient:
+	toggle: Random Orientation
+
+Random Orientation Seed:
+	#randrotseed:
+	float: Random Orientation Seed
+
+Position:
+	#ramp_1pos:
+	float: Position
+
+Value:
+	#ramp_1value:
+	float: Value
+
+Interpolation:
+	#ramp_1interp:
+	menu: Interpolation
+
+Position:
+	#ramp_2pos:
+	float: Position
+
+Value:
+	#ramp_2value:
+	float: Value
+
+Interpolation:
+	#ramp_2interp:
+	menu: Interpolation
+
+Position:
+	#ramp_3pos:
+	float: Position
+
+Value:
+	#ramp_3value:
+	float: Value
+
+Interpolation:
+	#ramp_3interp:
+	menu: Interpolation

@@ -1,0 +1,314 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<shelfDocument>
+  <!-- This file contains definitions of shelves, toolbars, and tools.
+ It should not be hand-edited when it is being used by the application.
+ Note, that two definitions of the same element are not allowed in
+ a single file. -->
+
+  <toolshelf name="LV_Tools" label="LV Tools">
+    <memberTool name="LV_Color"/>
+    <memberTool name="LV_Arrange"/>
+    <memberTool name="LV_Controller"/>
+    <memberTool name="LV_Texture_Abs"/>
+    <memberTool name="LV_Add_Remove_Sticky_Note_Parent"/>
+    <memberTool name="Open_Project_Folder"/>
+    <memberTool name="LV_Create_Named_Geo"/>
+    <memberTool name="LV_Make_Space"/>
+    <memberTool name="Light_Visibility_Listener"/>
+    <memberTool name="Updater"/>
+    <memberTool name="render_to_mp4"/>
+    <memberTool name="lv_gpt_comment"/>
+    <memberTool name="RS_Snapshot_and_Save"/>
+    <memberTool name="LV_wedge_selected"/>
+    <memberTool name="create_lv_mat"/>
+    <memberTool name="create_focus_target"/>
+    <memberTool name="resetPsr"/>
+    <memberTool name="lv_view_closest"/>
+    <memberTool name="LV_set_quickmark"/>
+    <memberTool name="lv_push_pull_text"/>
+  </toolshelf>
+
+  <tool name="LV_Color" label="LV Color" icon="SOP_color">
+    <script scriptType="python"><![CDATA[from LVUtils import colorControl
+
+colorControl()
+
+
+    ]]></script>
+  </tool>
+
+  <tool name="LV_Arrange" label="LV Arrange" icon="$LV/lv.svg">
+    <script scriptType="python"><![CDATA[import LVNodes
+
+LVNodes.light_arrange(kwargs)]]></script>
+  </tool>
+
+  <tool name="LV_Controller" label="LV Controller" icon="$LV/lv.svg">
+    <script scriptType="python"><![CDATA[from LVUtils import openControls
+from importlib import reload
+
+openControls()]]></script>
+  </tool>
+
+  <tool name="LV_Texture_Abs" label="LV Texture Abs" icon="$LV/lv.svg">
+    <script scriptType="python"><![CDATA[import tex
+from importlib import reload
+reload(tex)
+tex.createAbs()]]></script>
+  </tool>
+
+  <tool name="LV_Copy Ease" label="LV Copy Ease" icon="VOP_clamp">
+    <script scriptType="python"><![CDATA[import json
+import math
+
+pane_tab = hou.ui.paneTabUnderCursor()
+anim_editor = pane_tab.graph()
+keyframes = anim_editor.selectedKeyframes()
+
+kfs = []
+
+for parm in keyframes.keys():
+    for key in keyframes[parm]:
+        kfs.append(key)
+
+#normalize values
+
+foff = kfs[0].frame() -1 #shift set back to 0
+fdiff = kfs[1].frame() -  kfs[0].frame() #length of set
+
+
+for key in kfs:
+    #if (key.frame()-1) > 0:
+    key.setFrame(math.floor(key.frame() * (hou.fps()/(key.frame()-1) ) ) )
+
+#start saving out
+c1 = kfs[0].asJSON(save_keys_in_frames=True)
+c2 = kfs[1].asJSON(save_keys_in_frames=True)
+
+#create file
+path1 = 'C:/Users/PIC-TWO/Documents/ease/copied1.json'
+
+f = open(path1, 'w')
+json.dump(c1, f)
+f.close()
+
+path2 = 'C:/Users/PIC-TWO/Documents/ease/copied2.json'
+
+f = open(path2, 'w')
+json.dump(c2, f)
+f.close()
+
+]]></script>
+    <keywordList>
+      <keyword>ease</keyword>
+      <keyword>copy ease</keyword>
+      <keyword>transfer ease</keyword>
+    </keywordList>
+  </tool>
+
+  <tool name="LV_Paste_Ease" label="LV Paste Ease" icon="PLASMA_App">
+    <script scriptType="python"><![CDATA[import json
+
+pane_tab = hou.ui.paneTabUnderCursor()
+anim_editor = pane_tab.graph()
+keyframes = anim_editor.selectedKeyframes()
+
+#load keyframe
+path1 = 'C:/Users/PIC-TWO/Documents/ease/copied1.json'
+f1 = open(path1, 'r')
+c1 = json.load(f1)
+
+path2 = 'C:/Users/PIC-TWO/Documents/ease/copied2.json'
+f2 = open(path2, 'r')
+c2 = json.load(f2)
+
+kfs = []
+
+i = -1
+for parm in keyframes.keys():
+    for key in keyframes[parm]:
+        i = i + 1
+        kfs.append(key)
+        if i < 1:
+
+            parm.deleteKeyframeAtFrame(key.frame())
+            newKey = hou.Keyframe()
+            newKey.fromJSON(c1)
+            parm.setKeyframe(newKey)
+        else:
+            parm.deleteKeyframeAtFrame(key.frame())
+            newKey = hou.Keyframe()
+            newKey.fromJSON(c2)
+            parm.setKeyframe(newKey)
+
+#normalize values
+
+toff = kfs[0].time()
+tscale = kfs[1].time() -  kfs[0].time()]]></script>
+  </tool>
+
+  <tool name="LV_Add_Remove_Sticky_Note_Parent" label="LV Add/Remove Sticky Note Parent" icon="SHELF_parent">
+    <script scriptType="python"><![CDATA[import stickyparent
+
+stickyparent.linkNodes()]]></script>
+  </tool>
+
+  <tool name="LV_Flip_Ease_Y" label="LV Flip Ease Y" icon="PLASMA_App">
+    <script scriptType="python"><![CDATA[import hou
+
+pane_tab = hou.ui.paneTabUnderCursor()
+anim_editor = pane_tab.graph()
+keyframes = anim_editor.selectedKeyframes()
+
+# Collect all of the selected keyframes into a dictionary with parms as keys
+selected_keyframes = []
+for parm in keyframes.keys():
+    for key in keyframes[parm]:
+        if parm not in selected_keyframes:
+            selected_keyframes[parm] = []
+        selected_keyframes[parm].append(key)
+
+# Flip the values for each parameter's selected keyframes so that the minimum and maximum values swap
+for parm in selected_keyframes.keys():
+    keyframes = selected_keyframes[parm]
+    min_value = min([key.value() for key in keyframes])
+    max_value = max([key.value() for key in keyframes])
+    for keyframe in keyframes:
+        value = keyframe.value()
+        new_value = min_value + max_value - value
+        parm.setKeyframe(new_value, keyframe.frame())
+
+# Refresh the animation editor to show the updated keyframe values
+anim_editor.layout().setCurrentFrame(hou.frame())
+]]></script>
+  </tool>
+
+  <tool name="Open_Project_Folder" label="Open Project Folder" icon="BUTTONS_folder">
+    <script scriptType="python"><![CDATA[import projectFolder as pf
+
+pf.openDir()]]></script>
+  </tool>
+
+  <tool name="LV_Create_Named_Geo" label="LV Create Named Geo" icon="$LV/lv.svg">
+    <script scriptType="python"><![CDATA[import LVUtils
+from importlib import reload
+reload(LVUtils)
+LVUtils.createNamedGeo(kwargs)]]></script>
+  </tool>
+
+  <tool name="LV_Make_Space" label="LV Make Space" icon="$LV/lv.svg">
+    <script scriptType="python"><![CDATA[import LVUtils
+from importlib import reload
+reload(LVUtils)
+LVUtils.makeSpace(kwargs)]]></script>
+  </tool>
+
+  <tool name="Light_Visibility_Listener" label="Light Visibility Listener" icon="OBJ_light_area">
+    <script scriptType="python"><![CDATA[import LVLightUtils
+from importlib import reload
+reload(LVLightUtils)
+LVLightUtils.listenForLight(hou.selectedItems())]]></script>
+  </tool>
+
+  <tool name="Updater" label="Updater" icon="BUTTONS_download">
+    <script scriptType="python"><![CDATA[import LVUpdater
+from importlib import reload
+reload(LVUpdater)
+try:
+    LVUpdater.update()
+except:
+    print("Something went wrong, this updates with git, so install git and clone the repo to ensure this works.")]]></script>
+  </tool>
+
+  <tool name="render_to_mp4" label="Render to MP4" icon="NETWORKS_rop">
+    <script scriptType="python"><![CDATA[import LVRender
+from importlib import reload
+reload(LVRender)
+
+LVRender.post_render(hou.selectedItems()[0])]]></script>
+  </tool>
+
+  <tool name="lv_gpt_comment" label="LV GPT Add Comments" icon="$LV/lv.svg">
+    <script scriptType="python"><![CDATA[import LVAI
+from importlib import reload
+
+reload(LVAI)
+LVAI.call()]]></script>
+  </tool>
+
+  <tool name="RS_Snapshot_and_Save" label="RS Snapshot and Save" icon="$LV/lv.svg">
+    <script scriptType="python"><![CDATA[import LVRenderUtils
+from importlib import reload
+reload(LVRenderUtils)
+LVRenderUtils.snapshot_and_save(kwargs)]]></script>
+  </tool>
+
+  <tool name="LV_wedge_selected" label="LV Wedge Selected Nodes" icon="$LV/lv.svg">
+    <script scriptType="python"><![CDATA[import LVUtils
+from importlib import reload
+
+reload(LVUtils)
+LVUtils.build_wedge()]]></script>
+  </tool>
+
+  <tool name="create_lv_mat" label="Create LV Mat" icon="$LV/lv.svg">
+    <script scriptType="python"><![CDATA[from importlib import reload
+import LVUtils
+
+reload(LVUtils)
+LVUtils.inline_lvmat()]]></script>
+  </tool>
+
+  <tool name="create_focus_target" label="LV Create Focus Target" icon="$LV/lv.svg">
+    <toolMenuContext name="network">
+      <contextNetType>OBJ</contextNetType>
+    </toolMenuContext>
+    <toolSubmenu>LV</toolSubmenu>
+    <script scriptType="python"><![CDATA[from importlib import reload
+import LVNodes
+reload(LVNodes)
+
+LVNodes.createRSFocusTarget(kwargs)]]></script>
+    <keywordList>
+      <keyword>FT target focus</keyword>
+    </keywordList>
+  </tool>
+
+  <tool name="resetPsr" label="LV Reset PSR" icon="$LV/lv.svg">
+    <toolMenuContext name="network">
+      <contextNetType>OBJ</contextNetType>
+    </toolMenuContext>
+    <toolSubmenu>LV</toolSubmenu>
+    <script scriptType="python"><![CDATA[from importlib import reload
+import LVNodes
+reload(LVNodes)
+
+LVNodes.resetPsr(kwargs)]]></script>
+    <keywordList>
+      <keyword>psr reset</keyword>
+    </keywordList>
+  </tool>
+
+  <tool name="lv_view_closest" label="LV View Closest" icon="$LV/lv.svg">
+    <script scriptType="python"><![CDATA[from importlib import reload
+import LVUtils
+reload(LVUtils)
+
+LVUtils.view_closest()]]></script>
+  </tool>
+
+  <tool name="LV_set_quickmark" label="LV Set Quickmark" icon="$LV/lv.svg">
+    <script scriptType="python"><![CDATA[import LVTimelineUtils
+from importlib import reload
+reload(LVTimelineUtils)
+
+LVTimelineUtils.set_quickmark(kwargs)]]></script>
+  </tool>
+
+  <tool name="lv_push_pull_text" label="LV Push/Pull Text" icon="$LV/lv.svg">
+    <script scriptType="python"><![CDATA[import LVUtils
+from importlib import reload
+reload(LVUtils)
+LVUtils.snippet_to_text(kwargs)]]></script>
+  </tool>
+</shelfDocument>

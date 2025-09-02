@@ -1,0 +1,69 @@
+= LV Fit Float =
+
+== Overview ==
+
+Explanation of the node's purpose and operation.
+
+@inputs
+
+Label:
+
+What the input is for.
+
+@parameters
+
+Input Attribute:
+	#inname:
+	string: Input Attribute
+
+Attribute Type:
+	#attribute_type:
+	menu: Attribute Type
+
+Auto 0-1:
+	#auto:
+	toggle: Auto 0-1
+
+Floatify:
+	#floatify:
+	toggle: Floatify
+
+Input Min:
+	#min:
+	float: Input Min
+
+Input Max:
+	#max:
+	float: Input Max
+
+Ramp:
+	#remap:
+	ramp: Ramp
+
+Output Attribute:
+	#outname:
+	string: Output Attribute
+
+Position:
+	#remap1pos:
+	float: Position
+
+Value:
+	#remap1value:
+	float: Value
+
+Interpolation:
+	#remap1interp:
+	menu: Interpolation
+
+Position:
+	#remap2pos:
+	float: Position
+
+Value:
+	#remap2value:
+	float: Value
+
+Interpolation:
+	#remap2interp:
+	menu: Interpolation

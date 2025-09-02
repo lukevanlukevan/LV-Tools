@@ -1,0 +1,29 @@
+= LV Extract Largest =
+
+== Overview ==
+
+Explanation of the node's purpose and operation.
+
+@inputs
+
+Label:
+
+What the input is for.
+
+@parameters
+
+Type:
+	#type:
+	menu: Type
+
+Group?:
+	#group:
+	toggle: Group?
+
+Group Name:
+	#g_name:
+	string: Group Name
+
+Message:
+	#labelparm:
+	label: Message

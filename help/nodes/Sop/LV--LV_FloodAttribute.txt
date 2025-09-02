@@ -1,0 +1,41 @@
+= LV Flood Attribute =
+
+== Overview ==
+
+Explanation of the node's purpose and operation.
+
+@inputs
+
+Label:
+
+What the input is for.
+
+@parameters
+
+Original Name:
+	#inname:
+	string: Original Name
+
+Clamp Min:
+	#min:
+	float: Clamp Min
+
+Clamp Max:
+	#max:
+	float: Clamp Max
+
+Range Min:
+	#outputmin:
+	float: Range Min
+
+Range Max:
+	#outputmax:
+	float: Range Max
+
+Reverse Direction:
+	#reverse:
+	toggle: Reverse Direction
+
+Flood Slider:
+	#flood:
+	float: Flood Slider

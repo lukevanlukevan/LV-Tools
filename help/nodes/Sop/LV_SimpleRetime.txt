@@ -1,0 +1,57 @@
+= LV Simple Retime =
+
+== Overview ==
+
+Explanation of the node's purpose and operation.
+
+@inputs
+
+Label:
+
+What the input is for.
+
+@parameters
+
+Global Retime:
+	#global_retime:
+	float: Global Retime
+
+Input End Frame (Hold):
+	#end:
+	int: Input End Frame (Hold)
+
+Retiming Ramp:
+	#retime_ramp:
+	ramp: Retiming Ramp
+
+Retime Domain (Frames):
+	#out_end:
+	int: Retime Domain (Frames)
+
+Message:
+	#labelparm:
+	label: Message
+
+Position:
+	#retime_ramp1pos:
+	float: Position
+
+Value:
+	#retime_ramp1value:
+	float: Value
+
+Interpolation:
+	#retime_ramp1interp:
+	menu: Interpolation
+
+Position:
+	#retime_ramp2pos:
+	float: Position
+
+Value:
+	#retime_ramp2value:
+	float: Value
+
+Interpolation:
+	#retime_ramp2interp:
+	menu: Interpolation

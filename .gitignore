@@ -1,11 +1,18 @@
-**/backup
-.gitattributes
-/assets
-**/__pycache__
-**/.idea
-**/easeManager
-**/easecontrol
+LV Tools.approj
+.ap/*
+Houdini Tools.zip
 .gitignore
-**/Setups
-**/LV_Dev.shelf
-TODO.txt
+hda/backup/*
+hda/back
+otls_bak/*
+*/*/*/__pycache__/*
+*/*/__pycache__/*
+python3.9libs/__pycache__/*
+otls/backup/*
+scripts/python/LVProjectManager/prefs.json
+python3.9libs/nodegraphtitle.py
+scripts/python/.env
+scripts/python/gpt.py
+scripts/python/.bak
+scripts/python/gradientManager/ramps/*.json
+prefs.json

@@ -1,0 +1,69 @@
+= LV Alembic =
+
+== Overview ==
+
+Explanation of the node's purpose and operation.
+
+@inputs
+
+Label:
+
+What the input is for.
+
+@parameters
+
+Save to Disk:
+	#execute:
+	button: Save to Disk
+
+Controls...:
+	#renderdialog:
+	button: Controls...
+
+Valid Frame Range:
+	#trange:
+	menu: Valid Frame Range
+
+Start/End/Inc:
+	#f1:
+	float: Start/End/Inc
+
+Start/End/Inc:
+	#f2:
+	float: Start/End/Inc
+
+Start/End/Inc:
+	#f3:
+	float: Start/End/Inc
+
+Use File Directory:
+	#usefilepath:
+	toggle: Use File Directory
+
+File Directory:
+	#dir:
+	string: File Directory
+
+Alembic File:
+	#filename:
+	string: Alembic File
+
+Name:
+	#name:
+	string: Name
+
+Open Directory:
+	#openDir:
+	button: Open Directory
+
+-:
+	#vDown:
+	button: -
+
++:
+	#vUp:
+	button: +
+
+Version:
+	#v:
+	int: Version

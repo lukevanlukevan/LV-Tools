@@ -1,0 +1,33 @@
+= LV Mat =
+
+== Overview ==
+
+Explanation of the node's purpose and operation.
+
+@inputs
+
+Label:
+
+What the input is for.
+
+@parameters
+
+Color:
+	#base_colorr:
+	float: Color
+
+Color:
+	#base_colorg:
+	float: Color
+
+Color:
+	#base_colorb:
+	float: Color
+
+Weight:
+	#refl_weight:
+	float: Weight
+
+Roughness:
+	#refl_roughness:
+	float: Roughness

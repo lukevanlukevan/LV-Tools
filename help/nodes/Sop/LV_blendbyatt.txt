@@ -1,0 +1,69 @@
+= LV Blend by Attribute =
+
+== Overview ==
+
+Simple blend between 2 pieces of geometry by an input attribute. Blendshape SOP has this feature.
+
+@inputs
+
+Label:
+
+What the input is for.
+
+@parameters
+
+Blend Attribute:
+	#blendatt:
+	string: Blend Attribute
+
+Remapping:
+	#Remapping:
+	: Remapping
+
+Compute Range:
+	#computerange:
+	button: Compute Range
+
+Input Min:
+	#inputmin:
+	float: Input Min
+
+Input Max:
+	#inputmax:
+	float: Input Max
+
+Shape:
+	#shape:
+	ramp: Shape
+
+Label:
+	#zero:
+	float: Label
+
+Label:
+	#one:
+	float: Label
+
+Position:
+	#shape1pos:
+	float: Position
+
+Value:
+	#shape1value:
+	float: Value
+
+Interpolation:
+	#shape1interp:
+	menu: Interpolation
+
+Position:
+	#shape2pos:
+	float: Position
+
+Value:
+	#shape2value:
+	float: Value
+
+Interpolation:
+	#shape2interp:
+	menu: Interpolation

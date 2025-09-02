@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<shelfDocument>
+  <!-- This file contains definitions of shelves, toolbars, and tools.
+ It should not be hand-edited when it is being used by the application.
+ Note, that two definitions of the same element are not allowed in
+ a single file. -->
+
+  <toolshelf name="LV Dev" label="LV Dev">
+    <memberTool name="Copy Paste Ease"/>
+    <memberTool name="Paste Ease"/>
+    <memberTool name="create_lv_mat"/>
+    <memberTool name="create_lv_mat"/>
+    <memberTool name="hmp_knob1_ccw"/>
+    <memberTool name="build_hda_help"/>
+    <memberTool name="EaseTest"/>
+    <memberTool name="gpt"/>
+    <memberTool name="GetSize"/>
+    <memberTool name="stylesheet"/>
+    <memberTool name="LocalizeExternal"/>
+    <memberTool name="FindNotLocal"/>
+    <memberTool name="connect to output"/>
+    <memberTool name="tool_2"/>
+  </toolshelf>
+
+  <tool name="Paste Ease" label="Paste Ease" icon="PLASMA_App">
+    <script scriptType="python"><![CDATA[pane_tab = hou.ui.paneTabUnderCursor()
+anim_editor = pane_tab.graph()
+keyframes = anim_editor.selectedKeyframes()
+
+#load keyframe
+path1 = 'C:/Users/PIC-TWO/Documents/ease/copied1.json'
+f1 = open(path1, 'r')
+c1 = json.load(f1)
+
+path2 = 'C:/Users/PIC-TWO/Documents/ease/copied2.json'
+f2 = open(path2, 'r')
+c2 = json.load(f2)
+
+kfs = []
+
+i = -1
+for parm in keyframes.keys():
+    for key in keyframes[parm]:
+        i = i + 1
+        kfs.append(key)
+        if i < 1:
+
+            parm.deleteKeyframeAtFrame(key.frame())
+            newKey = hou.Keyframe()
+            newKey.fromJSON(c1)
+            parm.setKeyframe(newKey)
+        else:
+            parm.deleteKeyframeAtFrame(key.frame())
+            newKey = hou.Keyframe()
+            newKey.fromJSON(c2)
+            parm.setKeyframe(newKey)
+
+#normalize values
+
+toff = kfs[0].time()
+tscale = kfs[1].time() -  kfs[0].time()]]></script>
+  </tool>
+
+  <tool name="Copy Paste Ease" label="Copy Paste Ease" icon="PLASMA_App">
+    <script scriptType="python"><![CDATA[import math
+
+pane_tab = hou.ui.paneTabUnderCursor()
+anim_editor = pane_tab.graph()
+keyframes = anim_editor.selectedKeyframes()
+
+kfs = []
+
+for parm in keyframes.keys():
+    for key in keyframes[parm]:
+        kfs.append(key)
+
+#normalize values
+
+foff = kfs[0].frame() -1 #shift set back to 0
+fdiff = kfs[1].frame() -  kfs[0].frame() #length of set
+
+
+for key in kfs:
+    #if (key.frame()-1) > 0:
+    key.setFrame(math.floor(key.frame() * (hou.fps()/(key.frame()-1) ) ) )
+
+#start saving out
+c1 = kfs[0].asJSON(save_keys_in_frames=True)
+c2 = kfs[1].asJSON(save_keys_in_frames=True)
+
+#create file
+path1 = 'C:/Users/PIC-TWO/Documents/ease/copied1.json'
+
+f = open(path1, 'w')
+json.dump(c1, f)
+f.close()
+
+path2 = 'C:/Users/PIC-TWO/Documents/ease/copied2.json'
+
+f = open(path2, 'w')
+json.dump(c2, f)
+f.close()]]></script>
+  </tool>
+
+  <tool name="build_hda_help" label="Build HDA Help" icon="BUTTONS_help">
+    <script scriptType="python"><![CDATA[import HDAUtils
+from importlib import reload
+reload(HDAUtils)
+HDAUtils.change_icon()]]></script>
+  </tool>
+
+  <tool name="EaseTest" label="EaseTest" icon="PLASMA_App">
+    <script scriptType="python"><![CDATA[import LVAnimTools
+from importlib import reload
+
+reload(LVAnimTools)
+print('---')
+LVAnimTools.flip_x()]]></script>
+  </tool>
+
+  <tool name="gpt" label="gpt" icon="PLASMA_App">
+    <script scriptType="python"><![CDATA[import gpt
+from importlib import reload
+
+reload(gpt)
+gpt.call()]]></script>
+  </tool>
+
+  <tool name="GetSize" label="GetSize" icon="PLASMA_App">
+    <script scriptType="python"><![CDATA[node = hou.selectedItems()[0]
+
+type = node.type().name()
+
+print(type)]]></script>
+  </tool>
+
+  <tool name="LocalizeExternal" label="LocalizeExternal" icon="PLASMA_App">
+    <script scriptType="python"><![CDATA[from OD import shelftools
+
+shelftools.localizeExternals(hdas = None) ]]></script>
+  </tool>
+
+  <tool name="FindNotLocal" label="FindNotLocal" icon="PLASMA_App">
+    <script scriptType="python"><![CDATA[from shutil import copy
+from os import path
+import os
+
+files = hou.fileReferences()
+
+hip = hou.text.expandString("$HIP")
+
+def isInside(goodpath, checkpath):
+    if checkpath.startswith(goodpath):
+        return True, "", checkpath
+    else:
+        head, tail = path.split(checkpath)
+
+        newpath = path.join(hip, "tex", tail)
+        return False, newpath, checkpath
+
+for parm, file in files:
+    exclude = ["hda", "hdalc", "db", ".h"]
+
+    if not any(file.endswith(ex) for ex in exclude):
+        safe, swapped, orig = isInside("Z:", file)
+        import os
+        if not os.path.exists(path.join(hip, "tex")):
+            os.makedirs(path.join(hip, "tex"))
+        if not safe:
+            try:
+                copy(orig.replace("/", "\\"), swapped.replace("/", "\\"))
+            except:
+                print("failed file:", orig)
+            hou.hscript(f'opchange "{orig}" "{swapped}"')
+
+            ]]></script>
+  </tool>
+
+  <tool name="stylesheet" label="stylesheet" icon="PLASMA_App">
+    <script scriptType="python"><![CDATA[ps = hou.ui.floatingPanels()
+fp = ps[0].qtParentWindow().children()[1]
+
+print(fp)]]></script>
+  </tool>
+</shelfDocument>

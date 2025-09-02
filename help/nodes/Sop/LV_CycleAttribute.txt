@@ -1,0 +1,89 @@
+= LV Cycle Attribute =
+
+== Overview ==
+
+Explanation of the node's purpose and operation.
+
+@inputs
+
+Label:
+
+What the input is for.
+
+@parameters
+
+Attribute to Cycle:
+	#in_att:
+	string: Attribute to Cycle
+
+loop:
+	#loop:
+	: loop
+
+Loop Mode:
+	#loopmode:
+	menu: Loop Mode
+
+Time:
+	#Time:
+	float: Time
+
+Loop Duration (Frames):
+	#duration:
+	float: Loop Duration (Frames)
+
+Loops Per Cycle:
+	#loops:
+	int: Loops Per Cycle
+
+Shape:
+	#Shape:
+	ramp: Shape
+
+perpiece:
+	#perpiece:
+	: perpiece
+
+Piece Attribute:
+	#in_piece:
+	string: Piece Attribute
+
+Random Per Piece:
+	#do_rand:
+	toggle: Random Per Piece
+
+Random Scale:
+	#Random_Scale:
+	float: Random Scale
+
+Reverse Direction:
+	#flip:
+	toggle: Reverse Direction
+
+Output Attribute:
+	#out_att:
+	string: Output Attribute
+
+Position:
+	#Shape1pos:
+	float: Position
+
+Value:
+	#Shape1value:
+	float: Value
+
+Interpolation:
+	#Shape1interp:
+	menu: Interpolation
+
+Position:
+	#Shape2pos:
+	float: Position
+
+Value:
+	#Shape2value:
+	float: Value
+
+Interpolation:
+	#Shape2interp:
+	menu: Interpolation

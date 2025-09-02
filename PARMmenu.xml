@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<menuDocument>
+	<menuBar>
+		<subMenu id="LVM1">
+			<insertAfter>reference_menu</insertAfter>
+
+			<label>LV Tools</label>
+
+			<scriptItem id="LV_randomize_knots">
+				<expression>
+					parm = kwargs["parms"]
+					if parm is None:
+						return False
+
+					return parm[0].parmTemplate().type().name() == 'Ramp'
+				</expression>
+				<label>LV Randomize Knots</label>
+				<scriptCode>
+					<![CDATA[
+from importlib import reload
+import knotcontrol
+reload(knotcontrol)
+
+knotcontrol.randomizeKnots(kwargs)
+]]>
+				</scriptCode>
+			</scriptItem>
+
+			<scriptItem id="LV_distribute_knots">
+				<expression>
+					parm = kwargs["parms"]
+					if parm is None:
+						return False
+
+					return parm[0].parmTemplate().type().name() == 'Ramp'
+				</expression>
+				<label>LV Distribute Constant</label>
+				<scriptCode>
+					<![CDATA[
+from importlib import reload
+import knotcontrol
+reload(knotcontrol)
+
+knotcontrol.doDist(kwargs, hou.rampBasis.Constant)
+]]>
+				</scriptCode>
+			</scriptItem>
+
+			<scriptItem id="LV_sort_knots">
+				<expression>
+					parm = kwargs["parms"]
+					if parm is None:
+						return False
+
+					return parm[0].parmTemplate().type().name() == 'Ramp'
+				</expression>
+				<label>LV Sort By Value</label>
+				<scriptCode>
+					<![CDATA[
+from importlib import reload
+import knotcontrol
+reload(knotcontrol)
+
+knotcontrol.sortKnots(kwargs)
+]]>
+				</scriptCode>
+			</scriptItem>
+
+			<scriptItem id="LV Copy Ramp">
+				<expression>
+					parm = kwargs["parms"]
+					if parm is None:
+						return False
+
+					return parm[0].parmTemplate().type().name() == 'Ramp'
+				</expression>
+				<label>LV Copy Ramp</label>
+				<scriptCode>
+					<![CDATA[
+from importlib import reload
+import rampSave
+reload(rampSave)
+
+rampSave.save(kwargs)
+]]>
+				</scriptCode>
+			</scriptItem>
+			<scriptItem id="LV Paste Ramp">
+				<expression>
+					parm = kwargs["parms"]
+					if parm is None:
+						return False
+
+					return parm[0].parmTemplate().type().name() == 'Ramp'
+				</expression>
+				<label>LV Paste Ramp</label>
+				<scriptCode>
+					<![CDATA[
+from importlib import reload
+import rampSave
+reload(rampSave)
+
+rampSave.load(kwargs, hou.rampBasis.Linear)
+]]>
+				</scriptCode>
+			</scriptItem>
+
+			<scriptItem>
+				<label>Add float parm + slider</label>
+				<expression>
+					parm = kwargs["parms"]
+					if parm is None:
+						return False
+
+					return parm[0].name() == 'snippet'
+				</expression>
+				<scriptCode>
+					<![CDATA[
+from importlib import reload
+import LVParmUtils
+reload(LVParmUtils)
+
+LVParmUtils.addFloatParm(kwargs)
+]]>
+				</scriptCode>
+			</scriptItem>
+
+			<scriptItem>
+				<label>Move Wrangle Parms</label>
+				<expression>
+					parm = kwargs["parms"]
+					if parm is None:
+						return False
+
+					return parm[0].name() == 'snippet'
+				</expression>
+				<scriptCode>
+					<![CDATA[
+from importlib import reload
+import LVParmUtils
+reload(LVParmUtils)
+
+LVParmUtils.moveWrangleParms(kwargs)
+]]>
+				</scriptCode>
+			</scriptItem>
+
+			<scriptItem>
+				<label>Swap Values</label>
+				<scriptCode>
+					<![CDATA[
+from importlib import reload
+import LVParmUtils
+reload(LVParmUtils)
+
+LVParmUtils.swapDouble(kwargs)
+]]>
+				</scriptCode>
+			</scriptItem>
+
+			<scriptItem>
+				<label>Resize Camera</label>
+				<scriptCode>
+					<![CDATA[
+from importlib import reload
+import LVParmUtils
+reload(LVParmUtils)
+
+LVParmUtils.resizeCam(kwargs)
+]]>
+				</scriptCode>
+			</scriptItem>
+
+
+		</subMenu>
+		<subMenu id="LVM2">
+			<insertAfter>LVM1</insertAfter>
+
+			<label>LV Path Presets</label>
+			<scriptMenuStripDynamic id="myUniqueDynamicStripId">
+				<contentsScriptCode><![CDATA[
+from importlib import reload
+import LVParmUtils
+reload(LVParmUtils)
+return LVParmUtils.get_render_paths()
+]]>				</contentsScriptCode>
+				<scriptCode><![CDATA[
+import hou
+from importlib import reload
+import LVParmUtils
+reload(LVParmUtils)
+selected_token = kwargs["selectedtoken"]
+selected_label = kwargs["selectedlabel"]
+LVParmUtils.set_render_paths(kwargs)
+]]>				</scriptCode>
+			</scriptMenuStripDynamic>
+		</subMenu>
+
+
+		<separatorItem></separatorItem>
+	</menuBar>
+</menuDocument>

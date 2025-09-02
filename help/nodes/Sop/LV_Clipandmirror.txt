@@ -1,0 +1,37 @@
+= LV Clip and Mirror =
+
+== Overview ==
+
+Clip geometry and mirror by the same plane.
+
+@inputs
+
+Label:
+
+What the input is for.
+
+@parameters
+
+Clip Distance:
+	#dist:
+	float: Clip Distance
+
+Simple Direction:
+	#sdir:
+	toggle: Simple Direction
+
+Direction:
+	#dirx:
+	float: Direction
+
+Direction:
+	#diry:
+	float: Direction
+
+Direction:
+	#dirz:
+	float: Direction
+
+Direction:
+	#simpleDir:
+	menu: Direction

@@ -1,0 +1,16 @@
+import hou
+from canvaseventtypes import *
+import nodegraphdisplay as display
+import nodegraphview as view
+
+import extra
+from importlib import reload
+
+
+def createEventHandler(uievent, pending_actions):
+    reload(extra)
+    # return None, False
+    if extra.do_stuff(uievent):
+        return None, True # we return True here to hijack the event and stop it getting caught by houdini naturally
+    else:
+        return None, False

@@ -1,0 +1,73 @@
+= Palette from Image =
+
+== Overview ==
+
+Explanation of the node's purpose and operation.
+
+@inputs
+
+Label:
+
+What the input is for.
+
+@parameters
+
+Texture Map:
+	#filename:
+	string: Texture Map
+
+Build Gradient:
+	#build:
+	button: Build Gradient
+
+Gradient:
+	#Gradient:
+	ramp: Gradient
+
+Guide Scale:
+	#guide_scale:
+	float: Guide Scale
+
+Pixel Resolution:
+	#targetsize:
+	float: Pixel Resolution
+
+Position:
+	#Gradient1pos:
+	float: Position
+
+Color:
+	#Gradient1cr:
+	float: Color
+
+Color:
+	#Gradient1cg:
+	float: Color
+
+Color:
+	#Gradient1cb:
+	float: Color
+
+Interpolation:
+	#Gradient1interp:
+	menu: Interpolation
+
+Position:
+	#Gradient2pos:
+	float: Position
+
+Color:
+	#Gradient2cr:
+	float: Color
+
+Color:
+	#Gradient2cg:
+	float: Color
+
+Color:
+	#Gradient2cb:
+	float: Color
+
+Interpolation:
+	#Gradient2interp:
+	menu: Interpolation

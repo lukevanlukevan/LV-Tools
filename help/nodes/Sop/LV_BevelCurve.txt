@@ -1,0 +1,25 @@
+= LV Bevel Curve =
+
+== Overview ==
+
+NOT WORKING
+
+@inputs
+
+Label:
+
+What the input is for.
+
+@parameters
+
+Maximum Normal Angle:
+	#flatangle:
+	float: Maximum Normal Angle
+
+Distance:
+	#offset:
+	float: Distance
+
+Divisions:
+	#divisions:
+	int: Divisions

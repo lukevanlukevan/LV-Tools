@@ -1,0 +1,69 @@
+= LV Slicer =
+
+== Overview ==
+
+Explanation of the node's purpose and operation.
+
+@inputs
+
+Label:
+
+What the input is for.
+
+@parameters
+
+Time:
+	#time:
+	float: Time
+
+Slice Amount:
+	#sliceamount:
+	int: Slice Amount
+
+Slice Duration:
+	#slicedur:
+	int: Slice Duration
+
+Slice Ease:
+	#ease:
+	ramp: Slice Ease
+
+Random Slice Position:
+	#randp:
+	toggle: Random Slice Position
+
+Random Position Amount:
+	#p_amount:
+	float: Random Position Amount
+
+Rotation Amount:
+	#r_amount:
+	float: Rotation Amount
+
+Seed:
+	#seed:
+	float: Seed
+
+Position:
+	#ease1pos:
+	float: Position
+
+Value:
+	#ease1value:
+	float: Value
+
+Interpolation:
+	#ease1interp:
+	menu: Interpolation
+
+Position:
+	#ease2pos:
+	float: Position
+
+Value:
+	#ease2value:
+	float: Value
+
+Interpolation:
+	#ease2interp:
+	menu: Interpolation
