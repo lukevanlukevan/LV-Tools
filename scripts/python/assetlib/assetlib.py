@@ -25,33 +25,44 @@ class ThumbnailModel(QtCore.QAbstractListModel):
             ".hda",
             ".hdanc",
             ".zip",
-        )  # Added '.zip' for saved node assets
+        )  # added zip for assets
         for file in os.listdir(self.directory):
             if file.lower().endswith(asset_extensions):
                 base_name = os.path.splitext(file)[0]
-                asset_name = base_name  # Use base name as asset name
+                asset_name = base_name  # use base name as asset name
                 linked_file = os.path.join(self.directory, file)
                 thumb_path = os.path.join(
-                    self.directory, base_name + ".png"
-                )  # Corresponding thumbnail
+                    self.directory, base_name + ".jpg"
+                )  # corresponding thumbnail
                 pixmap = QtGui.QPixmap()
                 if os.path.exists(thumb_path):
                     pixmap.load(thumb_path)
                     scaled_pixmap = pixmap.scaled(
-                        128,
-                        128,
+                        256,
+                        256,
                         QtCore.Qt.KeepAspectRatio,
                         QtCore.Qt.SmoothTransformation,
                     )
                 else:
-                    # Use a default thumbnail if not found (e.g., a placeholder image)
-                    # For now, we'll use an empty pixmap; you can load a default image here
-                    scaled_pixmap = pixmap.scaled(128, 128, QtCore.Qt.KeepAspectRatio)
+                    # use a default thumbnail if not found (e.g., a placeholder image)
+                    # for now, we'll use an empty pixmap; you can load a default image here
+                    scaled_pixmap = pixmap.scaled(256, 256, QtCore.Qt.KeepAspectRatio)
+
+                # create a square pixmap with the scaled image centered
+                square_size = 256
+                thumbnail = QtGui.QPixmap(square_size, square_size)
+                thumbnail.fill(QtGui.QColor(0, 0, 0, 0))  # transparent fill
+                painter = QtGui.QPainter(thumbnail)
+                x = (square_size - scaled_pixmap.width()) // 2
+                y = (square_size - scaled_pixmap.height()) // 2
+                painter.drawPixmap(x, y, scaled_pixmap)
+                painter.end()
+
                 self.asset_list.append(
                     {
                         "name": asset_name,
                         "linked_file": linked_file,
-                        "thumbnail": scaled_pixmap,
+                        "thumbnail": thumbnail,
                     }
                 )
 
@@ -70,7 +81,7 @@ class ThumbnailModel(QtCore.QAbstractListModel):
             return QtGui.QIcon(item["thumbnail"])
         return None
 
-    # Optional: Method to refresh the model if assets change
+    # optional: Method to refresh the model if assets change
     def refresh(self):
         self.beginResetModel()
         self._load_assets()
@@ -91,32 +102,89 @@ class AssetLib(QtWidgets.QWidget):
         mainLayout.addWidget(self.ui)
         self.vertical = self.ui.findChild(QtWidgets.QVBoxLayout, "verticalLayout")
         self.setLayout(mainLayout)
-        self.setAcceptDrops(True)  # Enable drag and drop on the widget
+        # horizontal top holder
+        self.horizontal = self.ui.findChild(QtWidgets.QHBoxLayout, "horizontalLayout")
+        self.setAcceptDrops(True)  # enable drag and drop on the widget
         self.drop_area_label = QtWidgets.QLabel("Drop items here")
         self.vertical.addWidget(self.drop_area_label)
         self.createInterface()
 
     def createInterface(self):
+        # category dropdown
+        self.category_combo = QtWidgets.QComboBox(self)
+        self.horizontal.addWidget(self.category_combo)
+        self.category_combo.currentIndexChanged.connect(self.change_category)
+
         self.model = ThumbnailModel(self.libPath, self)
         self.view = QtWidgets.QListView(self)
         self.view.setModel(self.model)
         self.view.setViewMode(QtWidgets.QListView.IconMode)
-        self.view.setIconSize(QtCore.QSize(128, 128))
-        self.view.setGridSize(QtCore.QSize(150, 150))
+        self.view.setIconSize(QtCore.QSize(256, 256))
+        self.view.setGridSize(QtCore.QSize(256 + 20, 256 + 20))
         self.view.setResizeMode(QtWidgets.QListView.Adjust)
-        self.view.setMovement(QtWidgets.QListView.Static)  # Prevent dragging
+        self.view.setMovement(QtWidgets.QListView.Static)  # prevent dragging
         self.view.setWordWrap(True)
         self.view.setSelectionMode(
             QtWidgets.QAbstractItemView.ExtendedSelection
-        )  # Allow multi-select if needed
+        )  # allow multi-select if needed
         self.view.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
         self.view.customContextMenuRequested.connect(self.show_context_menu)
         self.view.doubleClicked.connect(self.load_asset)
         self.vertical.addWidget(self.view)
-        # Optional: Add a refresh button or other controls
-        refresh_button = QtWidgets.QPushButton("Refresh Assets")
-        refresh_button.clicked.connect(self.model.refresh)
-        self.vertical.addWidget(refresh_button)
+
+        # zoom slider
+        self.zoom_slider = QtWidgets.QSlider(QtCore.Qt.Horizontal)
+        self.zoom_slider.setMaximumWidth(150)
+        self.zoom_slider.setMinimum(50)
+        self.zoom_slider.setMaximum(256)
+        self.zoom_slider.setValue(256)
+        self.zoom_slider.setStyleSheet("QSlider::handle:horizontal { width: 15px; }")
+        self.zoom_slider.valueChanged.connect(self.update_zoom)
+        self.horizontal.addWidget(self.zoom_slider)
+
+        # populate categories initially
+        self.populate_categories()
+
+    def update_zoom(self, value):
+        self.view.setIconSize(QtCore.QSize(value, value))
+        self.view.setGridSize(QtCore.QSize(value + 22, value + 22))
+
+    def populate_categories(self):
+        categories = [
+            d
+            for d in os.listdir(self.libPath)
+            if os.path.isdir(os.path.join(self.libPath, d))
+        ]
+        self.category_combo.clear()
+        if not categories:
+            default_path = os.path.join(self.libPath, "Default")
+            os.makedirs(default_path, exist_ok=True)
+            categories = ["Default"]
+        self.category_combo.addItems(categories + ["New Category"])
+        # set to first category and load it
+        self.change_category(0)
+
+    def create_category(self):
+        result = hou.ui.readInput("Enter category name:", buttons=("OK", "Cancel"))
+        button, name = result
+        if button == 0 and name:
+            cat_path = os.path.join(self.libPath, name)
+            if not os.path.exists(cat_path):
+                os.makedirs(cat_path)
+            self.populate_categories()
+            # Select the new category
+            index = self.category_combo.findText(name)
+            if index >= 0:
+                self.category_combo.setCurrentIndex(index)
+
+    def change_category(self, index):
+        cat = self.category_combo.currentText()
+        if cat == "New Category":
+            self.create_category()
+            return
+        if cat:
+            self.model.directory = os.path.join(self.libPath, cat)
+            self.model.refresh()
 
     def load_asset(self, index):
         if not index.isValid():
@@ -138,13 +206,32 @@ class AssetLib(QtWidgets.QWidget):
             hou.ui.displayMessage(f"HDA {item['name']} installed.")
 
     def show_context_menu(self, position):
+        menu = QtWidgets.QMenu(self)
+        refresh_action = menu.addAction("Refresh")
+        refresh_action.triggered.connect(self.model.refresh)
+        selected = self.view.selectedIndexes()
+        if selected:
+            menu.addSeparator()
+            set_thumb_action = menu.addAction("Set Thumbnail from Clipboard")
+            set_thumb_action.triggered.connect(self.set_thumbnail_from_clipboard)
+            delete_action = menu.addAction("Delete")
+            delete_action.triggered.connect(self.delete_selected)
+        menu.exec_(self.view.viewport().mapToGlobal(position))
+
+    def set_thumbnail_from_clipboard(self):
         selected = self.view.selectedIndexes()
         if not selected:
             return
-        menu = QtWidgets.QMenu(self)
-        delete_action = menu.addAction("Delete")
-        delete_action.triggered.connect(self.delete_selected)
-        menu.exec_(self.view.viewport().mapToGlobal(position))
+        clipboard = QtWidgets.QApplication.clipboard()
+        image = clipboard.image()
+        if image.isNull():
+            hou.ui.displayMessage("No image in clipboard.")
+            return
+        for idx in selected:
+            item = self.model.asset_list[idx.row()]
+            thumb_path = os.path.join(self.model.directory, item["name"] + ".jpg")
+            image.save(thumb_path)
+        self.model.refresh()
 
     def delete_selected(self):
         selected = self.view.selectedIndexes()
@@ -156,7 +243,7 @@ class AssetLib(QtWidgets.QWidget):
             for idx in selected:
                 item = self.model.asset_list[idx.row()]
                 linked = item["linked_file"]
-                thumb = os.path.join(self.libPath, item["name"] + ".png")
+                thumb = os.path.join(self.model.directory, item["name"] + ".jpg")
                 try:
                     if os.path.exists(linked):
                         os.remove(linked)
@@ -210,6 +297,13 @@ class AssetLib(QtWidgets.QWidget):
         button, asset_name = result
         if button != 0 or not asset_name:
             return
+        current_cat = self.category_combo.currentText()
+        if current_cat == "New Category":
+            self.create_category()
+            current_cat = self.category_combo.currentText()
+            if current_cat == "New Category":
+                return  # Cancelled creation
+        save_dir = os.path.join(self.libPath, current_cat)
         self.clean_cpio_files()
         hou.copyNodesToClipboard(selected)
         temp_dir = hou.getenv("HOUDINI_TEMP_DIR")
@@ -218,13 +312,13 @@ class AssetLib(QtWidgets.QWidget):
         if temp_dir:
             cpio_files = [f for f in os.listdir(temp_dir) if f.endswith(".cpio")]
             if cpio_files:
-                zip_file_path = os.path.join(self.libPath, asset_name + ".zip")
+                zip_file_path = os.path.join(save_dir, asset_name + ".zip")
                 with zipfile.ZipFile(zip_file_path, "w") as zipf:
                     for file in cpio_files:
                         zipf.write(os.path.join(temp_dir, file), file)
                 # Generate thumbnail
                 viewer = hou.ui.paneTabOfType(hou.paneTabType.SceneViewer)
-                thumb_path = os.path.join(self.libPath, asset_name + ".png")
+                thumb_path = os.path.join(save_dir, asset_name + ".jpg")
                 assetutils.saveThumbnailFromViewer(
                     sceneviewer=viewer, frame=1, res=(512, 512), output=thumb_path
                 )
@@ -272,6 +366,14 @@ class AssetLib(QtWidgets.QWidget):
             print("No temporary directory found or file is not a ZIP.")
 
     def paste_nodes(self):
-        network = hou.ui.paneTabOfType(hou.paneTabType.NetworkEditor).pwd()
+        ng = hou.ui.paneTabOfType(hou.paneTabType.NetworkEditor)
+        network = ng.pwd()
         hou.pasteNodesFromClipboard(network)
 
+        # Get viewport rect
+        vcenter = ng.visibleBounds().center()
+        new_nodes = hou.selectedItems()
+        paste_center = new_nodes[round(len(new_nodes) / 2)].position()
+        diff = vcenter - paste_center
+        for n in new_nodes:
+            n.setPosition(n.position() + diff)

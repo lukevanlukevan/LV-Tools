@@ -42,7 +42,11 @@
        <number>8</number>
       </property>
       <item row="0" column="0">
-       <layout class="QVBoxLayout" name="verticalLayout"/>
+       <layout class="QVBoxLayout" name="verticalLayout">
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout"/>
+        </item>
+       </layout>
       </item>
      </layout>
     </item>
